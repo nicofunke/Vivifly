@@ -1,5 +1,8 @@
 import React from 'react'
 import Unity, { UnityContent } from "react-unity-webgl"
+// import { MDBBtn } from "mdbreact";
+import { MDBCard, MDBCardBody, MDBCardText, MDBCardHeader, MDBBtn } from "mdbreact";
+
 
 class UnityScreen extends React.Component {
 
@@ -43,12 +46,17 @@ class UnityScreen extends React.Component {
 
     render() {
         return (
-            <div style={{ width: 500, height: 500 }}>
-                <Unity unityContent={this.unityContent} />
-                {/* <input type="text" placholder="Test input..." /> */}
-                <button onClick={this.triggerButton1}>Trigger Button1</button>
-                <div>Currently selected: {this.state.selectedItemName || 'None'} </div>
-            </div>
+            <MDBCard>
+                <MDBCardHeader color="special-color">3D-View</MDBCardHeader>
+                <MDBCardBody className="p-0">
+                    <MDBCardText>
+                        <Unity unityContent={this.unityContent} />
+                        <MDBBtn color="primary" onClick={this.triggerButton1}>Trigger Button1</MDBBtn>
+                        <div>Currently selected: {this.state.selectedItemName || 'None'} </div>
+                    </MDBCardText>
+                </MDBCardBody>
+            </MDBCard>
+
         )
     }
 }
