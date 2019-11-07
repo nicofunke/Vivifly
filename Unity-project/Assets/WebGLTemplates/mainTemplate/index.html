@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>%UNITY_WEB_NAME%</title>
+
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <script src="%UNITY_WEBGL_LOADER_URL%"></script>
+  <script>
+    var unityInstance = UnityLoader.instantiate("webgl-container", "%UNITY_WEBGL_BUILD_URL%");
+
+    function setSelectedItem(itemName) {
+      if (!!itemName) {
+        document.getElementById("object-name").innerHTML = itemName;
+      } else {
+        document.getElementById("object-name").innerHTML = "No item selected";
+      }
+    }
+
+    function triggerButton1() {
+      unityInstance.SendMessage('Highlighter', 'HighlightObjectByName', "Button1");
+    }
+
+    var resizeTimer;
+    $(window).on('resize', function (e) {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateWebGLDimensions, 150);
+    })
+
+    function updateWebGLDimensions() {
+      var webGLContainer = $('#webgl-container');
+      var webGLCanvas = $('canvas');
+      var containerHeight = webGLContainer.height();
+      var containerWidth = webGLContainer.width();
+      var CanvasHeight = webGLCanvas.height();
+      var canvasWidth = webGLCanvas.width();
+
+      var scale = Math.min(containerWidth / canvasWidth, containerHeight / CanvasHeight);
+
+      var fitWidth = Math.round(canvasWidth * scale * 100) / 100;
+      var fitHeight = Math.round(CanvasHeight * scale * 100) / 100;
+
+      webGLCanvas.width(fitWidth);
+      webGLCanvas.height(fitHeight);
+    }
+
+    var recaptureInputAndFocus = function () {
+      var canvas = document.getElementById("#canvas");
+      if (canvas) {
+        canvas.setAttribute("tabindex", "1");
+        canvas.focus();
+      } else
+        setTimeout(recaptureInputAndFocus, 100);
+    }
+
+    recaptureInputAndFocus();
+  </script>
+
+  <!-- Bootstrap lux theme -->
+  <link rel="stylesheet" type="text/css" href="bootstrap_lux.min.css">
+
+</head>
+
+<body style="background-image: url('backgroundPattern.png');">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">StateApp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+      aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Controls <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Visualizations</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">States</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Testing</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main site -->
+  <div class="container-fluid p-2">
+    <div class="row">
+
+      <!-- Preview -->
+      <div class="col-7">
+        <div class="card bg-primary text-white">
+          <div class="card-header">Preview</div>
+          <div class="card-body p-0">
+            <div id="webgl-container" style="min-width: 500px; min-height: 500px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Options -->
+      <div class="col-5">
+        <div class="card bg-primary text-white">
+          <div class="card-header">Options</div>
+          <div class="card-body bg-light text-dark">
+            <h4 id="object-name">No item selected</h4>
+            <p>No special properties found</p>
+            <form>
+              <fieldset>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Custom Name</label>
+                  <input type="text" class="form-control" id="customObjectName" placeholder="Enter name">
+                </div>
+              </fieldset>
+            </form>
+            <button class="btn btn-primary" onclick="triggerButton1()"> Trigger Button1 </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</body>
+
+</html>
