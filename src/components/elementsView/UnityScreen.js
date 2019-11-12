@@ -1,8 +1,6 @@
 import React from 'react'
 import Unity, { UnityContent } from "react-unity-webgl"
-// import { MDBBtn } from "mdbreact";
-import { MDBCard, MDBCardBody, MDBCardText, MDBCardHeader, MDBBtn } from "mdbreact";
-
+import ElementInformation from '../ElementInformation';
 
 class UnityScreen extends React.Component {
 
@@ -10,24 +8,28 @@ class UnityScreen extends React.Component {
         super()
 
         this.unityContent = new UnityContent(
-            "UnityProject/WebGL.json",
-            "UnityProject/UnityLoader.js"
+            "Build/WebGL.json",
+            "Build/UnityLoader.js"
         )
         this.state = {
             selectedItemName: undefined
         };
         this.initializeUnityEventListeners()
-        this.triggerButton1 = this.triggerButton1.bind(this)
-        this.setSelectedItem = this.setSelectedItem.bind(this)
+
     }
 
     initializeUnityEventListeners() {
-        this.unityContent.on("setSelectedItem", name => {
-            this.setSelectedItem(name)
+        this.unityContent.on("objectClicked", name => {
+            this.objectClicked(name)
         });
+        this.objectClicked = this.objectClicked.bind(this)
     }
 
-    setSelectedItem(newItemName) {
+    objectClicked(newItemName) {
+        if (newItemName === this.state.selectedItemName) {
+            newItemName = ""
+        }
+        this.highLightItem(newItemName)
         this.setState(prevState => {
             return {
                 ...prevState,
@@ -36,37 +38,30 @@ class UnityScreen extends React.Component {
         })
     }
 
-    triggerButton1() {
+    highLightItem(itemName) {
         this.unityContent.send(
-            "Highlighter",
-            "HighlightObjectByName",
-            "Button1"
+            "JavascriptApi",
+            "HighlightObject",
+            itemName
         )
     }
 
     informationBox() {
         if (!!this.state.selectedItemName) {
             return (
-                <div style={{ position: "absolute", top: 20, right: 20, backgroundColor: "white", width: 200, height: 500 }}> Additional Box </div>
-
+                <ElementInformation elementName={this.state.selectedItemName} />
             )
         }
     }
 
     render() {
         return (
-            <MDBCard>
-                <MDBCardHeader color="special-color">3D-View</MDBCardHeader>
-                <MDBCardBody className="p-0">
-                    <div style={{ position: "relative" }}>
-                        <Unity unityContent={this.unityContent} />
-                        { this.informationBox() }
-                    </div>
-                    <MDBCardText>
-                        Currently selected: {this.state.selectedItemName || 'None'}
-                    </MDBCardText>
-                </MDBCardBody>
-            </MDBCard>
+            <div className="position-absolute h-100 w-100 overflow-hidden">
+                <div className="position-relative h-100 w-100">
+                    <Unity style={{ minHeight: "100vh", minWidth: "100vw" }} unityContent={this.unityContent} />
+                    {this.informationBox()}
+                </div>
+            </div>
 
         )
     }

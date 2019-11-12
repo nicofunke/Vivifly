@@ -6,12 +6,15 @@ import UnityScreen from './components/elementsView/UnityScreen';
 
 function App() {
   return (
+    <div className="h-100">
+      <UnityScreen objectSelected={() => console.log("jip")}/>
     <MDBContainer fluid className="h-100">
+      
       <MDBRow className="h-100">
         <MDBCol size="2"className="p-0 h-100"><CustomSideNav /></MDBCol>
-        <MDBCol size="10" className="pt-2"><UnityScreen/></MDBCol>
       </MDBRow>
     </MDBContainer>
+    </div>
   );
 }
 
