@@ -1,6 +1,5 @@
 import React from 'react'
 import Unity, { UnityContent } from "react-unity-webgl"
-import ElementInformation from '../ElementInformation';
 
 class UnityScreen extends React.Component {
 
@@ -11,31 +10,27 @@ class UnityScreen extends React.Component {
             "Build/WebGL.json",
             "Build/UnityLoader.js"
         )
-        this.state = {
-            selectedItemName: undefined
-        };
-        this.initializeUnityEventListeners()
-
-    }
-
-    initializeUnityEventListeners() {
+        this.bindMethods()
         this.unityContent.on("objectClicked", name => {
             this.objectClicked(name)
         });
+    }
+
+    bindMethods() {
+        this.restoreColor = this.restoreColor.bind(this)
+        this.changeColor = this.changeColor.bind(this)
         this.objectClicked = this.objectClicked.bind(this)
     }
 
-    objectClicked(newItemName) {
-        if (newItemName === this.state.selectedItemName) {
-            newItemName = ""
+    objectClicked(clickedElement) {
+        if (clickedElement === this.props.selectedElementName) {
+            clickedElement = ""
         }
-        this.highLightItem(newItemName)
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                selectedItemName: newItemName
-            }
-        })
+        this.props.setSelectedElement(clickedElement)
+    }
+
+    componentDidUpdate(prevProps) {
+        this.highLightItem(this.props.selectedElementName)
     }
 
     highLightItem(itemName) {
@@ -46,12 +41,20 @@ class UnityScreen extends React.Component {
         )
     }
 
-    informationBox() {
-        if (!!this.state.selectedItemName) {
-            return (
-                <ElementInformation elementName={this.state.selectedItemName} />
-            )
-        }
+    changeColor(hexColor) {
+        this.unityContent.send(
+            "JavascriptApi",
+            "ChangeColorOfCurrentlyHighlighted",
+            hexColor
+        )
+    }
+
+    restoreColor() {
+        this.unityContent.send(
+            "JavascriptApi",
+            "RestoreColor",
+            this.state.selectedItemName
+        )
     }
 
     render() {
@@ -59,7 +62,6 @@ class UnityScreen extends React.Component {
             <div className="position-absolute h-100 w-100 overflow-hidden">
                 <div className="position-relative h-100 w-100">
                     <Unity style={{ minHeight: "100vh", minWidth: "100vw" }} unityContent={this.unityContent} />
-                    {this.informationBox()}
                 </div>
             </div>
 

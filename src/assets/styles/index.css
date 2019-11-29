@@ -1,0 +1,10 @@
+.cursor-pointer:hover {
+  cursor: pointer;
+}
+
+.window-upper-right {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  max-width: 25vw;
+}
