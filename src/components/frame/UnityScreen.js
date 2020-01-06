@@ -12,7 +12,7 @@ class UnityScreen extends React.Component {
         super()
 
         this.unityContent = new UnityContent(
-            "Build/WebGL-react.json",
+            "Build/WebGL.json",
             "Build/UnityLoader.js"
         )
         this.bindMethods()
@@ -121,9 +121,6 @@ class UnityScreen extends React.Component {
     }
 
     render() {
-        if (this.state.loadingProgress < 1.0) {
-            console.log("jo")
-        }
         return <>
             <div className="position-absolute h-100 w-100 overflow-hidden">
                 <div className="position-relative h-100 w-100">
