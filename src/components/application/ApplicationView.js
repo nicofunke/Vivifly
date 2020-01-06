@@ -1,8 +1,8 @@
 import React from 'react'
-import { MDBContainer, MDBRow, MDBCol } from "mdbreact"
-import UnityScreen from '../frame/UnityScreen'
-import SituationsList from '../frame/SituationsList'
-import ElementInformation from '../elementInformation/ElementInformationWindow'
+import { MDBContainer, MDBRow, MDBCol } from 'mdbreact'
+import UnityScreen from '../Frame/UnityScreen'
+import SituationsList from '../SituationsList/SituationsList'
+import ElementInformationWindow from '../ElementInformation/ElementInformationWindow'
 
 class ApplicationView extends React.Component {
 
@@ -20,8 +20,10 @@ class ApplicationView extends React.Component {
                                 currentSituation={this.props.model.currentSituationName}
                                 setSituation={this.props.setSituation} />
                         </MDBCol>
-                        <ElementInformation
+                        <ElementInformationWindow
                             element={this.props.selectedElement}
+                            setSelectedElement={this.props.setSelectedElement}
+                            setElementType={this.props.setElementType}
                         />
                     </MDBRow>
                 </MDBContainer>
