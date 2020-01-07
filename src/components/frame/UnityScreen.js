@@ -1,12 +1,7 @@
 import React from 'react'
 import Unity, { UnityContent } from "react-unity-webgl"
-import LoadingOverlay from './LoadingOverlay'
 
 class UnityScreen extends React.Component {
-
-    state = {
-        loadingProgress: 0.0
-    }
 
     constructor() {
         super()
@@ -26,10 +21,8 @@ class UnityScreen extends React.Component {
         this.unityContent.on("loaded", () => {
             // TODO: Show upload button after loading unity
         })
-        this.unityContent.on("progress", progression => {
-            this.setState({
-                loadingProgress: progression
-            })
+        this.unityContent.on("progress", progress => {
+            this.props.setUnityLoadingProgress(progress)
         })
 
         // TODO: color with JSON 
@@ -45,7 +38,7 @@ class UnityScreen extends React.Component {
     }
 
     objectClicked(clickedElement) {
-        if (clickedElement === this.props.selectedElementName) {
+        if (clickedElement === this.props.applicationState.selectedElement) {
             clickedElement = ""
         }
         this.props.setSelectedElement(clickedElement)
@@ -59,8 +52,8 @@ class UnityScreen extends React.Component {
      * Changes the currently highlighted element if necessary, dependent on the props
      */
     componentDidUpdate(prevProps) {
-        if (prevProps.selectedElementName !== this.props.selectedElementName) {
-            this.highLightItem(this.props.selectedElementName)
+        if (prevProps.applicationState.selectedElement !== this.props.applicationState.selectedElement) {
+            this.highLightItem(this.props.applicationState.selectedElement)
         }
     }
 
@@ -112,11 +105,11 @@ class UnityScreen extends React.Component {
         )
     }
 
-    restoreColor() {
+    restoreColor(element) {
         this.unityContent.send(
             "JavascriptApi",
             "RestoreColor",
-            this.state.selectedItemName
+            element
         )
     }
 
@@ -127,7 +120,6 @@ class UnityScreen extends React.Component {
                     <Unity style={{ minHeight: "100vh", minWidth: "100vw" }} unityContent={this.unityContent} />
                 </div>
             </div>
-            {(this.state.loadingProgress < 1.0) && <LoadingOverlay loadingProgress={this.state.loadingProgress} isSpinner={false} message="Getting ready" />}
         </>
     }
 }

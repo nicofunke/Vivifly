@@ -1,28 +1,29 @@
 import React from 'react'
 import SituationsListElement from './SituationsListElement'
 
-class SituationsList extends React.Component {
+export default class SituationsList extends React.Component {
 
     render() {
-
         return (
             <div className=" h-100 w-100 bg-white">
-                <div className="special-color-dark text-light w-100 p-2">
+                <div className="text-dark w-100 p-2">
                     <h2>Situations</h2>
                 </div>
+                <hr className="my-0"/>
                 {this.renderSituationList()}
             </div>
         )
     }
 
-    renderSituationList(situations) {
+    renderSituationList() {
         const listElements = []
-        for (const situation of this.props.situations) {
+        for (const state of this.props.states) {
             listElements.push(
                 <SituationsListElement 
-                    name={situation.name} 
-                    setSituation={() =>this.props.setSituation(situation.name)}
-                    isSelected={situation.name === this.props.currentSituation} />)
+                    name={state.Name} 
+                    key={state.Name}
+                    setSituation={() =>this.props.setSituation(state.Name)}
+                    isSelected={state.Name === this.props.applicationState.currentSituation} />)
         }
         return (
             <div>
@@ -31,5 +32,3 @@ class SituationsList extends React.Component {
         )
     }
 }
-
-export default SituationsList

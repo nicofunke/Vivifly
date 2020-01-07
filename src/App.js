@@ -1,10 +1,10 @@
 import React from 'react'
-import AppContainer from './components/Application/AppContainer'
+import StateContainer from './components/Application/StateContainer'
 
 
 function App() {
   return (
-    <AppContainer />
+    <StateContainer />
   )
 }
 
