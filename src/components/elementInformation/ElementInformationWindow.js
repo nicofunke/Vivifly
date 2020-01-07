@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { MDBCard, MDBCardBody, MDBCardTitle, MDBIcon } from 'mdbreact'
+import { MDBCard, MDBCardBody, MDBCardTitle } from 'mdbreact'
 import ElementTypePicker from './ElementTypePicker'
 import ElementButtonSettings from './ElementButtonSettings'
 import ElementDisplaySettings from './ElementDisplaySettings'
 import ElementLightSettings from './ElementLightSettings'
+import { MDBCloseIcon } from "mdbreact"
 
-// TODO: Replace close button by real close icon
 export default class ElementInformationWindow extends Component {
 
     /**
@@ -26,6 +26,29 @@ export default class ElementInformationWindow extends Component {
         return elementTypes
     }
 
+    /**
+     * Listener for the escape key, to close window if escape is pressed
+     */
+    onKeyPressed(event){
+        if(event.keyCode === 27) {
+          this.props.setSelectedElement("")
+        }
+      }
+
+      /**
+       * Start listening to keydown events after mounting
+       */
+      componentDidMount(){
+        document.addEventListener("keydown", this.onKeyPressed.bind(this), false)
+      }
+
+      /**
+       * Stop listening to keydown events on unmounting
+       */
+      componentWillUnmount(){
+        document.removeEventListener("keydown", this.onKeyPressed.bind(this), false)
+      }
+
     render() {
         if (!this.props.applicationState.selectedElement || this.props.applicationState.selectedElement === "") {
             return null
@@ -35,8 +58,11 @@ export default class ElementInformationWindow extends Component {
             <div className="window-upper-right">
                 <MDBCard>
                     <MDBCardBody>
-                        <div className="d-flex justify-content-end"><span onClick={() => this.props.setSelectedElement("")} className="cursor-pointer"><MDBIcon icon="times" /></span></div>
-                        <MDBCardTitle>{this.props.applicationState.selectedElement}</MDBCardTitle>
+                        <div className="row align-items-start">
+                            <MDBCardTitle className="col-10">{this.props.applicationState.selectedElement}</MDBCardTitle>
+                            <MDBCloseIcon className="col-2" onClick={() => this.props.setSelectedElement("")} />
+                        </div>
+                        
                         <ElementSettings
                             element={this.props.applicationState.selectedElement}
                             elementTypes={this.getElementTypes(this.props.applicationState.selectedElement)}
