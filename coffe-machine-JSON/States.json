@@ -1,0 +1,701 @@
+{
+    "States": [
+	    {
+            "Name": "off.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "off.png"
+                }
+            ]
+        },
+        {
+            "Name": "heating.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "heatingUp.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "waterRefill.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "waterRefill.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "beansRefill.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "BeansRefill.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "ready.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "ready.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "1coffee2.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "1Coffee2.png"
+                }
+            ]
+        },
+        {
+            "Name": "1coffee3.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "1Coffee3.png"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 1.0,
+                    "VisualizationElement": "CoffeeSimulation1"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 1.0,
+                    "VisualizationElement": "CoffeeSimulation2"
+                }
+            ]
+        },
+        {
+            "Name": "1coffee4.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "1Coffee4.png"
+                }
+            ]
+        },
+        {
+            "Name": "1coffee5.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "1Coffee5.png"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 0.0,
+                    "VisualizationElement": "CoffeeSimulation1"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 0.0,
+                    "VisualizationElement": "CoffeeSimulation2"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "1strongcoffee2.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "1StrongCoffee2.png"
+                }
+            ]
+        },
+        {
+            "Name": "1strongcoffee3.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "1StrongCoffee3.png"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 1.0,
+                    "VisualizationElement": "CoffeeSimulation1"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 1.0,
+                    "VisualizationElement": "CoffeeSimulation2"
+                }
+            ]
+        },
+        {
+            "Name": "1strongcoffee4.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "1StrongCoffee4.png"
+                }
+            ]
+        },
+        {
+            "Name": "1strongcoffee5.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "1StrongCoffee5.png"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 0.0,
+                    "VisualizationElement": "CoffeeSimulation1"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 0.0,
+                    "VisualizationElement": "CoffeeSimulation2"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "2coffee2.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "2Coffee2.png"
+                }
+            ]
+        },
+        {
+            "Name": "2coffee3.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "2Coffee3.png"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 1.0,
+                    "VisualizationElement": "CoffeeSimulation1"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 1.0,
+                    "VisualizationElement": "CoffeeSimulation2"
+                }
+            ]
+        },
+        {
+            "Name": "2coffee4.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "2Coffee4.png"
+                }
+            ]
+        },
+        {
+            "Name": "2coffee5.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "2Coffee5.png"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 0.0,
+                    "VisualizationElement": "CoffeeSimulation1"
+                },
+                {
+                    "Type": "FloatValueVisualization",
+                    "Value": 0.0,
+                    "VisualizationElement": "CoffeeSimulation2"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "steamHeatUp.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "SteamHeatUp.png"
+                }
+            ]
+        },
+        {
+            "Name": "steamReady.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "SteamReady.png"
+                }
+            ]
+        },
+        {
+            "Name": "steam.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "Steam.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "hotWater.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "HotWater.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "spuelen.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "SpuelenOK.png"
+                }
+            ]
+        },
+        {
+            "Name": "spuelenruns.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "SpuelenRuns.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "cleaningOK.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CleaningOK.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "entkalkenOK.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "EntkalkenOK.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "coffeeOverall.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeOverall.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeOverallValue.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeOverallValue.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "vorbruehenOK.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "Vorbruehen.png"
+                }
+            ]
+        },
+        {
+            "Name": "vorbruehenWithout.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "VorbruehenWithout.png"
+                }
+            ]
+        },
+        {
+            "Name": "vorbruehenLong.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "VorbruehenLong.png"
+                }
+            ]
+        },
+        {
+            "Name": "vorbruehenNormal.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "VorbruehenNormal.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "coffeeStrength.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength1.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength1.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength2.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength2.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength3.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength3.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength4.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength4.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength5.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength5.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength6.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength6.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength7.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength7.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength8.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength8.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength9.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength9.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength10.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength10.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength11.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength11.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeStrength12.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeStrength12.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "coffeeTemperature.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeTemperature.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeTemperature1.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeTemperature1.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeTemperature2.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeTemperature2.png"
+                }
+            ]
+        },
+        {
+            "Name": "coffeeTemperature3.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "CoffeeTemperature3.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "waterStrength.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "WaterStrength.png"
+                }
+            ]
+        },
+        {
+            "Name": "waterStrength0.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "WaterStrength0.png"
+                }
+            ]
+        },
+        {
+            "Name": "waterStrength1.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "WaterStrength1.png"
+                }
+            ]
+        },
+        {
+            "Name": "waterStrength2.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "WaterStrength2.png"
+                }
+            ]
+        },
+        {
+            "Name": "waterStrength3.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "WaterStrength3.png"
+                }
+            ]
+        },
+        {
+            "Name": "waterStrength4.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "WaterStrength4.png"
+                }
+            ]
+        },
+        {
+            "Name": "waterStrengthFilter.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "WaterStrengthFilter.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "autoStart.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "AutoStart.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "autoStop.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "AutoStop.png"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "Name": "setClock.state",
+            "Values": [
+                {
+                    "Type": "ScreenContentVisualization",
+                    "VisualizationElement": "DisplayContent",
+                    "FileName": "SetClock.png"
+                }
+            ]
+        }
+    ]
+}
