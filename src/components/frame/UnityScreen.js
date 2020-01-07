@@ -1,7 +1,10 @@
 import React from 'react'
 import Unity, { UnityContent } from "react-unity-webgl"
+import LoadingOverlay from './LoadingOverlay'
 
 class UnityScreen extends React.Component {
+
+    state = { isUploading: false, debugUpload: false }
 
     constructor() {
         super()
@@ -10,7 +13,6 @@ class UnityScreen extends React.Component {
             "Build/WebGL.json",
             "Build/UnityLoader.js"
         )
-        this.bindMethods()
         this.unityContent.on("objectClicked", name => {
             this.objectClicked(name)
         })
@@ -31,21 +33,17 @@ class UnityScreen extends React.Component {
         // console.log(stringObject)
     }
 
-    bindMethods() {
-        this.restoreColor = this.restoreColor.bind(this)
-        this.changeColor = this.changeColor.bind(this)
-        this.objectClicked = this.objectClicked.bind(this)
-    }
-
     objectClicked(clickedElement) {
         if (clickedElement === this.props.applicationState.selectedElement) {
             clickedElement = ""
         }
         this.props.setSelectedElement(clickedElement)
-        this.insertStringObject("http://localhost:3000/CoffeeMaker.obj")
-        // this.uploadURLObject("http://localhost:3000/Polaroid.obj")
-        // this.updloadLocalObject("C:\\Users\\Nico\\Documents\\Masterarbeit\\3D_Models\\CoffeeMakerCord_OBJ.obj")
-
+        if (!this.state.debugUpload) {
+            this.insertStringObject("http://localhost:3000/CoffeeMaker.obj")
+            this.setState({debugUpload: true})
+            // this.uploadURLObject("http://localhost:3000/Polaroid.obj")
+            // this.updloadLocalObject("C:\\Users\\Nico\\Documents\\Masterarbeit\\3D_Models\\CoffeeMakerCord_OBJ.obj")
+        }
     }
 
     /**
@@ -76,6 +74,7 @@ class UnityScreen extends React.Component {
      */
     insertStringObject(url) {
         // TODO: Loading screen while inserting object
+        this.setState({ isUploading: true })
         fetch(url)
             .then((response) => {
                 return response.text()
@@ -85,6 +84,7 @@ class UnityScreen extends React.Component {
                     "UploadStringObject",
                     response
                 )
+                this.setState({ isUploading: false })
             })
 
     }
@@ -115,6 +115,7 @@ class UnityScreen extends React.Component {
 
     render() {
         return <>
+            {this.state.isUploading && <LoadingOverlay message="Uploading model" />}
             <div className="position-absolute h-100 w-100 overflow-hidden">
                 <div className="position-relative h-100 w-100">
                     <Unity style={{ minHeight: "100vh", minWidth: "100vw" }} unityContent={this.unityContent} />
