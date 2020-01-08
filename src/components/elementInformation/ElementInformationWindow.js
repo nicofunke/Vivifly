@@ -48,36 +48,6 @@ export default class ElementInformationWindow extends Component {
         document.removeEventListener("keydown", this.onKeyPressed.bind(this), false)
     }
 
-    /**
-     * Returns the correspondent settings for the current element as JSX
-     */
-    elementTypeSettings() {
-        const elementTypes = this.getElementTypes(this.props.applicationState.selectedElement)
-        if (!elementTypes || elementTypes.length === 0) {
-            return <ElementTypePicker element={this.props.applicationState.selectedElement} addElementType={this.props.addElementType} />
-        }
-        let output = []
-        if (elementTypes.find(type => type === "Button")) {
-            output.push(<ElementButtonSettings key="ButtonSettings" className="mt-2"
-                removeElementType={this.props.removeElementType}
-                element={this.props.applicationState.selectedElement} />)
-        }
-        if (elementTypes.find(type => type === "Display")) {
-            output.push(<ElementDisplaySettings key="DisplaySettings" className="mt-2" />)
-        }
-        if (elementTypes.find(type => type === "Light")) {
-            output.push(<ElementLightSettings key="LightSettings" className="mt-2" />)
-        }
-        return <>
-            {output}
-            <div className="d-flex justify-content-end">
-                <button type="button" className="btn btn-link btn-sm p-0 text-default">
-                    <MDBIcon icon="plus" /> Add another function to this element
-                    </button>
-            </div>
-        </>
-    }
-
     render() {
         if (!this.props.applicationState.selectedElement || this.props.applicationState.selectedElement === "") {
             return null
@@ -93,6 +63,40 @@ export default class ElementInformationWindow extends Component {
                         {this.elementTypeSettings()}
                     </MDBCardBody>
                 </MDBCard>
+            </div>
+        </>
+    }
+
+    /**
+     * Returns the correspondent settings for the current element as JSX
+     */
+    elementTypeSettings() {
+        const elementTypes = this.getElementTypes(this.props.applicationState.selectedElement)
+        if (!elementTypes || elementTypes.length === 0) {
+            return <ElementTypePicker element={this.props.applicationState.selectedElement} addElementType={this.props.addElementType} />
+        }
+        let output = []
+        if (elementTypes.find(type => type === "Button")) {
+            output.push(<ElementButtonSettings key="ButtonSettings" className="mt-2"
+                removeElementType={this.props.removeElementType}
+                element={this.props.applicationState.selectedElement}
+                createNewSituation={this.props.createNewSituation}
+                states={this.props.states}
+                setCurrentSituation={this.props.setCurrentSituation}
+                setSelectedElement={this.props.setSelectedElement} />)
+        }
+        if (elementTypes.find(type => type === "Display")) {
+            output.push(<ElementDisplaySettings key="DisplaySettings" className="mt-2" />)
+        }
+        if (elementTypes.find(type => type === "Light")) {
+            output.push(<ElementLightSettings key="LightSettings" className="mt-2" />)
+        }
+        return <>
+            {output}
+            <div className="d-flex justify-content-end">
+                <button type="button" className="btn btn-link btn-sm p-0 text-default">
+                    <MDBIcon icon="plus" /> Add another function to this element
+                </button>
             </div>
         </>
     }

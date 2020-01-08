@@ -6,29 +6,74 @@ import ViewContainer from './ViewContainer'
  */
 export default class StateContainer extends React.Component {
 
+    /**
+     * Default state
+     */
     state = {
         interactionElements: [],
-        states: [{ Name: "Start" }, { Name: "Heating" }, { Name: "Ready" }],
+        states: [{ Name: "Start", id: 0 }],
         transitions: [],
         visualizationElements: [],
         applicationState: {
-            currentSituation: "Start",
+            currentSituationID: 0,
             selectedElement: "",
-            unityLoadingProgress: 0.0,
-            hasAlreadySelectedAnElement: false
+            unityLoadingProgress: 0.0,              // from 0.0 to 1.0
+            hasAlreadySelectedAnElement: false     // if the user has already clicked on an element
         }
     }
 
+    /**
+     * Updates the value of the unity loading progression. 
+     * progress === 1.0 => Unity loaded completely and is ready for interaction 
+     */
     setUnityLoadingProgress(progress) {
         this.setState(state => { return { ...state, applicationState: { ...state.applicationState, unityLoadingProgress: progress } } })
     }
 
-    setCurrentSituation(newSituation) {
-        if (!this.state.states.find(state => state.Name === newSituation)) {
-            // State does not exist
+    /**
+     * Changes the currently selected situation
+    */
+    setCurrentSituation(currentSituationID) {
+        this.setState(state => {
+            return {
+                ...state, applicationState: {
+                    ...state.applicationState,
+                    currentSituationID: currentSituationID
+                }
+            }
+        })
+    }
+
+    /**
+     * Creates a new situation and returns the ID of the new situation
+     * Aborts and returns false if the name is already taken
+     */
+    createNewSituation(newSituationName) {
+        if (this.state.states.find(state => state.Name === newSituationName)) {
+            // State does already exist
             return
         }
-        this.setState(state => { return { ...state, applicationState: { ...state.applicationState, currentSituation: newSituation } } })
+        const newID = this.state.states.length
+        this.setState(state => {
+            return { ...state, states: [...state.states, { Name: newSituationName, id: newID }] }
+        })
+        return newID
+    }
+
+    /**
+     * Renames a specific situation, given by id
+     */
+    renameSituation(situationID, newSituationName) {
+        this.setState(state => {
+            return {
+                ...state, states: state.states.map(situation => {
+                    if (situationID === situation.id) {
+                        return { ...situation, Name: newSituationName }
+                    }
+                    return situation
+                })
+            }
+        })
     }
 
     setSelectedElement(selectedElement) {
@@ -80,7 +125,9 @@ export default class StateContainer extends React.Component {
     render() {
         return (
             <ViewContainer
-                setSituation={this.setCurrentSituation.bind(this)}
+                setCurrentSituation={this.setCurrentSituation.bind(this)}
+                createNewSituation={this.createNewSituation.bind(this)}
+                renameSituation={this.renameSituation.bind(this)}
                 setSelectedElement={this.setSelectedElement.bind(this)}
                 setUnityLoadingProgress={this.setUnityLoadingProgress.bind(this)}
                 interactionElements={this.state.interactionElements}

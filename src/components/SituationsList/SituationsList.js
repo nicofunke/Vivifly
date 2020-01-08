@@ -20,10 +20,11 @@ export default class SituationsList extends React.Component {
         for (const state of this.props.states) {
             listElements.push(
                 <SituationsListElement 
-                    name={state.Name} 
-                    key={state.Name}
-                    setSituation={() =>this.props.setSituation(state.Name)}
-                    isSelected={state.Name === this.props.applicationState.currentSituation} />)
+                    name={state.Name}
+                    id={state.id} 
+                    key={state.id}
+                    setCurrentSituation={this.props.setCurrentSituation}
+                    isSelected={state.id === this.props.applicationState.currentSituationID} />)
         }
         return (
             <div>
