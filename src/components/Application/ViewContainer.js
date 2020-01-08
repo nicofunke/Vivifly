@@ -33,6 +33,7 @@ export default class ViewContainer extends React.Component {
                             visualizationElements={this.props.visualizationElements}
                             setSelectedElement={this.props.setSelectedElement}
                             addElementType={this.props.addElementType}
+                            removeElementType={this.props.removeElementType}
                         />
                     </MDBRow>
                 </MDBContainer>

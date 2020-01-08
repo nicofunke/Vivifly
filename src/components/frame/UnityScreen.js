@@ -3,9 +3,10 @@ import Unity, { UnityContent } from "react-unity-webgl"
 import LoadingOverlay from './LoadingOverlay'
 import UploadModelOverlay from './UploadModelOverlay'
 
+// TODO: Send keystrokes(arrows) to unity
 class UnityScreen extends React.Component {
 
-    state = { isUploading: false, isModelUploaded: false }
+    state = { isUploading: false, isModelUploaded: true }
 
     constructor() {
         super()

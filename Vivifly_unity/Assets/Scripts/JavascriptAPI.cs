@@ -19,7 +19,6 @@ public class JavascriptAPI : MonoBehaviour {
         highlighterScript = GameObject.Find("Highlighter").GetComponent<HighlightController>();
         visualizationScript = GameObject.Find("Visualization").GetComponent<VisualizationController>();
         uploaderScript = GameObject.Find("UploadController").GetComponent<ModelUploader>();
-        this.UploadURLObject("https://user.informatik.uni-goettingen.de/~nico.funke/CoffeeMakerCord_OBJ.obj");
     }
 
     // Update is called once per frame

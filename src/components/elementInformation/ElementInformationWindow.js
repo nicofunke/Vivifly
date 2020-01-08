@@ -5,6 +5,7 @@ import ElementButtonSettings from './ElementButtonSettings'
 import ElementDisplaySettings from './ElementDisplaySettings'
 import ElementLightSettings from './ElementLightSettings'
 import { MDBCloseIcon } from "mdbreact"
+import { MDBIcon } from "mdbreact"
 
 export default class ElementInformationWindow extends Component {
 
@@ -29,25 +30,55 @@ export default class ElementInformationWindow extends Component {
     /**
      * Listener for the escape key, to close window if escape is pressed
      */
-    onKeyPressed(event){
-        if(event.keyCode === 27) {
-          this.props.setSelectedElement("")
+    onKeyPressed(event) {
+        if (event.keyCode === 27) {
+            this.props.setSelectedElement("")
         }
-      }
+    }
 
-      /**
-       * Start listening to keydown events after mounting
-       */
-      componentDidMount(){
+    /**
+     * Start listening to keydown events after mounting
+     */
+    componentDidMount() {
         document.addEventListener("keydown", this.onKeyPressed.bind(this), false)
-      }
+    }
 
-      /**
-       * Stop listening to keydown events on unmounting
-       */
-      componentWillUnmount(){
+    /**
+     * Stop listening to keydown events on unmounting
+     */
+    componentWillUnmount() {
         document.removeEventListener("keydown", this.onKeyPressed.bind(this), false)
-      }
+    }
+
+    /**
+     * Returns the correspondent settings for the current element as JSX
+     */
+    elementTypeSettings() {
+        const elementTypes = this.getElementTypes(this.props.applicationState.selectedElement)
+        if (!elementTypes || elementTypes.length === 0) {
+            return <ElementTypePicker element={this.props.applicationState.selectedElement} addElementType={this.props.addElementType} />
+        }
+        let output = []
+        if (elementTypes.find(type => type === "Button")) {
+            output.push(<ElementButtonSettings key="ButtonSettings" className="mt-2"
+                removeElementType={this.props.removeElementType}
+                element={this.props.applicationState.selectedElement} />)
+        }
+        if (elementTypes.find(type => type === "Display")) {
+            output.push(<ElementDisplaySettings key="DisplaySettings" className="mt-2" />)
+        }
+        if (elementTypes.find(type => type === "Light")) {
+            output.push(<ElementLightSettings key="LightSettings" className="mt-2" />)
+        }
+        return <>
+            {output}
+            <div className="d-flex justify-content-end">
+                <button type="button" className="btn btn-link btn-sm p-0 text-default">
+                    <MDBIcon icon="plus" /> Add another function to this element
+                    </button>
+            </div>
+        </>
+    }
 
     render() {
         if (!this.props.applicationState.selectedElement || this.props.applicationState.selectedElement === "") {
@@ -61,34 +92,10 @@ export default class ElementInformationWindow extends Component {
                             <MDBCardTitle className="col-10">{this.props.applicationState.selectedElement}</MDBCardTitle>
                             <MDBCloseIcon className="col-2" onClick={() => this.props.setSelectedElement("")} />
                         </div>
-                        
-                        <ElementSettings
-                            element={this.props.applicationState.selectedElement}
-                            elementTypes={this.getElementTypes(this.props.applicationState.selectedElement)}
-                            setSelectedElement={this.props.setSelectedElement}
-                            addElementType={this.props.addElementType} />
+                        {this.elementTypeSettings()}
                     </MDBCardBody>
                 </MDBCard>
             </div>
         </>
     }
-}
-
-function ElementSettings(props) {
-    if (!props.elementTypes || props.elementTypes.length === 0) {
-        return <ElementTypePicker element={props.element} addElementType={props.addElementType} />
-    }
-    let output = []
-    if (props.elementTypes.find(type => type === "Button")) {
-        output.push(<ElementButtonSettings key="ButtonSettings" />)
-    }
-    if (props.elementTypes.find(type => type === "Display")) {
-        output.push(<ElementDisplaySettings key="DisplaySettings"/>)
-    }
-    if (props.elementTypes.find(type => type === "Light")) {
-        output.push(<ElementLightSettings key="LightSettings"/>)
-    }
-    return <>
-        {output}
-    </>
 }

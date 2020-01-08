@@ -31,7 +31,6 @@ public class MouseController : MonoBehaviour {
             }
 
             // Send feedback to javascript
-            Debug.Log(clickedObjectName);
             JS_ObjectClicked(clickedObjectName);
         }
     }

@@ -146,8 +146,8 @@ public class CameraController : MonoBehaviour {
     /// </summary>
     public void StartLooking() {
         looking = true;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     /// <summary>
@@ -155,8 +155,8 @@ public class CameraController : MonoBehaviour {
     /// </summary>
     public void StopLooking() {
         looking = false;
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        //Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.None;
     }
 
     /// <summary>

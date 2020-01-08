@@ -8,7 +8,7 @@ export default class StateContainer extends React.Component {
 
     state = {
         interactionElements: [],
-        states: [ {Name: "Start"},{Name: "Heating"}, {Name: "Ready"}],
+        states: [{ Name: "Start" }, { Name: "Heating" }, { Name: "Ready" }],
         transitions: [],
         visualizationElements: [],
         applicationState: {
@@ -56,6 +56,28 @@ export default class StateContainer extends React.Component {
         }
     }
 
+    removeElementType(element, type) {
+        switch (type) {
+            case "Button":
+                this.setState(state => {
+                    return {
+                        ...state,
+                        interactionElements: state.interactionElements.filter( interactionElement => interactionElement.Name !== element)
+                    }
+                })
+                break
+
+            case "Display":
+                // TODO: Remove type display
+                break
+            case "Light":
+                // TODO: Remove type light
+                break
+            default:
+                return
+        }
+    }
+
     render() {
         return (
             <ViewContainer
@@ -67,7 +89,8 @@ export default class StateContainer extends React.Component {
                 transitions={this.state.transitions}
                 visualizationElements={this.state.visualizationElements}
                 applicationState={this.state.applicationState}
-                addElementType={this.addElementType.bind(this)} />
+                addElementType={this.addElementType.bind(this)} 
+                removeElementType={this.removeElementType.bind(this)} />
         )
     }
 }
