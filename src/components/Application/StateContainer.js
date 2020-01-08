@@ -8,7 +8,7 @@ export default class StateContainer extends React.Component {
 
     state = {
         interactionElements: [],
-        states: [ {Name: "Start"}],
+        states: [ {Name: "Start"},{Name: "Heating"}, {Name: "Ready"}],
         transitions: [],
         visualizationElements: [],
         applicationState: {
@@ -27,7 +27,7 @@ export default class StateContainer extends React.Component {
             // State does not exist
             return
         }
-        this.setState(state => { return { ...state, applicationState: { ...state.applicationState, currentSituationName: newSituation } } })
+        this.setState(state => { return { ...state, applicationState: { ...state.applicationState, currentSituation: newSituation } } })
     }
 
     setSelectedElement(selectedElement) {
