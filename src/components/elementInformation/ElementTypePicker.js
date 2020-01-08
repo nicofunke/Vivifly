@@ -1,5 +1,5 @@
 import React from 'react'
-import { MDBBtn, MDBCardText,MDBBtnGroup, MDBIcon } from 'mdbreact'
+import { MDBBtn, MDBCardText, MDBBtnGroup, MDBIcon } from 'mdbreact'
 
 class ElementTypePicker extends React.Component {
 
@@ -10,9 +10,18 @@ class ElementTypePicker extends React.Component {
                     What kind of element is this?
             </MDBCardText>
                 <MDBBtnGroup>
-                    <MDBBtn color="info" onClick={() => this.props.addElementType(this.props.element, "Button")}><MDBIcon icon="fingerprint" />Button</MDBBtn>
-                    <MDBBtn color="secondary" onClick={() => this.props.addElementType(this.props.element, "Light")}><MDBIcon icon="lightbulb" />Light</MDBBtn>
-                    <MDBBtn onClick={() => this.props.setElementType(this.props.element, "Display")}><MDBIcon icon="tv" />Display</MDBBtn>
+                    <MDBBtn color="light-green" onClick={() => this.props.addElementType(this.props.element, "Button")} >
+                        <div className="mb-2"><MDBIcon icon="fingerprint"  size="lg"/></div>
+                        <div>Button</div>
+                    </MDBBtn>
+                    <MDBBtn color="deep-orange" onClick={() => this.props.addElementType(this.props.element, "Light")}>
+                        <div className="mb-2"><MDBIcon icon="lightbulb" size="lg" /></div>
+                        <div>Light</div>
+                    </MDBBtn>
+                    <MDBBtn color="cyan" onClick={() => this.props.setElementType(this.props.element, "Display")}>
+                        <div className="mb-2"><MDBIcon icon="tv" size="lg" /></div>
+                        <div>Display</div>
+                    </MDBBtn>
                 </MDBBtnGroup>
             </>
         )

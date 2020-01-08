@@ -4,16 +4,18 @@
   z-index: 1001;
 }
 
-// Main styles
-.cursor-pointer:hover {
-  cursor: pointer;
-}
-
 .window-upper-right {
   position: absolute;
   top: 20px;
   right: 20px;
   max-width: 25vw;
+  width: 20vw;
+  min-width: 400px;
+}
+
+// Main styles
+.cursor-pointer:hover {
+  cursor: pointer;
 }
 
 .bg-white-transparent {
