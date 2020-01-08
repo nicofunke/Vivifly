@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import { MDBCard, MDBCardBody, MDBCardTitle } from 'mdbreact'
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBIcon, MDBCloseIcon } from 'mdbreact'
 import ElementTypePicker from './ElementTypePicker'
 import ElementButtonSettings from './ElementButtonSettings'
 import ElementDisplaySettings from './ElementDisplaySettings'
 import ElementLightSettings from './ElementLightSettings'
-import { MDBCloseIcon } from "mdbreact"
-import { MDBIcon } from "mdbreact"
 
 export default class ElementInformationWindow extends Component {
 

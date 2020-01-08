@@ -14,7 +14,8 @@ export default class StateContainer extends React.Component {
         applicationState: {
             currentSituation: "Start",
             selectedElement: "",
-            unityLoadingProgress: 0.0
+            unityLoadingProgress: 0.0,
+            hasAlreadySelectedAnElement: false
         }
     }
 
@@ -31,7 +32,7 @@ export default class StateContainer extends React.Component {
     }
 
     setSelectedElement(selectedElement) {
-        this.setState(state => { return { ...state, applicationState: { ...state.applicationState, selectedElement: selectedElement } } })
+        this.setState(state => { return { ...state, applicationState: { ...state.applicationState, selectedElement: selectedElement, hasAlreadySelectedAnElement: true } } })
     }
 
     addElementType(element, type) {
@@ -44,7 +45,6 @@ export default class StateContainer extends React.Component {
                 const newInteractionElement = { Name: element, Type: "Button" }
                 this.setState(state => { return { ...state, interactionElements: [...state.interactionElements, newInteractionElement] } })
                 break
-
             case "Display":
                 // TODO: Set type display
                 break
@@ -62,11 +62,10 @@ export default class StateContainer extends React.Component {
                 this.setState(state => {
                     return {
                         ...state,
-                        interactionElements: state.interactionElements.filter( interactionElement => interactionElement.Name !== element)
+                        interactionElements: state.interactionElements.filter(interactionElement => interactionElement.Name !== element)
                     }
                 })
                 break
-
             case "Display":
                 // TODO: Remove type display
                 break
@@ -89,7 +88,7 @@ export default class StateContainer extends React.Component {
                 transitions={this.state.transitions}
                 visualizationElements={this.state.visualizationElements}
                 applicationState={this.state.applicationState}
-                addElementType={this.addElementType.bind(this)} 
+                addElementType={this.addElementType.bind(this)}
                 removeElementType={this.removeElementType.bind(this)} />
         )
     }

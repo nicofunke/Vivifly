@@ -2,25 +2,40 @@
 // Object specific styling
 .window-upper-right {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  max-width: 25vw;
-  width: 20vw;
+  top: 1rem;
+  right: 1rem;
+  width: 25vw; 
   min-width: 400px;
 }
+
 .dropzone:hover{
   background-color: #eeeeee;
 }
 
-// z-index for overlays
-.loading-overlay{
-  z-index: 1002;
+.window-top-center{
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  width: 25vw;
+  min-width: 350px;
+
 }
-.upload-overlay{
+
+// z-index for overlays
+
+.popup-overlay{
   z-index: 1001;
 }
-.starting-overlay{
+.upload-overlay{
+  z-index: 1002;
+}
+.loading-overlay{
   z-index: 1003;
+}
+.starting-overlay{
+  z-index: 1004;
 }
 
 // Main styles
