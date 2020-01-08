@@ -1,10 +1,11 @@
 import React from 'react'
 import Unity, { UnityContent } from "react-unity-webgl"
 import LoadingOverlay from './LoadingOverlay'
+import UploadModelOverlay from './UploadModelOverlay'
 
 class UnityScreen extends React.Component {
 
-    state = { isUploading: false, debugUpload: false }
+    state = { isUploading: false, isModelUploaded: false }
 
     constructor() {
         super()
@@ -38,12 +39,6 @@ class UnityScreen extends React.Component {
             clickedElement = ""
         }
         this.props.setSelectedElement(clickedElement)
-        if (!this.state.debugUpload) {
-            this.insertStringObject("http://localhost:3000/CoffeeMaker.obj")
-            this.setState({debugUpload: true})
-            // this.uploadURLObject("http://localhost:3000/Polaroid.obj")
-            // this.updloadLocalObject("C:\\Users\\Nico\\Documents\\Masterarbeit\\3D_Models\\CoffeeMakerCord_OBJ.obj")
-        }
     }
 
     /**
@@ -68,25 +63,22 @@ class UnityScreen extends React.Component {
     }
 
     /**
-     * Inserting an 3D-model from string is currently used, because it does not require to store the 3D model on the server
+     * Inserting an 3D-model from file. This method is currently used, because it does not require to store the 3D model on the server
      * (Upload via URL is currently also implemented and works)
      * TODO: Move fetch outside this method
      */
-    insertStringObject(url) {
-        // TODO: Loading screen while inserting object
+    insertFileModel(file) {
         this.setState({ isUploading: true })
-        fetch(url)
-            .then((response) => {
-                return response.text()
-            }).then(response => {
-                this.unityContent.send(
-                    "JavascriptApi",
-                    "UploadStringObject",
-                    response
-                )
-                this.setState({ isUploading: false })
-            })
-
+        var reader = new FileReader()
+        reader.onload =  (event) => {
+            this.unityContent.send(
+                "JavascriptApi",
+                "UploadStringObject",
+                event.target.result
+            )
+            this.setState({ isUploading: false, isModelUploaded: true })
+        }
+        reader.readAsText(file)
     }
 
     highLightItem(itemName) {
@@ -115,6 +107,7 @@ class UnityScreen extends React.Component {
 
     render() {
         return <>
+            {this.state.isModelUploaded || <UploadModelOverlay insertFileModel={this.insertFileModel.bind(this)} />}
             {this.state.isUploading && <LoadingOverlay message="Uploading model" />}
             <div className="position-absolute h-100 w-100 overflow-hidden">
                 <div className="position-relative h-100 w-100">

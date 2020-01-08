@@ -53,7 +53,6 @@ export default class ElementInformationWindow extends Component {
         if (!this.props.applicationState.selectedElement || this.props.applicationState.selectedElement === "") {
             return null
         }
-        console.log(this.props.interactionElements)
         return <>
             <div className="window-upper-right">
                 <MDBCard>
@@ -81,13 +80,13 @@ function ElementSettings(props) {
     }
     let output = []
     if (props.elementTypes.find(type => type === "Button")) {
-        output.push(<ElementButtonSettings />)
+        output.push(<ElementButtonSettings key="ButtonSettings" />)
     }
     if (props.elementTypes.find(type => type === "Display")) {
-        output.push(<ElementDisplaySettings />)
+        output.push(<ElementDisplaySettings key="DisplaySettings"/>)
     }
     if (props.elementTypes.find(type => type === "Light")) {
-        output.push(<ElementLightSettings />)
+        output.push(<ElementLightSettings key="LightSettings"/>)
     }
     return <>
         {output}

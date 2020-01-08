@@ -41,4 +41,5 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 - [MDBootstrap React](https://mdbootstrap.com/docs/react/)
 - [React Unity](https://www.npmjs.com/package/react-unity-webgl)
-- [React Color] (https://casesandberg.github.io/react-color/)
+- [React Color](https://casesandberg.github.io/react-color/)
+- [react-dropzone](https://github.com/react-dropzone/react-dropzone)

@@ -1,9 +1,5 @@
 
 // Object specific styling
-.loading-overlay{
-  z-index: 1001;
-}
-
 .window-upper-right {
   position: absolute;
   top: 20px;
@@ -11,6 +7,20 @@
   max-width: 25vw;
   width: 20vw;
   min-width: 400px;
+}
+.dropzone:hover{
+  background-color: #eeeeee;
+}
+
+// z-index for overlays
+.loading-overlay{
+  z-index: 1002;
+}
+.upload-overlay{
+  z-index: 1001;
+}
+.starting-overlay{
+  z-index: 1003;
 }
 
 // Main styles

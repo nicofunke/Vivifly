@@ -8,7 +8,7 @@ export default class StartingOverlay extends React.Component {
             return null
         }
         return <>
-            <div className="position-fixed h-100 w-100 overflow-hidden bg-white loading-overlay">
+            <div className="position-fixed h-100 w-100 overflow-hidden bg-white starting-overlay">
                 <div className="row h-100">
                     <div className="col-12 my-auto row">
                         <div className="text-center col-12 mb-4"> <img src={Logo} alt="Logo" height="80px" /></div>
