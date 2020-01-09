@@ -8,18 +8,20 @@ export default class ElementButtonSettings extends Component {
      * Creates a new situation and sets a transition from the current button to this situation
      * Since the situation is created without a name it will open a popup to give it a name
      */
-    newSituationButtonClicked(){
+    newSituationButtonClicked() {
         const newSituationID = this.props.createNewSituation("")
+        this.props.addButtonTransition(this.props.applicationState.currentSituationID,
+            newSituationID, this.props.applicationState.selectedElement)
         this.props.setCurrentSituation(newSituationID)
         this.props.setSelectedElement("")
-        // TODO: Add transition
     }
 
+    // TODO: Show current transition
     render() {
         return <>
             <button type="button"
                 className="btn btn-link btn-sm p-0 text-default"
-                onClick={() => this.props.removeElementType(this.props.element, "Button")}>
+                onClick={() => this.props.removeElementType(this.props.applicationState.selectedElement, "Button")}>
                 <MDBIcon icon="angle-left" /> This is no button
             </button>
             <h5 className="light-green-text"><MDBIcon icon="fingerprint" className="mr-1" /> Button </h5>

@@ -79,11 +79,12 @@ export default class ElementInformationWindow extends Component {
         if (elementTypes.find(type => type === "Button")) {
             output.push(<ElementButtonSettings key="ButtonSettings" className="mt-2"
                 removeElementType={this.props.removeElementType}
-                element={this.props.applicationState.selectedElement}
+                applicationState={this.props.applicationState}
                 createNewSituation={this.props.createNewSituation}
                 states={this.props.states}
                 setCurrentSituation={this.props.setCurrentSituation}
-                setSelectedElement={this.props.setSelectedElement} />)
+                setSelectedElement={this.props.setSelectedElement} 
+                addButtonTransition={this.props.addButtonTransition} />)
         }
         if (elementTypes.find(type => type === "Display")) {
             output.push(<ElementDisplaySettings key="DisplaySettings" className="mt-2" />)

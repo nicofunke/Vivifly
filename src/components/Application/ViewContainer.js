@@ -44,6 +44,7 @@ export default class ViewContainer extends React.Component {
                             removeElementType={this.props.removeElementType}
                             createNewSituation={this.props.createNewSituation}
                             setCurrentSituation={this.props.setCurrentSituation}
+                            addButtonTransition={this.props.addButtonTransition}
                         />
                     </MDBRow>
                 </MDBContainer>

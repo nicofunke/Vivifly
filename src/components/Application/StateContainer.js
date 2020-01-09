@@ -76,6 +76,26 @@ export default class StateContainer extends React.Component {
         })
     }
 
+    /**
+     * Adds a new transition from one situation to another, that is triggered by pressing a button
+     */
+    addButtonTransition(sourceSituationID, destinationSituationID, button) {
+        if (this.state.transitions.find(transition =>
+            (transition.SourceStateID === sourceSituationID && transition.InteractionElement === button))) {
+            // There is already a transition
+            return
+        }
+        const newTransition = {
+            SourceStateID: sourceSituationID,
+            InteractionElement: button,
+            event: 0,
+            DestinationStateID: destinationSituationID
+        }
+        this.setState(state => {
+            return { ...state, transitions: [...state.transitions, newTransition] }
+        })
+    }
+
     setSelectedElement(selectedElement) {
         this.setState(state => { return { ...state, applicationState: { ...state.applicationState, selectedElement: selectedElement, hasAlreadySelectedAnElement: true } } })
     }
@@ -130,6 +150,7 @@ export default class StateContainer extends React.Component {
                 renameSituation={this.renameSituation.bind(this)}
                 setSelectedElement={this.setSelectedElement.bind(this)}
                 setUnityLoadingProgress={this.setUnityLoadingProgress.bind(this)}
+                addButtonTransition={this.addButtonTransition.bind(this)}
                 interactionElements={this.state.interactionElements}
                 states={this.state.states}
                 transitions={this.state.transitions}
