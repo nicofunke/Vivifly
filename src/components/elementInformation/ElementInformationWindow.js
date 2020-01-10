@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBIcon, MDBCloseIcon } from 'mdbreact'
 import ElementTypePicker from './ElementTypePicker'
-import ElementButtonSettings from './ElementButtonSettings'
+import ButtonSettings from './ButtonSettings/ButtonSettings'
 import ElementDisplaySettings from './ElementDisplaySettings'
 import ElementLightSettings from './ElementLightSettings'
 import { AppContext } from '../Application/AppContext'
@@ -36,14 +36,14 @@ export default class ElementInformationWindow extends Component {
     }
 
     /**
-     * Start listening to keydown events after mounting
+     * Start listening to keydown events after mounting(catching ESC)
      */
     componentDidMount() {
         document.addEventListener("keydown", this.onKeyPressed.bind(this), false)
     }
 
     /**
-     * Stop listening to keydown events on unmounting
+     * Stop listening to keydown events on unmounting(catching ESC)
      */
     componentWillUnmount() {
         document.removeEventListener("keydown", this.onKeyPressed.bind(this), false)
@@ -78,7 +78,7 @@ export default class ElementInformationWindow extends Component {
         }
         let output = []
         if (elementTypes.find(type => type === "Button")) {
-            output.push(<ElementButtonSettings key="ButtonSettings" className="mt-2"/>)
+            output.push(<ButtonSettings key="ButtonSettings" className="mt-2"/>)
         }
         if (elementTypes.find(type => type === "Display")) {
             output.push(<ElementDisplaySettings key="DisplaySettings" className="mt-2" />)

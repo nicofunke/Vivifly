@@ -23,6 +23,8 @@ export default class AppProvider extends React.Component {
         }
     }
 
+    //============== Session specific methods
+
     /**
      * Updates the value of the unity loading progression. 
      * progress === 1.0 => Unity loaded completely and is ready for interaction 
@@ -45,6 +47,12 @@ export default class AppProvider extends React.Component {
         })
     }
 
+    setSelectedElement(selectedElement) {
+        this.setState(state => { return { ...state, applicationState: { ...state.applicationState, selectedElement: selectedElement, hasAlreadySelectedAnElement: true } } })
+    }
+
+    // =============== SITUATION/STATE METHODS ========================
+    // TODO: SituationID static
     /**
      * Creates a new situation and returns the ID of the new situation
      * Aborts and returns false if the name is already taken
@@ -77,6 +85,7 @@ export default class AppProvider extends React.Component {
         })
     }
 
+    // =============== TRANSITION METHODS ================================
     /**
      * Adds a new transition from one situation to another, that is triggered by pressing a button
      */
@@ -97,10 +106,22 @@ export default class AppProvider extends React.Component {
         })
     }
 
-    setSelectedElement(selectedElement) {
-        this.setState(state => { return { ...state, applicationState: { ...state.applicationState, selectedElement: selectedElement, hasAlreadySelectedAnElement: true } } })
+    /**
+     * Changes the destination of a specific button transition
+     */
+    changeButtonTransitionDestination(sourceSituationID, button, newDestinationSituationID) {
+        this.setState(state => {
+            return {
+                ...state,
+                transitions: state.transitions.map(transition =>
+                    (transition.SourceStateID === sourceSituationID && transition.InteractionElement === button) ?
+                        { ...transition, DestinationStateID: newDestinationSituationID } : transition
+                )
+            }
+        })
     }
 
+    // ================== ELEMENT METHODS =================================
     addElementType(element, type) {
         switch (type) {
             case "Button":
@@ -125,6 +146,7 @@ export default class AppProvider extends React.Component {
     removeElementType(element, type) {
         switch (type) {
             case "Button":
+                // TODO: Remove Transitions
                 this.setState(state => {
                     return {
                         ...state,
@@ -143,8 +165,10 @@ export default class AppProvider extends React.Component {
         }
     }
 
+    //================= RENDER =============================
+
     render() {
-        return <AppContext.Provider value={{         
+        return <AppContext.Provider value={{
             applicationState: this.state.applicationState,
             interactionElements: this.state.interactionElements,
             states: this.state.states,
@@ -152,6 +176,7 @@ export default class AppProvider extends React.Component {
             visualizationElements: this.state.visualizationElements,
             addButtonTransition: this.addButtonTransition.bind(this),
             addElementType: this.addElementType.bind(this),
+            changeButtonTransitionDestination: this.changeButtonTransitionDestination.bind(this),
             createNewSituation: this.createNewSituation.bind(this),
             removeElementType: this.removeElementType.bind(this),
             renameSituation: this.renameSituation.bind(this),
@@ -160,7 +185,7 @@ export default class AppProvider extends React.Component {
             setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this)
 
         }}>
-             {this.props.children}
+            {this.props.children}
         </AppContext.Provider>
 
     }

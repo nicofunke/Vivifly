@@ -7,6 +7,7 @@ import { AppContext } from '../Application/AppContext'
  * Only pop ups if the name of the current situation is ""
  */
 // TODO: Validation warnings
+// TODO: Auto focus
 export default class NewSituationPopup extends React.Component {
 
     // Default: not active (gets activated if the current situation is "")
@@ -33,7 +34,6 @@ export default class NewSituationPopup extends React.Component {
 
     /**
      * Closes the popup if the current situation has an appropriate name
-     // TODO: Add to context
      */
     closePopup() {
         if( this.isProperSituationName()){
