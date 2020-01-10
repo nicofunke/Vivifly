@@ -75,7 +75,8 @@ export default class NewSituationPopup extends React.Component {
                             value={currentSituation.Name}
                             onChange={this.handleChange.bind(this)}
                             onKeyDown={this.handleKeyDown.bind(this)}
-                            outline />
+                            outline
+                            autoFocus  />
                         <small className="grey-text">
                             Meaningful names are for example
                             turnedOff, ready or gettingReady
