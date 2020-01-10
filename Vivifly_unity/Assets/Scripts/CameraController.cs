@@ -56,46 +56,43 @@ public class CameraController : MonoBehaviour {
     private bool moveLeft = false;
     private bool moveRight = false;
 
+    // Listens to keyboards and mouse events and calls necessary camera movement functions
     void Update() {
         var fastMode = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         var movementSpeed = fastMode ? this.fastMovementSpeed : this.movementSpeed;
 
         // Key down events
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
-            moveLeft = true;
-            transform.position = transform.position + (-transform.right * movementSpeed * Time.deltaTime);
+            this.startMoving("left");
         }
 
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
-            moveRight = true;
-            transform.position = transform.position + (transform.right * movementSpeed * Time.deltaTime);
+            this.startMoving("right");
         }
 
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
-            moveForwards = true;
-            transform.position = transform.position + (transform.forward * movementSpeed * Time.deltaTime);
+            this.startMoving("forwards");
         }
 
         if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
-            moveBackwards = true;
-            transform.position = transform.position + (-transform.forward * movementSpeed * Time.deltaTime);
+            this.startMoving("backwards");
         }
 
         // Key up events
         if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow)) {
-            moveLeft = false;
+            this.stopMoving("left");
         }
 
         if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow)) {
-            moveRight = false;
+            this.stopMoving("right");
         }
 
         if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.UpArrow)) {
-            moveForwards = false;
+            this.stopMoving("forwards");
         }
 
         if (Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.DownArrow)) {
-            moveBackwards = false;
+            this.stopMoving("backwards");
         }
 
         // Camera Movement
@@ -136,32 +133,74 @@ public class CameraController : MonoBehaviour {
         }
     }
 
+    // Start moving camera in the direction that is given as string
+    // possible strings: forwards, backwards, left, right
+    public void startMoving(string direction) {
+        switch (direction) {
+            case "forwards":
+                moveForwards = true;
+                transform.position = transform.position + (transform.forward * movementSpeed * Time.deltaTime);
+                break;
+            case "backwards":
+                moveBackwards = true;
+                transform.position = transform.position + (-transform.forward * movementSpeed * Time.deltaTime);
+                break;
+            case "left":
+                moveLeft = true;
+                transform.position = transform.position + (-transform.right * movementSpeed * Time.deltaTime);
+                break;
+            case "right":
+                moveRight = true;
+                transform.position = transform.position + (transform.right * movementSpeed * Time.deltaTime);
+                break;
+            default:
+                return;
+        }
+    }
+
+    // Stop movement of camera in the direction that is given as string
+    // possible strings: forwards, backwards, left, right
+    public void stopMoving(string direction) {
+        switch (direction) {
+            case "forwards":
+                moveForwards = false;
+                break;
+            case "backwards":
+                moveBackwards = false;
+                break;
+            case "left":
+                moveLeft = false;
+                break;
+            case "right":
+                moveRight = false;
+                break;
+            default:
+                return;
+        }
+    }
+
+    // Stops movement and looking
     void OnDisable() {
         StopLooking();
         StopAllMovement();
     }
 
-    /// <summary>
-    /// Enable free looking.
-    /// </summary>
+
+    // Enable free looking.
     public void StartLooking() {
         looking = true;
         //Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
     }
 
-    /// <summary>
-    /// Disable free looking.
-    /// </summary>
+    // Disable free looking.
     public void StopLooking() {
         looking = false;
         //Cursor.visible = true;
         //Cursor.lockState = CursorLockMode.None;
     }
 
-    /// <summary>
-    /// Stops looking and all movements of the camera
-    /// </summary>
+    // Stop looking and all movements of the camera
     public void StopAllMovement() {
         StopLooking();
         moveRight = false;

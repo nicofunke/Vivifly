@@ -16,7 +16,8 @@ public class ModelUploader : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        this.UploadURLObject("https://user.informatik.uni-goettingen.de/~nico.funke/CoffeeMakerCord_OBJ.obj");
+        // DEBUG: Upload CoffeeMachine on start
+        // this.UploadURLObject("https://user.informatik.uni-goettingen.de/~nico.funke/CoffeeMakerCord_OBJ.obj");
     }
 
     // Adds a MeshCollider to all child GameObject

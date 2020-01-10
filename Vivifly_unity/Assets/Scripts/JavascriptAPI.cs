@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
 
+/**
+ * Class to handle JSON coloring requests from javascript
+ **/
+public class ColoringJSON {
+    public string element;
+    public string color;
+}
+
 public class JavascriptAPI : MonoBehaviour {
 
     // Import js function
@@ -12,13 +20,15 @@ public class JavascriptAPI : MonoBehaviour {
     // Necessary scripts to call functions
     HighlightController highlighterScript;
     VisualizationController visualizationScript;
-    ModelUploader uploaderScript;        
+    ModelUploader uploaderScript;
+    CameraController cameraControllerScript;
 
     // Instantiates necessary objects
     void Start() {
         highlighterScript = GameObject.Find("Highlighter").GetComponent<HighlightController>();
         visualizationScript = GameObject.Find("Visualization").GetComponent<VisualizationController>();
         uploaderScript = GameObject.Find("UploadController").GetComponent<ModelUploader>();
+        cameraControllerScript = GameObject.Find("Main Camera").GetComponent<CameraController>();
     }
 
     // Update is called once per frame
@@ -37,7 +47,7 @@ public class JavascriptAPI : MonoBehaviour {
     // Changes the color of a gameObject
     public void ChangeColorOfCurrentlyHighlighted(string hexColor) {
         GameObject gameObject = this.highlighterScript.currentlyHighlighted;
-        if(!gameObject) {
+        if (!gameObject) {
             return;
         }
         this.visualizationScript.ChangeColor(gameObject, hexColor);
@@ -69,11 +79,6 @@ public class JavascriptAPI : MonoBehaviour {
         highlighterScript.HighlightGameObject(gameObject);
     }
 
-    // Does not work at the moment
-    public void UploadLocalObject(string objPath) {
-        uploaderScript.UploadLocalObject(objPath);
-    }
-
     // Uploads an .*obj model given by URL
     public void UploadURLObject(string url) {
         uploaderScript.UploadURLObject(url);
@@ -84,6 +89,28 @@ public class JavascriptAPI : MonoBehaviour {
         uploaderScript.UploadFromString(fileContent);
     }
 
+    // Changes the color as defined in the json that is given as string parameter
+    // example JSON: {"element": "Cube", "color":"#FF0000"}
+    public void ChangeColor(string coloringJSON) {
+        ColoringJSON request = new ColoringJSON();
+        JsonUtility.FromJsonOverwrite(coloringJSON, request);
+        GameObject gameObject = this.findObjectByName(request.element);
+        if (!gameObject) {
+            return;
+        }
+        this.visualizationScript.ChangeColor(gameObject, request.color);
+    }
 
-    // JSON string for coloring: {"name":"myName\"--\\Object123%$- {}Object","color":"red"}
+
+    // Starts movement of camera in the direction that is given as string
+    // possible strings: forwards, backwards, left, right
+    public void startCameraMovement(string direction) {
+        cameraControllerScript.startMoving(direction);
+    }
+
+    // Stops movement of camera in the direction that is given as string
+    // possible strings: forwards, backwards, left, right
+    public void stopCameraMovement(string direction) {
+        cameraControllerScript.stopMoving(direction);
+    }
 }
