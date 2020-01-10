@@ -4,6 +4,7 @@ import ElementTypePicker from './ElementTypePicker'
 import ElementButtonSettings from './ElementButtonSettings'
 import ElementDisplaySettings from './ElementDisplaySettings'
 import ElementLightSettings from './ElementLightSettings'
+import { AppContext } from '../Application/AppContext'
 
 export default class ElementInformationWindow extends Component {
 
@@ -12,12 +13,12 @@ export default class ElementInformationWindow extends Component {
      */
     getElementTypes(element) {
         let elementTypes = []
-        for (const interactionElement of this.props.interactionElements) {
+        for (const interactionElement of this.context.interactionElements) {
             if (interactionElement.Name === element) {
                 elementTypes.push(interactionElement.Type)
             }
         }
-        for (const visualizationElement of this.props.visualizationElements) {
+        for (const visualizationElement of this.context.visualizationElements) {
             if (visualizationElement.Name === element) {
                 elementTypes.push(visualizationElement.Type)
             }
@@ -30,7 +31,7 @@ export default class ElementInformationWindow extends Component {
      */
     onKeyPressed(event) {
         if (event.keyCode === 27) {
-            this.props.setSelectedElement("")
+            this.context.setSelectedElement("")
         }
     }
 
@@ -49,7 +50,7 @@ export default class ElementInformationWindow extends Component {
     }
 
     render() {
-        if (!this.props.applicationState.selectedElement || this.props.applicationState.selectedElement === "") {
+        if (!this.context.applicationState.selectedElement || this.context.applicationState.selectedElement === "") {
             return null
         }
         return <>
@@ -57,8 +58,8 @@ export default class ElementInformationWindow extends Component {
                 <MDBCard>
                     <MDBCardBody>
                         <div className="row align-items-start">
-                            <MDBCardTitle className="col-10">{this.props.applicationState.selectedElement}</MDBCardTitle>
-                            <MDBCloseIcon className="col-2" onClick={() => this.props.setSelectedElement("")} />
+                            <MDBCardTitle className="col-10">{this.context.applicationState.selectedElement}</MDBCardTitle>
+                            <MDBCloseIcon className="col-2" onClick={() => this.context.setSelectedElement("")} />
                         </div>
                         {this.elementTypeSettings()}
                     </MDBCardBody>
@@ -71,20 +72,13 @@ export default class ElementInformationWindow extends Component {
      * Returns the correspondent settings for the current element as JSX
      */
     elementTypeSettings() {
-        const elementTypes = this.getElementTypes(this.props.applicationState.selectedElement)
+        const elementTypes = this.getElementTypes(this.context.applicationState.selectedElement)
         if (!elementTypes || elementTypes.length === 0) {
-            return <ElementTypePicker element={this.props.applicationState.selectedElement} addElementType={this.props.addElementType} />
+            return <ElementTypePicker />
         }
         let output = []
         if (elementTypes.find(type => type === "Button")) {
-            output.push(<ElementButtonSettings key="ButtonSettings" className="mt-2"
-                removeElementType={this.props.removeElementType}
-                applicationState={this.props.applicationState}
-                createNewSituation={this.props.createNewSituation}
-                states={this.props.states}
-                setCurrentSituation={this.props.setCurrentSituation}
-                setSelectedElement={this.props.setSelectedElement} 
-                addButtonTransition={this.props.addButtonTransition} />)
+            output.push(<ElementButtonSettings key="ButtonSettings" className="mt-2"/>)
         }
         if (elementTypes.find(type => type === "Display")) {
             output.push(<ElementDisplaySettings key="DisplaySettings" className="mt-2" />)
@@ -102,3 +96,5 @@ export default class ElementInformationWindow extends Component {
         </>
     }
 }
+
+ElementInformationWindow.contextType = AppContext

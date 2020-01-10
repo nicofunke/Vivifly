@@ -1,11 +1,12 @@
 import React from 'react'
-import StateContainer from './components/Application/StateContainer'
+import AppProvider from './components/Application/AppProvider'
+import ViewContainer from './components/Application/ViewContainer'
 
 // TODO: Warning: Not Supported on mobile devices
 function App() {
-  return (
-    <StateContainer />
-  )
+  return <AppProvider>
+    <ViewContainer />
+  </AppProvider>
 }
 
 export default App

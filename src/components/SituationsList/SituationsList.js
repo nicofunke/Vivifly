@@ -1,5 +1,6 @@
 import React from 'react'
 import SituationsListElement from './SituationsListElement'
+import { AppContext } from '../Application/AppContext'
 
 export default class SituationsList extends React.Component {
 
@@ -17,14 +18,12 @@ export default class SituationsList extends React.Component {
 
     renderSituationList() {
         const listElements = []
-        for (const state of this.props.states) {
+        for (const state of this.context.states) {
             listElements.push(
                 <SituationsListElement 
                     name={state.Name}
                     id={state.id} 
-                    key={state.id}
-                    setCurrentSituation={this.props.setCurrentSituation}
-                    isSelected={state.id === this.props.applicationState.currentSituationID} />)
+                    key={state.id} />)
         }
         return (
             <div>
@@ -33,3 +32,5 @@ export default class SituationsList extends React.Component {
         )
     }
 }
+
+SituationsList.contextType = AppContext

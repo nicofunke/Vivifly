@@ -1,7 +1,8 @@
 import React from 'react'
 import { MDBBtn, MDBCardText, MDBBtnGroup, MDBIcon } from 'mdbreact'
+import { AppContext } from '../Application/AppContext'
 
-class ElementTypePicker extends React.Component {
+export default class ElementTypePicker extends React.Component {
 
     render() {
         return <>
@@ -9,15 +10,15 @@ class ElementTypePicker extends React.Component {
                 What kind of element is this?
             </MDBCardText>
             <MDBBtnGroup>
-                <MDBBtn color="light-green" onClick={() => this.props.addElementType(this.props.element, "Button")} >
+                <MDBBtn color="light-green" onClick={() => this.context.addElementType(this.context.applicationState.selectedElement, "Button")} >
                     <div className="mb-2"><MDBIcon icon="fingerprint" size="lg" /></div>
                     <div>Button</div>
                 </MDBBtn>
-                <MDBBtn color="deep-orange" onClick={() => this.props.addElementType(this.props.element, "Light")}>
+                <MDBBtn color="deep-orange" onClick={() => this.context.addElementType(this.context.applicationState.selectedElement, "Light")}>
                     <div className="mb-2"><MDBIcon icon="lightbulb" size="lg" /></div>
                     <div>Light</div>
                 </MDBBtn>
-                <MDBBtn color="cyan" onClick={() => this.props.setElementType(this.props.element, "Display")}>
+                <MDBBtn color="cyan" onClick={() => this.context.setElementType(this.context.applicationState.selectedElement, "Display")}>
                     <div className="mb-2"><MDBIcon icon="tv" size="lg" /></div>
                     <div>Display</div>
                 </MDBBtn>
@@ -26,4 +27,4 @@ class ElementTypePicker extends React.Component {
     }
 }
 
-export default ElementTypePicker
+ElementTypePicker.contextType = AppContext

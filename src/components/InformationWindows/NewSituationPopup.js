@@ -1,5 +1,6 @@
 import React from 'react'
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBIcon, MDBCardText, MDBInput, MDBBtn } from 'mdbreact'
+import { AppContext } from '../Application/AppContext'
 
 /**
  * Popup to define a name for the current situation
@@ -16,8 +17,9 @@ export default class NewSituationPopup extends React.Component {
      * calls the method to change the name globally 
      */
     handleChange(event) {
+        const currentSituationId = this.context.applicationState.currentSituationID
         this.setState({ currentlyActive: true })
-        this.props.renameSituation(this.props.applicationState.currentSituationID, event.target.value)
+        this.context.renameSituation(currentSituationId, event.target.value)
     }
 
     /**
@@ -31,6 +33,7 @@ export default class NewSituationPopup extends React.Component {
 
     /**
      * Closes the popup if the current situation has an appropriate name
+     // TODO: Add to context
      */
     closePopup() {
         if( this.isProperSituationName()){
@@ -42,13 +45,15 @@ export default class NewSituationPopup extends React.Component {
      * Returns if the current situation name is appropriate and can be used
      */
     isProperSituationName(){
-        const currentSituation = this.props.states.find(situation => situation.id === this.props.applicationState.currentSituationID)
-        const duplicate = this.props.states.filter( state => state.Name === currentSituation.Name).length > 1
-        return !!currentSituation && currentSituation.Name !=="" && !duplicate
+        const currentSituationID =  this.context.applicationState.currentSituationID
+        const currentSituation = this.context.states.find(situation => situation.id === currentSituationID)
+        const isDuplicate = this.context.states.filter( state => state.Name === currentSituation.Name).length > 1
+        return !!currentSituation && currentSituation.Name !=="" && !isDuplicate
     }
 
     render() {
-        const currentSituation = this.props.states.find(situation => situation.id === this.props.applicationState.currentSituationID)
+        const currentSituationID = this.context.applicationState.currentSituationID
+        const currentSituation = this.context.states.find(situation => situation.id === currentSituationID)
         if (!this.state.currentlyActive &&
             (!currentSituation || currentSituation.Name !== "")) {
             return null
@@ -87,3 +92,5 @@ export default class NewSituationPopup extends React.Component {
         </>
     }
 }
+
+NewSituationPopup.contextType = AppContext

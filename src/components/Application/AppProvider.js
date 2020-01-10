@@ -1,10 +1,11 @@
 import React from 'react'
-import ViewContainer from './ViewContainer'
+import { AppContext } from './AppContext'
 
 /**
- * This container class holds all state information, like the states, elements and transitions
+ * Provides the context AppContext for the whole application
  */
-export default class StateContainer extends React.Component {
+// TODO: THink about conditional rerendering
+export default class AppProvider extends React.Component {
 
     /**
      * Default state
@@ -143,21 +144,24 @@ export default class StateContainer extends React.Component {
     }
 
     render() {
-        return (
-            <ViewContainer
-                setCurrentSituation={this.setCurrentSituation.bind(this)}
-                createNewSituation={this.createNewSituation.bind(this)}
-                renameSituation={this.renameSituation.bind(this)}
-                setSelectedElement={this.setSelectedElement.bind(this)}
-                setUnityLoadingProgress={this.setUnityLoadingProgress.bind(this)}
-                addButtonTransition={this.addButtonTransition.bind(this)}
-                interactionElements={this.state.interactionElements}
-                states={this.state.states}
-                transitions={this.state.transitions}
-                visualizationElements={this.state.visualizationElements}
-                applicationState={this.state.applicationState}
-                addElementType={this.addElementType.bind(this)}
-                removeElementType={this.removeElementType.bind(this)} />
-        )
+        return <AppContext.Provider value={{         
+            applicationState: this.state.applicationState,
+            interactionElements: this.state.interactionElements,
+            states: this.state.states,
+            transitions: this.state.transitions,
+            visualizationElements: this.state.visualizationElements,
+            addButtonTransition: this.addButtonTransition.bind(this),
+            addElementType: this.addElementType.bind(this),
+            createNewSituation: this.createNewSituation.bind(this),
+            removeElementType: this.removeElementType.bind(this),
+            renameSituation: this.renameSituation.bind(this),
+            setCurrentSituation: this.setCurrentSituation.bind(this),
+            setSelectedElement: this.setSelectedElement.bind(this),
+            setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this)
+
+        }}>
+             {this.props.children}
+        </AppContext.Provider>
+
     }
 }

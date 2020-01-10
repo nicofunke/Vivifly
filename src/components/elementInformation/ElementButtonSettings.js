@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { MDBBtn, MDBIcon } from "mdbreact"
+import { AppContext } from '../Application/AppContext'
 
 export default class ElementButtonSettings extends Component {
 
@@ -9,11 +10,11 @@ export default class ElementButtonSettings extends Component {
      * Since the situation is created without a name it will open a popup to give it a name
      */
     newSituationButtonClicked() {
-        const newSituationID = this.props.createNewSituation("")
-        this.props.addButtonTransition(this.props.applicationState.currentSituationID,
-            newSituationID, this.props.applicationState.selectedElement)
-        this.props.setCurrentSituation(newSituationID)
-        this.props.setSelectedElement("")
+        const newSituationID = this.context.createNewSituation("")
+        this.context.addButtonTransition(this.context.applicationState.currentSituationID,
+            newSituationID, this.context.applicationState.selectedElement)
+        this.context.setCurrentSituation(newSituationID)
+        this.context.setSelectedElement("")
     }
 
     // TODO: Show current transition
@@ -21,7 +22,7 @@ export default class ElementButtonSettings extends Component {
         return <>
             <button type="button"
                 className="btn btn-link btn-sm p-0 text-default"
-                onClick={() => this.props.removeElementType(this.props.applicationState.selectedElement, "Button")}>
+                onClick={() => this.context.removeElementType(this.context.applicationState.selectedElement, "Button")}>
                 <MDBIcon icon="angle-left" /> This is no button
             </button>
             <h5 className="light-green-text"><MDBIcon icon="fingerprint" className="mr-1" /> Button </h5>
@@ -37,7 +38,7 @@ export default class ElementButtonSettings extends Component {
                 </div>
                 <div className="col-6 px-2">
                     <MDBBtn color="info" className="d-flex align-items-center"
-                        disabled={!!this.props.states && this.props.states.length <= 1}>
+                        disabled={!!this.context.states && this.context.states.length <= 1}>
                         <MDBIcon icon="random" size="lg" />
                         <div className="d-inline-block ml-2">Existing Situation</div>
                     </MDBBtn>
@@ -46,3 +47,5 @@ export default class ElementButtonSettings extends Component {
         </>
     }
 }
+
+ElementButtonSettings.contextType = AppContext

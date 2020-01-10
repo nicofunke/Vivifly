@@ -1,10 +1,12 @@
 import React from 'react'
 import Logo from '../../assets/logo_font.png'
+import { AppContext } from '../Application/AppContext'
 
 export default class StartingOverlay extends React.Component {
 
     render() {
-        if(this.props.loadingProgress >= 1.0){
+        const loadingProgress = this.context.applicationState.unityLoadingProgress
+        if(loadingProgress >= 1.0){
             return null
         }
         return <>
@@ -14,7 +16,7 @@ export default class StartingOverlay extends React.Component {
                         <div className="text-center col-12 mb-4"> <img src={Logo} alt="Logo" height="80px" /></div>
                         <div className="col-sm-4 offset-sm-4">
                             <div className="progress">
-                                <div className="progress-bar blue-gradient" role="progressbar" style={{ width: `${100 * this.props.loadingProgress}%` }}></div>
+                                <div className="progress-bar blue-gradient" role="progressbar" style={{ width: `${100 * loadingProgress}%` }}></div>
                             </div>
                         </div>
                     </div>
@@ -23,3 +25,5 @@ export default class StartingOverlay extends React.Component {
         </>
     }
 }
+
+StartingOverlay.contextType = AppContext

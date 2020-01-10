@@ -1,9 +1,11 @@
 import React from 'react'
 import { MDBCard, MDBCardBody, MDBCardTitle } from 'mdbreact'
+import { AppContext } from '../Application/AppContext'
 
 export default class WelcomeWindow extends React.Component {
     render() {
-        if (!this.props.applicationState || this.props.applicationState.hasAlreadySelectedAnElement) {
+        const applicationState = this.context.applicationState
+        if (!applicationState || applicationState.hasAlreadySelectedAnElement) {
             return null
         }
         return <>
@@ -27,3 +29,5 @@ export default class WelcomeWindow extends React.Component {
         </>
     }
 }
+
+WelcomeWindow.contextType = AppContext

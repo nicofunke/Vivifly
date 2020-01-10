@@ -15,37 +15,17 @@ export default class ViewContainer extends React.Component {
 
     render() {
         return <>
-            <StartingOverlay loadingProgress={this.props.applicationState.unityLoadingProgress} />
-            <WelcomeWindow applicationState={this.props.applicationState} />
-            <NewSituationPopup 
-                applicationState={this.props.applicationState}
-                states={this.props.states} 
-                renameSituation={this.props.renameSituation}/>
+            <StartingOverlay />
+            <WelcomeWindow />
+            <NewSituationPopup />
             <div className="h-100">
-                <UnityScreen
-                    setSelectedElement={this.props.setSelectedElement}
-                    applicationState={this.props.applicationState}
-                    setUnityLoadingProgress={this.props.setUnityLoadingProgress} />
+                <UnityScreen />
                 <MDBContainer fluid className="h-100">
                     <MDBRow className="h-100">
                         <MDBCol size="2" className="p-0 h-100">
-                            <SituationsList
-                                states={this.props.states}
-                                applicationState={this.props.applicationState}
-                                setCurrentSituation={this.props.setCurrentSituation} />
+                            <SituationsList />
                         </MDBCol>
-                        <ElementInformationWindow
-                            applicationState={this.props.applicationState}
-                            interactionElements={this.props.interactionElements}
-                            visualizationElements={this.props.visualizationElements}
-                            states={this.props.states}
-                            setSelectedElement={this.props.setSelectedElement}
-                            addElementType={this.props.addElementType}
-                            removeElementType={this.props.removeElementType}
-                            createNewSituation={this.props.createNewSituation}
-                            setCurrentSituation={this.props.setCurrentSituation}
-                            addButtonTransition={this.props.addButtonTransition}
-                        />
+                        <ElementInformationWindow />
                     </MDBRow>
                 </MDBContainer>
             </div>

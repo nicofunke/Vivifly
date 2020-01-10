@@ -2,11 +2,16 @@ import React from 'react'
 import Unity, { UnityContent } from "react-unity-webgl"
 import LoadingOverlay from './LoadingOverlay'
 import UploadModelOverlay from './UploadModelOverlay'
+import { AppContext } from '../Application/AppContext'
 
 // TODO: Send keystrokes(arrows) to unity
-class UnityScreen extends React.Component {
+export default class UnityScreen extends React.Component {
 
-    state = { isUploading: false, isModelUploaded: true }
+    state = {
+        isUploading: false,
+        isModelUploaded: true,
+        highlightedElement: ""
+    }
 
     constructor() {
         super()
@@ -26,7 +31,7 @@ class UnityScreen extends React.Component {
             // TODO: Show upload button after loading unity
         })
         this.unityContent.on("progress", progress => {
-            this.props.setUnityLoadingProgress(progress)
+            this.context.setUnityLoadingProgress(progress)
         })
 
         // TODO: color with JSON 
@@ -36,19 +41,10 @@ class UnityScreen extends React.Component {
     }
 
     objectClicked(clickedElement) {
-        if (clickedElement === this.props.applicationState.selectedElement) {
+        if (clickedElement === this.context.applicationState.selectedElement) {
             clickedElement = ""
         }
-        this.props.setSelectedElement(clickedElement)
-    }
-
-    /**
-     * Changes the currently highlighted element if necessary, dependent on the props
-     */
-    componentDidUpdate(prevProps) {
-        if (prevProps.applicationState.selectedElement !== this.props.applicationState.selectedElement) {
-            this.highLightItem(this.props.applicationState.selectedElement)
-        }
+        this.context.setSelectedElement(clickedElement)
     }
 
     /**
@@ -71,7 +67,7 @@ class UnityScreen extends React.Component {
     insertFileModel(file) {
         this.setState({ isUploading: true })
         var reader = new FileReader()
-        reader.onload =  (event) => {
+        reader.onload = (event) => {
             this.unityContent.send(
                 "JavascriptApi",
                 "UploadStringObject",
@@ -82,11 +78,21 @@ class UnityScreen extends React.Component {
         reader.readAsText(file)
     }
 
-    highLightItem(itemName) {
+    /**
+     * Highlights a new object in the unity scene if the context has changed
+     */
+    componentDidUpdate() {
+        if (this.state.highlightedElement !== this.context.applicationState.selectedElement) {
+            this.highLightElement(this.context.applicationState.selectedElement)
+        }
+    }
+
+    highLightElement(element) {
+        this.setState({ highlightedElement: element })
         this.unityContent.send(
             "JavascriptApi",
             "HighlightObject",
-            itemName
+            element
         )
     }
 
@@ -119,4 +125,4 @@ class UnityScreen extends React.Component {
     }
 }
 
-export default UnityScreen
+UnityScreen.contextType = AppContext
