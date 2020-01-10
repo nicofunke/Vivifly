@@ -9,17 +9,28 @@ export default class UnityScreen extends React.Component {
 
     state = {
         isUploading: false,
-        isModelUploaded: true,
+        isModelUploaded: true, // TODO: move to context
         highlightedElement: ""
     }
 
     constructor() {
         super()
-
         this.unityContent = new UnityContent(
             "Build/WebGL.json",
             "Build/UnityLoader.js"
         )
+        this.initializeUnityMethods()
+
+        // TODO: color with JSON 
+        // const testObject = {name: "myName\"--\\Object123%$- {}Object", color: "red"}
+        // const stringObject = JSON.stringify(testObject)
+        // console.log(stringObject)
+    }
+
+    /**
+     * Initializes the handlers for method calls that come from unity WebGL
+     */
+    initializeUnityMethods() {
         this.unityContent.on("objectClicked", name => {
             this.objectClicked(name)
         })
@@ -33,13 +44,12 @@ export default class UnityScreen extends React.Component {
         this.unityContent.on("progress", progress => {
             this.context.setUnityLoadingProgress(progress)
         })
-
-        // TODO: color with JSON 
-        // const testObject = {name: "myName\"--\\Object123%$- {}Object", color: "red"}
-        // const stringObject = JSON.stringify(testObject)
-        // console.log(stringObject)
     }
 
+    /**
+     * Method that gets called if an element is clicked inside unity WebGL
+     * Sets it as the currently selected element
+     */
     objectClicked(clickedElement) {
         if (clickedElement === this.context.applicationState.selectedElement) {
             clickedElement = ""
@@ -87,6 +97,90 @@ export default class UnityScreen extends React.Component {
         }
     }
 
+    /**
+     * Start listening to keydown/keyup events after mounting(catching arrow keys)
+     */
+    componentDidMount() {
+        document.addEventListener("keydown", this.handleKeyDown.bind(this), false)
+        document.addEventListener("keydown", this.handleKeyDown.bind(this), false)
+    }
+
+    /**
+     * Stop listening to keydown/keyup events on unmounting(catching arrow keys)
+     */
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKeyUp.bind(this), false)
+        document.removeEventListener("keyup", this.handleKeyUp.bind(this), false)
+    }
+
+    /**
+     * Method that gets called if a key is pressed down and moves the camera if it's an arrow key
+     */
+    handleKeyDown(event) {
+        switch (event.keyCode) {
+            case 37:
+                this.startCameraMovement("left")
+                break
+            case 38:
+                this.startCameraMovement("forwards")
+                break
+            case 39:
+                this.startCameraMovement("right")
+                break
+            case 40:
+                this.startCameraMovement("backwards")
+                break
+            default:
+                return
+        }
+    }
+
+    /**
+     * Method that gets called if a key is released and stops camera movement the camera if it's an arrow key
+     */
+    handleKeyUp(event) {
+        switch (event.keyCode) {
+            case 37:
+                this.stopCameraMovement("left")
+                break
+            case 38:
+                this.stopCameraMovement("forwards")
+                break
+            case 39:
+                this.stopCameraMovement("right")
+                break
+            case 40:
+                this.stopCameraMovement("backwards")
+                break
+            default:
+                return
+        }
+    }
+
+    /**
+     * Starts moving the camera inside WebGL
+     * possible directions: forwards, backwards, left, right
+     */
+    startCameraMovement(direction) {
+        this.unityContent.send(
+            "JavascriptApi",
+            "startCameraMovement",
+            direction
+        )
+    }
+
+    /**
+     * Stops camera movement inside WebGL
+     * possible directions: forwards, backwards, left, right
+     */
+    stopCameraMovement(direction) {
+        this.unityContent.send(
+            "JavascriptApi",
+            "stopCameraMovement",
+            direction
+        )
+    }
+
     highLightElement(element) {
         this.setState({ highlightedElement: element })
         this.unityContent.send(
@@ -96,7 +190,7 @@ export default class UnityScreen extends React.Component {
         )
     }
 
-    changeColor(hexColor) {
+    changeColor(element, hexColor) {
         this.unityContent.send(
             "JavascriptApi",
             "ChangeColorOfCurrentlyHighlighted",
