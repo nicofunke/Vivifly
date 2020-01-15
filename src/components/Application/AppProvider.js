@@ -7,6 +7,8 @@ import { AppContext } from './AppContext'
 // TODO: THink about conditional rerendering
 export default class AppProvider extends React.Component {
 
+    static nexSituationID = 1
+
     /**
      * Default state
      */
@@ -19,7 +21,8 @@ export default class AppProvider extends React.Component {
             currentSituationID: 0,
             selectedElement: "",
             unityLoadingProgress: 0.0,              // from 0.0 to 1.0
-            hasAlreadySelectedAnElement: false     // if the user has already clicked on an element
+            hasAlreadySelectedAnElement: false,     // if the user has already clicked on an element
+            nextSituationID: 1                      // in order to give new situations a unique ID
         }
     }
 
@@ -52,7 +55,6 @@ export default class AppProvider extends React.Component {
     }
 
     // =============== SITUATION/STATE METHODS ========================
-    // TODO: SituationID static
     /**
      * Creates a new situation and returns the ID of the new situation
      * Aborts and returns false if the name is already taken
@@ -62,9 +64,15 @@ export default class AppProvider extends React.Component {
             // State does already exist
             return
         }
-        const newID = this.state.states.length
+        const newID = this.state.applicationState.nextSituationID
+        const nextID = newID + 1
+        console.log(nextID)
         this.setState(state => {
-            return { ...state, states: [...state.states, { Name: newSituationName, id: newID }] }
+            return {
+                ...state,
+                states: [...state.states, { Name: newSituationName, id: newID }],
+                applicationState: { ...state.applicationState, nextSituationID: nextID}
+            }
         })
         return newID
     }
