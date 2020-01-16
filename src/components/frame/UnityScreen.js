@@ -22,9 +22,9 @@ export default class UnityScreen extends React.Component {
         this.initializeUnityMethods()
 
         // TODO: color with JSON 
-        // const testObject = {name: "myName\"--\\Object123%$- {}Object", color: "red"}
-        // const stringObject = JSON.stringify(testObject)
-        // console.log(stringObject)
+        const testObject = {name: "someCube", red: 15, green: 200, blue: 150, alpha: 0.7 }
+        const stringObject = JSON.stringify(testObject)
+        console.log(stringObject)
     }
 
     /**

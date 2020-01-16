@@ -8,7 +8,10 @@ using System.Runtime.InteropServices;
  **/
 public class ColoringJSON {
     public string element;
-    public string color;
+    public float red;
+    public float green;
+    public float blue;
+    public float alpha;
 }
 
 public class JavascriptAPI : MonoBehaviour {
@@ -18,17 +21,18 @@ public class JavascriptAPI : MonoBehaviour {
     private static extern void JS_ErrorOccurred(int code, string message);
 
     // Necessary scripts to call functions
-    HighlightController highlighterScript;
-    VisualizationController visualizationScript;
-    ModelUploader uploaderScript;
-    CameraController cameraControllerScript;
+    OutlineController outlineController;
+    LightsController lightsController;
+    ModelUploader modelUploader;
+    CameraController cameraController;
 
     // Instantiates necessary objects
     void Start() {
-        highlighterScript = GameObject.Find("Highlighter").GetComponent<HighlightController>();
-        visualizationScript = GameObject.Find("Visualization").GetComponent<VisualizationController>();
-        uploaderScript = GameObject.Find("UploadController").GetComponent<ModelUploader>();
-        cameraControllerScript = GameObject.Find("Main Camera").GetComponent<CameraController>();
+        GameObject viviflyCore = GameObject.Find("ViviflyCore");
+        outlineController = viviflyCore.GetComponent<OutlineController>();
+        lightsController = viviflyCore.GetComponent<LightsController>();
+        modelUploader = viviflyCore.GetComponent<ModelUploader>();
+        cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
     }
 
     // Update is called once per frame
@@ -44,28 +48,6 @@ public class JavascriptAPI : MonoBehaviour {
         return gameObject;
 
     }
-    // Changes the color of a gameObject
-    public void ChangeColorOfCurrentlyHighlighted(string hexColor) {
-        GameObject gameObject = this.highlighterScript.currentlyHighlighted;
-        if (!gameObject) {
-            return;
-        }
-        this.visualizationScript.ChangeColor(gameObject, hexColor);
-    }
-
-    // Restores the original color of an object
-    public void RestoreColor(string objectName) {
-        GameObject gameObject = this.findObjectByName(objectName);
-        if (!gameObject) {
-            return;
-        }
-        this.visualizationScript.restoreColor(gameObject);
-    }
-
-    // Restores the original color of all objects
-    public void RestoreAllColors() {
-        this.visualizationScript.restoreColorsOfAllGameobjects();
-    }
 
     // Highlights a gameobject by its name or no element, if "" is given as parameter
     public void HighlightObject(string objectName) {
@@ -76,41 +58,58 @@ public class JavascriptAPI : MonoBehaviour {
                 return;
             }
         }
-        highlighterScript.HighlightGameObject(gameObject);
+        outlineController.HighlightGameObject(gameObject);
     }
 
     // Uploads an .*obj model given by URL
     public void UploadURLObject(string url) {
-        uploaderScript.UploadURLObject(url);
+        modelUploader.UploadURLObject(url);
     }
 
     // Uploads an *.obj model given as a string)
     public void UploadStringObject(string fileContent) {
-        uploaderScript.UploadFromString(fileContent);
+        modelUploader.UploadFromString(fileContent);
     }
 
     // Changes the color as defined in the json that is given as string parameter
-    // example JSON: {"element": "Cube", "color":"#FF0000"}
+    // example JSON: {element: "Cube3", red: 0.2, green: 1.0, blue: 0.15, alpha: 0.7 }
     public void ChangeColor(string coloringJSON) {
+
         ColoringJSON request = new ColoringJSON();
         JsonUtility.FromJsonOverwrite(coloringJSON, request);
         GameObject gameObject = this.findObjectByName(request.element);
         if (!gameObject) {
+            // Element does not exist: do nothing
             return;
         }
-        this.visualizationScript.ChangeColor(gameObject, request.color);
+        this.lightsController.ChangeColor(gameObject, request.red, request.green, request.blue, request.alpha);
+    }
+
+    // Removes the light effect of an object
+    public void RemoveLight(string objectName) {
+        GameObject gameObject = this.findObjectByName(objectName);
+        if (!gameObject) {
+            // Element does not exist: do nothing
+            return;
+        }
+        this.lightsController.RemoveLightEffect(gameObject);
+    }
+
+    // Removes all light effects of all elements
+    public void RemoveAllLights() {
+        this.lightsController.RemoveAllLightEffects();
     }
 
 
     // Starts movement of camera in the direction that is given as string
     // possible strings: forwards, backwards, left, right
     public void startCameraMovement(string direction) {
-        cameraControllerScript.startMoving(direction);
+        cameraController.startMoving(direction);
     }
 
     // Stops movement of camera in the direction that is given as string
     // possible strings: forwards, backwards, left, right
     public void stopCameraMovement(string direction) {
-        cameraControllerScript.stopMoving(direction);
+        cameraController.stopMoving(direction);
     }
 }
