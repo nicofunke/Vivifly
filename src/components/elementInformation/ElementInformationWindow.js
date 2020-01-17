@@ -3,8 +3,8 @@ import { MDBCard, MDBCardBody, MDBCardTitle, MDBIcon, MDBCloseIcon } from 'mdbre
 import ElementTypePicker from './ElementTypePicker'
 import ButtonSettings from './ButtonSettings/ButtonSettings'
 import ElementDisplaySettings from './ElementDisplaySettings'
-import ElementLightSettings from './ElementLightSettings'
 import { AppContext } from '../Application/AppContext'
+import LightSettings from './LightSettings/LightSettings'
 
 export default class ElementInformationWindow extends Component {
 
@@ -84,7 +84,7 @@ export default class ElementInformationWindow extends Component {
             output.push(<ElementDisplaySettings key="DisplaySettings" className="mt-2" />)
         }
         if (elementTypes.find(type => type === "Light")) {
-            output.push(<ElementLightSettings key="LightSettings" className="mt-2" />)
+            output.push(<LightSettings key="LightSettings" className="mt-2" />)
         }
         return <>
             {output}

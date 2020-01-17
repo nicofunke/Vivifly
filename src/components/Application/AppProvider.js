@@ -71,7 +71,7 @@ export default class AppProvider extends React.Component {
             return {
                 ...state,
                 states: [...state.states, { Name: newSituationName, id: newID }],
-                applicationState: { ...state.applicationState, nextSituationID: nextID}
+                applicationState: { ...state.applicationState, nextSituationID: nextID }
             }
         })
         return newID
@@ -130,6 +130,10 @@ export default class AppProvider extends React.Component {
     }
 
     // ================== ELEMENT METHODS =================================
+    /**
+     * Adds a type(function) to an element
+     * Currently implemented types: Button, Light & Display
+     */
     addElementType(element, type) {
         switch (type) {
             case "Button":
@@ -144,13 +148,22 @@ export default class AppProvider extends React.Component {
                 // TODO: Set type display
                 break
             case "Light":
-                // TODO: Set type light
+                if (!!this.state.visualizationElements.find(visualizationElement => visualizationElement.Name === element)) {
+                    // Element is already a visualizationElement
+                    return
+                }
+                const newVisualizationElement = { Type: "Light", Name: element, EmissionColor: { r: 1, g: 0, b: 0, a: 1 } }
+                this.setState(state => { return { ...state, visualizationElements: [...state.visualizationElements, newVisualizationElement] } })
                 break
             default:
                 return
         }
     }
 
+    /**
+     * Removes a type(function) from an element
+     * Currently implemented types: Button, Light & Display
+     */
     removeElementType(element, type) {
         switch (type) {
             case "Button":
@@ -166,7 +179,13 @@ export default class AppProvider extends React.Component {
                 // TODO: Remove type display
                 break
             case "Light":
-                // TODO: Remove type light
+                // TODO: Remove visualizations in states
+                this.setState(state => {
+                    return {
+                        ...state,
+                        visualizationElements: state.visualizationElements.filter(visualizationElement => visualizationElement.Name !== element)
+                    }
+                })
                 break
             default:
                 return
