@@ -1,11 +1,11 @@
 {
-  "name": "react-stater",
+  "name": "Vivifly",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@trendmicro/react-sidenav": "^0.4.5",
     "mdbreact": "^4.21.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "react": "^16.10.2",
     "react-color": "^2.17.3",
     "react-dom": "^16.10.2",
