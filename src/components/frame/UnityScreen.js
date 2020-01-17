@@ -22,9 +22,9 @@ export default class UnityScreen extends React.Component {
         this.initializeUnityMethods()
 
         // TODO: color with JSON 
-        const testObject = {name: "someCube", red: 15, green: 200, blue: 150, alpha: 0.7 }
-        const stringObject = JSON.stringify(testObject)
-        console.log(stringObject)
+        // const testObject = {name: "someCube", red: 15, green: 200, blue: 150, alpha: 0.7 }
+        // const stringObject = JSON.stringify(testObject)
+        // console.log(stringObject)
     }
 
     /**
@@ -37,9 +37,6 @@ export default class UnityScreen extends React.Component {
         // TODO: Error Handling
         this.unityContent.on("catchUnityError", (code, messageString) => {
             console.log("ERROR" + code + ": " + messageString)
-        })
-        this.unityContent.on("loaded", () => {
-            // TODO: Show upload button after loading unity
         })
         this.unityContent.on("progress", progress => {
             this.context.setUnityLoadingProgress(progress)
@@ -93,7 +90,15 @@ export default class UnityScreen extends React.Component {
      */
     componentDidUpdate() {
         if (this.state.highlightedElement !== this.context.applicationState.selectedElement) {
-            this.highLightElement(this.context.applicationState.selectedElement)
+            // If exists remove outline from previous outlined object
+            if (!!this.state.highlightedElement && this.state.highlightedElement !== "") {
+                this.removeOutline(this.state.highlightedElement)
+            }
+            // Outline newly selected element if an element is selected
+            if (!!this.context.applicationState.selectedElement && this.context.applicationState.selectedElement !== "") {
+                this.outlineElement(this.context.applicationState.selectedElement, "red")
+            }
+            this.setState({highlightedElement: this.context.applicationState.selectedElement})
         }
     }
 
@@ -181,28 +186,27 @@ export default class UnityScreen extends React.Component {
         )
     }
 
-    highLightElement(element) {
-        this.setState({ highlightedElement: element })
+    /**
+     * Outlines an element inside WebGL
+     * possible color strings: red, deep-orange, light-green, cyan 
+     */
+    outlineElement(elementName, colorName) {
+        const requestParam = { element: elementName, color: colorName }
         this.unityContent.send(
             "JavascriptApi",
-            "HighlightObject",
-            element
+            "setOutline",
+            JSON.stringify(requestParam)
         )
     }
 
-    changeColor(element, hexColor) {
+    /**
+     * Removes outline of an element 
+     */
+    removeOutline(elementName) {
         this.unityContent.send(
             "JavascriptApi",
-            "ChangeColorOfCurrentlyHighlighted",
-            hexColor
-        )
-    }
-
-    restoreColor(element) {
-        this.unityContent.send(
-            "JavascriptApi",
-            "RestoreColor",
-            element
+            "RemoveOutline",
+            elementName
         )
     }
 
