@@ -3,16 +3,26 @@ import LightColorPicker from './LightColorPicker'
 import LightEmissionSlider from './LightEmissionSlider'
 import { AppContext } from '../../Application/AppContext'
 import { MDBIcon } from 'mdbreact'
+import {Utils} from '../../../Utils'
 
 export default class LightSettings extends React.Component {
 
     static contextType = AppContext
 
+
+    /**
+     * Changes the main color of the current element(Light) 
+     */
+    setColor(r,g,b){
+        this.context.setLightColor(this.context.applicationState.selectedElement,r,g,b)
+    }
+
     render() {
+        const currentElement = this.context.applicationState.selectedElement
         return <>
             <button type="button"
                 className="btn btn-link btn-sm p-0 text-default"
-                onClick={() => this.context.removeElementType(this.context.applicationState.selectedElement, "Light")}>
+                onClick={() => this.context.removeElementType(currentElement, "Light")}>
                 <MDBIcon icon="angle-left" /> This is no light
             </button>
             <h5 className="deep-orange-text"><MDBIcon icon="lightbulb" className="mr-1" /> Light </h5>
@@ -20,7 +30,7 @@ export default class LightSettings extends React.Component {
             <label className="mt-3">Emission</label>
             <LightEmissionSlider />
             <label className="mt-3">Color: </label>
-            <LightColorPicker />
+            <LightColorPicker colorChanged={this.setColor.bind(this)} color={Utils.getLightEmissionColor(currentElement, this.context)} />
         </>
     }
 }

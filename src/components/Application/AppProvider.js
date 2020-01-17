@@ -26,7 +26,7 @@ export default class AppProvider extends React.Component {
         }
     }
 
-    //============== Session specific methods
+    //============== Session specific methods =========================
 
     /**
      * Updates the value of the unity loading progression. 
@@ -129,7 +129,7 @@ export default class AppProvider extends React.Component {
         })
     }
 
-    // ================== ELEMENT METHODS =================================
+    // ================== ELEMENT-TYPE METHODS =================================
     /**
      * Adds a type(function) to an element
      * Currently implemented types: Button, Light & Display
@@ -161,7 +161,7 @@ export default class AppProvider extends React.Component {
     }
 
     /**
-     * Removes a type(function) from an element
+     * Removes a type/function from an element
      * Currently implemented types: Button, Light & Display
      */
     removeElementType(element, type) {
@@ -192,6 +192,27 @@ export default class AppProvider extends React.Component {
         }
     }
 
+    //================= LIGHT METHODS =============================
+
+    /**
+     * Changes the main color of a light element
+     */
+    setLightColor(element, red, green, blue){
+        if (!this.state.visualizationElements.find(visualizationElement => visualizationElement.Name === element)) {
+            // Element is no light -> Stop
+            return
+        }
+        this.setState( state => {
+            return { ...state,
+                visualizationElements: state.visualizationElements.map(visualizationElement => {
+                    return visualizationElement.Name === element?
+                    {...visualizationElement, EmissionColor: { r: red, g: green, b: blue, a:1.0} }
+                    :  visualizationElement
+                })
+            }
+        })
+    }
+
     //================= RENDER =============================
 
     render() {
@@ -208,6 +229,7 @@ export default class AppProvider extends React.Component {
             removeElementType: this.removeElementType.bind(this),
             renameSituation: this.renameSituation.bind(this),
             setCurrentSituation: this.setCurrentSituation.bind(this),
+            setLightColor: this.setLightColor.bind(this),
             setSelectedElement: this.setSelectedElement.bind(this),
             setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this)
 

@@ -5,26 +5,12 @@ import ButtonSettings from './ButtonSettings/ButtonSettings'
 import ElementDisplaySettings from './ElementDisplaySettings'
 import { AppContext } from '../Application/AppContext'
 import LightSettings from './LightSettings/LightSettings'
+import { Utils } from '../../Utils'
 
 export default class ElementInformationWindow extends Component {
 
-    /**
-     * Returns an array with the types (Button, Light, ...) of the given element
-     */
-    getElementTypes(element) {
-        let elementTypes = []
-        for (const interactionElement of this.context.interactionElements) {
-            if (interactionElement.Name === element) {
-                elementTypes.push(interactionElement.Type)
-            }
-        }
-        for (const visualizationElement of this.context.visualizationElements) {
-            if (visualizationElement.Name === element) {
-                elementTypes.push(visualizationElement.Type)
-            }
-        }
-        return elementTypes
-    }
+    static contextType = AppContext
+
 
     /**
      * Listener for the escape key, to close window if escape is pressed
@@ -72,13 +58,13 @@ export default class ElementInformationWindow extends Component {
      * Returns the correspondent settings for the current element as JSX
      */
     elementTypeSettings() {
-        const elementTypes = this.getElementTypes(this.context.applicationState.selectedElement)
+        const elementTypes = Utils.getElementTypes(this.context.applicationState.selectedElement, this.context)
         if (!elementTypes || elementTypes.length === 0) {
             return <ElementTypePicker />
         }
         let output = []
         if (elementTypes.find(type => type === "Button")) {
-            output.push(<ButtonSettings key="ButtonSettings" className="mt-2"/>)
+            output.push(<ButtonSettings key="ButtonSettings" className="mt-2" />)
         }
         if (elementTypes.find(type => type === "Display")) {
             output.push(<ElementDisplaySettings key="DisplaySettings" className="mt-2" />)
@@ -96,5 +82,3 @@ export default class ElementInformationWindow extends Component {
         </>
     }
 }
-
-ElementInformationWindow.contextType = AppContext

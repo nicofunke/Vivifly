@@ -7,6 +7,8 @@ import { AppContext } from '../Application/AppContext'
 // TODO: Send keystrokes(arrows) to unity
 export default class UnityScreen extends React.Component {
 
+    static contextType = AppContext
+    
     state = {
         isUploading: false,
         isModelUploaded: true, // TODO: move to context
@@ -217,5 +219,3 @@ export default class UnityScreen extends React.Component {
         </>
     }
 }
-
-UnityScreen.contextType = AppContext
