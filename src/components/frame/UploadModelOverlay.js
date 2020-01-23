@@ -4,10 +4,11 @@ import { MDBIcon } from 'mdbreact'
 import Logo from '../../assets/logo_font.png'
 
 export default function UploadModelOverlay(props) {
+    
     // TODO: Handling wrong file formats
     const { getRootProps, getInputProps } = useDropzone({
         multiple: false,
-        onDrop: files => props.insertFileModel(files[0])
+        onDrop: files => props.unityWrapper.insertFileModel(files[0])
     })
 
     return <>

@@ -1,7 +1,7 @@
 /**
  * Utils class with static helper function to work with the application state(context)
  */
-export class Utils {
+export class ContextUtils {
 
     /**
      * Returns an array with the types (Button, Light, ...) of the given element

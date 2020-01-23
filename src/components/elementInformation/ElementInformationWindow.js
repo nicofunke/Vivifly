@@ -5,7 +5,7 @@ import ButtonSettings from './ButtonSettings/ButtonSettings'
 import ElementDisplaySettings from './ElementDisplaySettings'
 import { AppContext } from '../Application/AppContext'
 import LightSettings from './LightSettings/LightSettings'
-import { Utils } from '../../Utils'
+import { ContextUtils } from '../../Utils/ContextUtils'
 
 export default class ElementInformationWindow extends Component {
 
@@ -58,7 +58,7 @@ export default class ElementInformationWindow extends Component {
      * Returns the correspondent settings for the current element as JSX
      */
     elementTypeSettings() {
-        const elementTypes = Utils.getElementTypes(this.context.applicationState.selectedElement, this.context)
+        const elementTypes = ContextUtils.getElementTypes(this.context.applicationState.selectedElement, this.context)
         if (!elementTypes || elementTypes.length === 0) {
             return <ElementTypePicker />
         }

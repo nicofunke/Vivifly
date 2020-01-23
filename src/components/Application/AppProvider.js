@@ -1,10 +1,11 @@
 import React from 'react'
 import { AppContext } from './AppContext'
+import { UnityWrapper } from '../../Utils/UnityWrapper'
 
 /**
  * Provides the context AppContext for the whole application
  */
-// TODO: THink about conditional rerendering
+// TODO: Think about conditional rerendering
 export default class AppProvider extends React.Component {
 
     static nexSituationID = 1
@@ -22,11 +23,28 @@ export default class AppProvider extends React.Component {
             selectedElement: "",
             unityLoadingProgress: 0.0,              // from 0.0 to 1.0
             hasAlreadySelectedAnElement: false,     // if the user has already clicked on an element
-            nextSituationID: 1                      // in order to give new situations a unique ID
-        }
+            nextSituationID: 1,                     // in order to give new situations a unique ID
+            isCurrentlyUploading: false,            // Boolean if the application currently uploads a model
+            modelWasUploaded: true,                // Boolean if a model was already uploaded
+        },
+        unityWrapper: new UnityWrapper(             // Current UnityWrapper object
+            this.unityObjectClicked.bind(this),
+            this.setUnityLoadingProgress.bind(this),
+            this.uploadingStarted.bind(this),
+            this.uploadingFinished.bind(this))
     }
 
-    //============== Session specific methods =========================
+    // ============== WebGL/Unity methods ===========================
+    /**
+     * Method that gets called if an element is clicked inside unity WebGL
+     * Sets it as the currently selected element
+     */
+    unityObjectClicked(clickedElement) {
+        if (clickedElement === this.state.applicationState.selectedElement) {
+            clickedElement = ""
+        }
+        this.setSelectedElement(clickedElement)
+    }
 
     /**
      * Updates the value of the unity loading progression. 
@@ -36,6 +54,21 @@ export default class AppProvider extends React.Component {
         this.setState(state => { return { ...state, applicationState: { ...state.applicationState, unityLoadingProgress: progress } } })
     }
 
+    /**
+     * Gets called when uploading a 3D model started
+     */
+    uploadingStarted() {
+        this.setState(state => { return { ...state, applicationState: { ...state.applicationState, isCurrentlyUploading: true } } })
+    }
+
+    /**
+     * Gets called if the 3D has been uploaded successfully
+     */
+    uploadingFinished() {
+        this.setState(state => { return { ...state, applicationState: { ...state.applicationState, isCurrentlyUploading: false, modelWasUploaded: true } } })
+    }
+
+    //============== Session specific methods =========================
     /**
      * Changes the currently selected situation
     */
@@ -50,7 +83,17 @@ export default class AppProvider extends React.Component {
         })
     }
 
+    /**
+     * Changes the currently selected element and highlights it in unity
+     */
     setSelectedElement(selectedElement) {
+        const previousSelectedElement = this.state.applicationState.selectedElement
+        if (previousSelectedElement !== "") {
+            this.state.unityWrapper.removeOutline(previousSelectedElement)
+        }
+        if (selectedElement !== "") {
+            this.state.unityWrapper.outlineElement(selectedElement, "red")
+        }
         this.setState(state => { return { ...state, applicationState: { ...state.applicationState, selectedElement: selectedElement, hasAlreadySelectedAnElement: true } } })
     }
 
@@ -197,17 +240,18 @@ export default class AppProvider extends React.Component {
     /**
      * Changes the main color of a light element
      */
-    setLightColor(element, red, green, blue){
+    setLightColor(element, red, green, blue) {
         if (!this.state.visualizationElements.find(visualizationElement => visualizationElement.Name === element)) {
             // Element is no light -> Stop
             return
         }
-        this.setState( state => {
-            return { ...state,
+        this.setState(state => {
+            return {
+                ...state,
                 visualizationElements: state.visualizationElements.map(visualizationElement => {
-                    return visualizationElement.Name === element?
-                    {...visualizationElement, EmissionColor: { r: red, g: green, b: blue, a:1.0} }
-                    :  visualizationElement
+                    return visualizationElement.Name === element ?
+                        { ...visualizationElement, EmissionColor: { r: red, g: green, b: blue, a: 1.0 } }
+                        : visualizationElement
                 })
             }
         })
@@ -221,6 +265,7 @@ export default class AppProvider extends React.Component {
             interactionElements: this.state.interactionElements,
             states: this.state.states,
             transitions: this.state.transitions,
+            unityWrapper: this.state.unityWrapper,
             visualizationElements: this.state.visualizationElements,
             addButtonTransition: this.addButtonTransition.bind(this),
             addElementType: this.addElementType.bind(this),

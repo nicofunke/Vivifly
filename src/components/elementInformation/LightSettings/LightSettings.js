@@ -3,7 +3,7 @@ import LightColorPicker from './LightColorPicker'
 import LightEmissionSlider from './LightEmissionSlider'
 import { AppContext } from '../../Application/AppContext'
 import { MDBIcon } from 'mdbreact'
-import {Utils} from '../../../Utils'
+import {ContextUtils} from '../../../Utils/ContextUtils'
 
 export default class LightSettings extends React.Component {
 
@@ -30,7 +30,7 @@ export default class LightSettings extends React.Component {
             <label className="mt-3">Emission</label>
             <LightEmissionSlider />
             <label className="mt-3">Color: </label>
-            <LightColorPicker colorChanged={this.setColor.bind(this)} color={Utils.getLightEmissionColor(currentElement, this.context)} />
+            <LightColorPicker colorChanged={this.setColor.bind(this)} color={ContextUtils.getLightEmissionColor(currentElement, this.context)} />
         </>
     }
 }
