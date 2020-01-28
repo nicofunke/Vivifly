@@ -1,6 +1,7 @@
 import React from 'react'
 import { AppContext } from './AppContext'
 import { UnityWrapper } from '../../Utils/UnityWrapper'
+import { ContextUtils } from '../../Utils/ContextUtils'
 
 /**
  * Provides the context AppContext for the whole application
@@ -73,6 +74,7 @@ export default class AppProvider extends React.Component {
      * Changes the currently selected situation
     */
     setCurrentSituation(currentSituationID) {
+        // TODO: Update VisualizationElements inside WebGL
         this.setState(state => {
             return {
                 ...state, applicationState: {
@@ -109,7 +111,6 @@ export default class AppProvider extends React.Component {
         }
         const newID = this.state.applicationState.nextSituationID
         const nextID = newID + 1
-        console.log(nextID)
         this.setState(state => {
             return {
                 ...state,
@@ -223,6 +224,7 @@ export default class AppProvider extends React.Component {
                 break
             case "Light":
                 // TODO: Remove visualizations in states
+                // TODO: Remove visualization inside WebGL
                 this.setState(state => {
                     return {
                         ...state,
@@ -255,11 +257,16 @@ export default class AppProvider extends React.Component {
                 })
             }
         })
-        this.state.unityWrapper.setLightEffect(element, red, green, blue, 1.0)
+
+        // Change color inside the current WebGL visualization if necessary
+        const emissionStrength = ContextUtils.getLightEmissionStrength(element, this.state.applicationState.currentSituationID, this.state)
+        this.state.unityWrapper.setLightEffect(element, red, green, blue, emissionStrength)
     }
 
+    /**
+     * Changes the emission strength of a light in a certain situation
+     */
     setLightEmission(element, emissionSituationID, emissionStrength) {
-        console.log(" Changing: " + element + " " + emissionSituationID + " " + emissionStrength)
         if (!this.state.visualizationElements.find(visualizationElement => visualizationElement.Name === element)) {
             // Element is no light -> Stop
             return
@@ -289,6 +296,13 @@ export default class AppProvider extends React.Component {
         })
         this.setState({ states: newStates })
 
+        // Change emission inside the current WebGL visualization if necessary
+        if (emissionSituationID === this.state.applicationState.currentSituationID) {
+            const color = ContextUtils.getLightEmissionColor(element, this.state)
+            if (!!color) {
+                this.state.unityWrapper.setLightEffect(element, color.r, color.g, color.b, emissionStrength)
+            }
+        }
     }
 
     //================= RENDER =============================
