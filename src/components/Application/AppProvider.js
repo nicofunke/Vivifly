@@ -225,13 +225,15 @@ export default class AppProvider extends React.Component {
      * Currently implemented types: Button, Light & Display
      */
     removeElementType(element, type) {
+        console.log(this.state.transitions)
         switch (type) {
             case "Button":
-                // TODO: Remove Transitions
+                // Remove element from interactionElements and remove all transitions that include the button
                 this.setState(state => {
                     return {
                         ...state,
-                        interactionElements: state.interactionElements.filter(interactionElement => interactionElement.Name !== element)
+                        interactionElements: state.interactionElements.filter(interactionElement => interactionElement.Name !== element),
+                        transitions: state.transitions.filter( transition => (transition.InteractionElement !== element))
                     }
                 })
                 break
@@ -239,14 +241,22 @@ export default class AppProvider extends React.Component {
                 // TODO: Remove type display
                 break
             case "Light":
-                // TODO: Remove visualizations in states
-                // TODO: Remove visualization inside WebGL
+                // Remove from all situations and from visualizationElements list
+                const newStates = this.state.states.map( situation => {
+                    if(!situation.Values){
+                        return situation
+                    }
+                    return {...situation, Values: situation.Values.filter( value => value.VisualizationElement !== element)}
+                })
                 this.setState(state => {
                     return {
                         ...state,
+                        states: newStates,
                         visualizationElements: state.visualizationElements.filter(visualizationElement => visualizationElement.Name !== element)
                     }
                 })
+                // Remove light effects from current WebGL visualization
+                this.state.unityWrapper.removeLightEffect(element)
                 break
             default:
                 return

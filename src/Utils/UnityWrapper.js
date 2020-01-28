@@ -117,4 +117,15 @@ export class UnityWrapper {
             undefined
         )
     }
+
+    /**
+     * Removes the light effect of a certain element
+     */
+    removeLightEffect(elementName) {
+        this.unityContent.send(
+            "JavascriptApi",
+            "RemoveLight",
+            elementName
+        )
+    }
 }
