@@ -106,4 +106,15 @@ export class UnityWrapper {
             JSON.stringify(requestParam)
         )
     }
+
+    /**
+     * Removes all light effects from the current visualization
+     */
+    removeAllLightEffects(){
+        this.unityContent.send(
+            "JavascriptApi",
+            "RemoveAllLights",
+            undefined
+        )
+    }
 }

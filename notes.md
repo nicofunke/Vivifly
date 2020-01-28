@@ -15,6 +15,7 @@
   - It is necessary to send element name and color at least
   - Solution: Send JSON string and parse it in unity
 - Highlighting: Asset
+- Appprovicder(state) -> UnityWrapper
 
 # Interface notes
 

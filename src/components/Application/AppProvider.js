@@ -6,7 +6,7 @@ import { ContextUtils } from '../../Utils/ContextUtils'
 /**
  * Provides the context AppContext for the whole application
  */
-// TODO: Think about conditional rerendering
+// TODO: Think about conditional rerendering to speed up everything
 export default class AppProvider extends React.Component {
 
     static nexSituationID = 1
@@ -74,7 +74,7 @@ export default class AppProvider extends React.Component {
      * Changes the currently selected situation
     */
     setCurrentSituation(currentSituationID) {
-        // TODO: Update VisualizationElements inside WebGL
+        // Change state
         this.setState(state => {
             return {
                 ...state, applicationState: {
@@ -83,6 +83,22 @@ export default class AppProvider extends React.Component {
                 }
             }
         })
+        // Change visualization
+        this.state.unityWrapper.removeAllLightEffects()
+        const newSituation = this.state.states.find(situation => situation.id === currentSituationID)
+        if (!!newSituation && !!newSituation.Values) {
+            for (const value of newSituation.Values) {
+                if (value.Type === "FloatValueVisualization") {
+                    // Light effect
+                    const color = ContextUtils.getLightEmissionColor(value.VisualizationElement, this.state)
+                    if(!!color){
+                        this.state.unityWrapper.setLightEffect(value.VisualizationElement, color.r, color.g, color.b, value.Value)
+                    }
+                } else if (value.Type === "ScreenContentVisualization") {
+                    // TODO: Screen visualization
+                }
+            }
+        }
     }
 
     /**
