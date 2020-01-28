@@ -93,4 +93,17 @@ export class UnityWrapper {
             elementName
         )
     }
+
+    /**
+     * Changes the light effect of an element
+     * colors and alpha are from 0 to 1
+     */
+    setLightEffect(elementName, red, green, blue, alpha) {
+        const requestParam = { element: elementName, red: red, blue: blue, green: green, alpha: alpha}
+        this.unityContent.send(
+            "JavascriptApi",
+            "SetLightColor",
+            JSON.stringify(requestParam)
+        )
+    }
 }

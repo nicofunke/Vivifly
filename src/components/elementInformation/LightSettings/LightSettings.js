@@ -17,8 +17,17 @@ export default class LightSettings extends React.Component {
         this.context.setLightColor(this.context.applicationState.selectedElement,r,g,b)
     }
 
+    /**
+     * Changes the emission strength of the current element in the current situation 
+     */
+    setEmission(alpha){
+        this.context.setLightEmission(this.context.applicationState.selectedElement, this.context.applicationState.currentSituationID, alpha)
+    }
+
     render() {
         const currentElement = this.context.applicationState.selectedElement
+        const currentSituationID = this.context.applicationState.currentSituationID
+        console.log(this.context.states)
         return <>
             <button type="button"
                 className="btn btn-link btn-sm p-0 text-default"
@@ -28,7 +37,7 @@ export default class LightSettings extends React.Component {
             <h5 className="deep-orange-text"><MDBIcon icon="lightbulb" className="mr-1" /> Light </h5>
             <div>A light has a fixed color and can change its emission strength dependent on the situation</div>
             <label className="mt-3">Emission</label>
-            <LightEmissionSlider />
+            <LightEmissionSlider alphaChanged={this.setEmission.bind(this)} alpha={ContextUtils.getLightEmissionStrength(currentElement, currentSituationID, this.context )} />
             <label className="mt-3">Color: </label>
             <LightColorPicker colorChanged={this.setColor.bind(this)} color={ContextUtils.getLightEmissionColor(currentElement, this.context)} />
         </>

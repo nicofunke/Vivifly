@@ -32,4 +32,22 @@ export class ContextUtils {
         }
         return visualizationElement.EmissionColor
     }
+
+    /**
+     * Returns the emission strength of an element in a certain situation
+     */
+    static getLightEmissionStrength(element, situationID, context) {
+        const emissionSituation = context.states.find(state => state.id === situationID)
+        if (!emissionSituation) {
+            // situation does not exist -> Stop
+            return null
+        }
+        if(!emissionSituation.Values){
+            return 0.0
+        } 
+        const visualizationValue = emissionSituation.Values.find(value => value.VisualizationElement === element && value.Type === "FloatValueVisualization")
+        // Return 0.0 if element has no visualization currently
+        return !!visualizationValue ? visualizationValue.Value : 0.0 
+
+    }
 }

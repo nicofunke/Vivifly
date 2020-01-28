@@ -255,6 +255,40 @@ export default class AppProvider extends React.Component {
                 })
             }
         })
+        this.state.unityWrapper.setLightEffect(element, red, green, blue, 1.0)
+    }
+
+    setLightEmission(element, emissionSituationID, emissionStrength) {
+        console.log(" Changing: " + element + " " + emissionSituationID + " " + emissionStrength)
+        if (!this.state.visualizationElements.find(visualizationElement => visualizationElement.Name === element)) {
+            // Element is no light -> Stop
+            return
+        }
+        const newStates = this.state.states.map(situation => {
+            if (situation.id !== emissionSituationID) {
+                return situation
+            }
+            let emissionChanged = false
+            let newValues = []
+            if (!!situation.Values) {
+                newValues = situation.Values.map(visualizationValue => {
+                    if (visualizationValue.VisualizationElement !== element || visualizationValue.Type !== "FloatValueVisualization") {
+                        return visualizationValue
+                    }
+                    // Visualization exists -> Change emission
+                    emissionChanged = true
+                    return { ...visualizationValue, Value: emissionStrength }
+                })
+            }
+            if (!emissionChanged) {
+                // emission does not exist yet -> Create a new entry
+                const newVisualizationValue = { Type: "FloatValueVisualization", Value: emissionStrength, VisualizationElement: element }
+                newValues = [...newValues, newVisualizationValue]
+            }
+            return { ...situation, Values: newValues }
+        })
+        this.setState({ states: newStates })
+
     }
 
     //================= RENDER =============================
@@ -275,6 +309,7 @@ export default class AppProvider extends React.Component {
             renameSituation: this.renameSituation.bind(this),
             setCurrentSituation: this.setCurrentSituation.bind(this),
             setLightColor: this.setLightColor.bind(this),
+            setLightEmission: this.setLightEmission.bind(this),
             setSelectedElement: this.setSelectedElement.bind(this),
             setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this)
 
