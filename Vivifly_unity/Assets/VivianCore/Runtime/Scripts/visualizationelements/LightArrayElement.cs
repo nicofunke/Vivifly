@@ -51,7 +51,7 @@ namespace de.ugoe.cs.vivian.core
         /**
          * Called to visualize a bool value
          */
-        internal override void Visualize(bool value)
+        public override void Visualize(bool value)
         {
             foreach (LightElement light in this.LightElements)
             {
@@ -62,7 +62,7 @@ namespace de.ugoe.cs.vivian.core
         /**
          * Called to visualize a float value
          */
-        internal override void Visualize(float value)
+        public override void Visualize(float value)
         {
             for (int i = 0; i < this.LightElements.Length; i++)
             {

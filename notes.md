@@ -16,6 +16,7 @@
   - Solution: Send JSON string and parse it in unity
 - Highlighting: Asset
 - Appprovicder(state) -> UnityWrapper
+- Access Lighteffect and Displayeffect of vivian framework
 
 # Interface notes
 

@@ -62,7 +62,7 @@ namespace de.ugoe.cs.vivian.core
         /**
          * Called to visualize a bool value
          */
-        internal override void Visualize(bool value)
+        public override void Visualize(bool value)
         {
             if (value)
             {
@@ -93,7 +93,7 @@ namespace de.ugoe.cs.vivian.core
         /**
          * Called to visualize a float value
          */
-        internal override void Visualize(float value)
+        public override void Visualize(float value)
         {
             if (value > 0.0)
             {

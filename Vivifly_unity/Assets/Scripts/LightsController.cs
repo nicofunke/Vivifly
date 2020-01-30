@@ -11,8 +11,8 @@ public class LightsController : MonoBehaviour {
     [DllImport("__Internal")]
     private static extern void JS_ErrorOccurred(int code, string message);
 
-    // Maps GameObjects of light with their correspondend light overlay
-    private Dictionary<GameObject, GameObject> lightObjects = new Dictionary<GameObject, GameObject>();
+    // Maps the name of gameObjects with their correspondend light GameObject if exist
+    private Dictionary<string, GameObject> lightObjects = new Dictionary<string, GameObject>();
 
 
     // Start is called before the first frame update
@@ -23,77 +23,40 @@ public class LightsController : MonoBehaviour {
     void Update() {
     }
 
-    // Adds a light effect to an gameObject by creating an overlay light object
-    public void ChangeColor(GameObject originalObject, float red, float green, float blue, float alpha) {
+    // Adds a light effect to an gameObject 
+    public void ChangeColor(string gameObjectName, float red, float green, float blue, float alpha) {
 
-        // Get light overlay object or create new one
         GameObject lightGameObject;
-        if (!lightObjects.ContainsKey(originalObject)) {
-            lightGameObject = this.AddLightEffect(originalObject, red, green, blue);
-        }
-        else {
-            lightGameObject = lightObjects[originalObject];
-        }
-        lightGameObject.GetComponent<MeshRenderer>().material.color = new Color(red, green, blue, alpha);
+        Color emissionColor = new Color(red, green, blue);
+        VisualizationElementSpec visualizationSpec = new LightSpec(gameObjectName, emissionColor);
+
+        // If exists remove previous light effect
+        this.RemoveLightEffect(gameObjectName);
+
+        // Add new light effect gameObject
+        lightGameObject = VirtualPrototype.CreateVisualizationElement(visualizationSpec, null);
+        lightGameObject.GetComponent<LightElement>().Visualize(0.5F);
+
+        // Store light effect in mapping
+        this.lightObjects.Add(gameObjectName, lightGameObject);
     }
 
-    // Creates an overlaying GameObject for light effects
-    // Returns the overlay object
-    public GameObject AddLightEffect(GameObject originalObject, float red, float green, float blue) {
-
-        // There is already an overlay element -> stop
-        if (lightObjects.ContainsKey(originalObject)) {
-            return null;
-        }
-
-        // Create an overlay object for the light
-        GameObject lightGameObject = new GameObject("VisualizationObject" + originalObject.name);
-        lightGameObject.transform.SetPositionAndRotation(originalObject.transform.position, originalObject.transform.rotation);
-
-        // Copy Meshfilter
-        MeshFilter originalObjectMeshFilter = originalObject.GetComponent<MeshFilter>();
-        if (originalObjectMeshFilter != null) {
-            MeshFilter lightMeshFilter = (MeshFilter)lightGameObject.AddComponent(originalObjectMeshFilter.GetType());
-            Utils.CopyComponentValues(lightMeshFilter, originalObjectMeshFilter);
-        }
-
-        // Get Meshrenderer
-        MeshRenderer originalObjectMeshRenderer = originalObject.GetComponent<MeshRenderer>();
-        if (originalObjectMeshRenderer == null) {
-            // No Meshrenderer found => Stop 
-            return null;
-        }
-
-        // Copy Meshrenderer
-        MeshRenderer lightMeshRenderer = (MeshRenderer)lightGameObject.AddComponent(originalObjectMeshRenderer.GetType());
-        Utils.CopyComponentValues(lightMeshRenderer, originalObjectMeshRenderer);
-
-        // Add transparent material
-        Material lightMaterial = new Material(Shader.Find("UI/Default"));
-        lightMaterial.color = new Color(red, green, blue, (float)0.0);
-        lightMeshRenderer.material = lightMaterial;
-
-        // Add to lightElements mapping and return
-        lightObjects.Add(originalObject, lightGameObject);
-        return lightGameObject;
-    }
-
-    // Removes the light effect overlay of a gameobject
-    public void RemoveLightEffect(GameObject originalObject) {
+    // Removes the light effect of a gameobject
+    public void RemoveLightEffect(string gameObjectName) {
         // There is no overlay element -> stop
-        if (!lightObjects.ContainsKey(originalObject)) {
+        if (!lightObjects.ContainsKey(gameObjectName)) {
             return;
         }
-        GameObject lightGameObject = lightObjects[originalObject];
-        lightObjects.Remove(originalObject);
+        GameObject lightGameObject = lightObjects[gameObjectName];
+        lightObjects.Remove(gameObjectName);
         Destroy(lightGameObject);
     }
 
-    // Removes all light overlay gameobjects
+    // Removes all light gameobjects
     public void RemoveAllLightEffects() {
-        GameObject[] keyObjects = lightObjects.Keys.ToArray();
-        foreach (GameObject keyObject in keyObjects) {
-            this.RemoveLightEffect(keyObject);
+        string[] keyObjects = lightObjects.Keys.ToArray();
+        foreach (string gameObjectName in keyObjects) {
+            this.RemoveLightEffect(gameObjectName);
         }
     }
 }

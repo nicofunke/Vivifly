@@ -281,7 +281,7 @@ namespace de.ugoe.cs.vivian.core
         /*
          * 
          */
-        private GameObject CreateVisualizationElement(VisualizationElementSpec elementSpec, AssetBundle assetBundle)
+        public static GameObject CreateVisualizationElement(VisualizationElementSpec elementSpec, AssetBundle assetBundle)
         {
             GameObject effectiveElement = GameObject.Find(elementSpec.Name);
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
 
+using de.ugoe.cs.vivian.core;
+
 /**
  * Class to handle JSON coloring requests from Javascript
  **/
@@ -109,22 +111,12 @@ public class JavascriptAPI : MonoBehaviour {
 
         ColoringJSON request = new ColoringJSON();
         JsonUtility.FromJsonOverwrite(coloringJSON, request);
-        GameObject gameObject = this.findObjectByName(request.element);
-        if (!gameObject) {
-            // Element does not exist: do nothing
-            return;
-        }
-        this.lightsController.ChangeColor(gameObject, request.red, request.green, request.blue, request.alpha);
+        this.lightsController.ChangeColor(request.element, request.red, request.green, request.blue, request.alpha);
     }
 
     // Removes the light effect of an object
     public void RemoveLight(string objectName) {
-        GameObject gameObject = this.findObjectByName(objectName);
-        if (!gameObject) {
-            // Element does not exist: do nothing
-            return;
-        }
-        this.lightsController.RemoveLightEffect(gameObject);
+        this.lightsController.RemoveLightEffect(objectName);
     }
 
     // Removes all light effects of all elements
@@ -146,3 +138,4 @@ public class JavascriptAPI : MonoBehaviour {
         cameraController.stopMoving(direction);
     }
 }
+

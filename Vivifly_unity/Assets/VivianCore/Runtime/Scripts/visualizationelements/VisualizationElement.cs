@@ -57,12 +57,12 @@ namespace de.ugoe.cs.vivian.core
         /**
          * Called to visualize a bool value
          */
-        internal abstract void Visualize(bool value);
+        public abstract void Visualize(bool value);
 
         /**
          * Called to visualize a float value
          */
-        internal abstract void Visualize(float value);
+        public abstract void Visualize(float value);
     }
 
     /**
