@@ -67,7 +67,7 @@ namespace de.ugoe.cs.vivian.core
 
         public bool IsVideo { get; }
 
-        internal ScreenSpec(string name, Vector3 plane, Vector2 resolution, bool isVideo) : base(name)
+        public ScreenSpec(string name, Vector3 plane, Vector2 resolution, bool isVideo) : base(name)
         {
             this.Plane = plane;
             this.Resolution = resolution;

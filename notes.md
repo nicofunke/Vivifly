@@ -22,3 +22,11 @@
 
 - colors for each element type
 - states -> Situations
+
+# Changes on Vivian Framework
+- ScreenElement Rotate and movement exchanged and rotation inverted
+- Visualize method public
+- VirtualPrototype.CreateVisualizationElement made public and static
+- ScreenElement Visualize extended with Texture2D params
+- Screenspec constructor public
+- LightSpec constructor public

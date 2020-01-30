@@ -38,7 +38,7 @@ namespace de.ugoe.cs.vivian.core
         /**
          * Called to visualize any value
          */
-        internal virtual void Visualize(object value)
+        public virtual void Visualize(object value)
         {
             if (value is bool)
             {

@@ -53,7 +53,6 @@ namespace de.ugoe.cs.vivian.core
         internal void Initialize(ScreenSpec spec, GameObject representedObject, AssetBundle assetBundle)
         {
             base.Initialize(spec, representedObject);
-
             this.AssetBundle = assetBundle;
 
             // add a canvas to draw the screen content onto.
@@ -73,11 +72,11 @@ namespace de.ugoe.cs.vivian.core
             // set the resolution of the canvas to the provided one
             transform.sizeDelta = spec.Resolution;
 
-            // compensate for the usually wrong orientation of the canvas (away from camera)
-            transform.rotation = base.RepresentedObject.transform.rotation * Quaternion.LookRotation(-spec.Plane);
-
-            // move the canvas so that it is minimally above the screen
+            // move the canvas so that it is minimally above 
             transform.Translate((Vector3.Scale(-spec.Plane.normalized, effectiveSize) / 2) + (0.0005f * -spec.Plane.normalized));
+
+            // compensate for the usually wrong orientation of the canvas (away from camera)
+            transform.rotation = base.RepresentedObject.transform.rotation * Quaternion.LookRotation(spec.Plane);
 
             // add an image object to draw image contents
             GameObject imageObject = new GameObject("ScreenContent" + spec.Name);
@@ -123,7 +122,7 @@ namespace de.ugoe.cs.vivian.core
         /**
          * Called to visualize any value
          */
-        internal override void Visualize(object value)
+        public override void Visualize(object value)
         {
             if (value is bool)
             {
@@ -136,6 +135,10 @@ namespace de.ugoe.cs.vivian.core
             else if (value is string)
             {
                 this.Visualize((string)value);
+            }
+            else if (value is Texture2D) 
+            {
+                this.Visualize((Texture2D)value);
             }
             else
             {
@@ -176,7 +179,7 @@ namespace de.ugoe.cs.vivian.core
         /**
          * Called to visualize a string value, which is supposed to be screen content
          */
-        internal void Visualize(string value)
+        public void Visualize(string value)
         {
             if (!base.Spec.IsVideo)
             {
@@ -195,6 +198,14 @@ namespace de.ugoe.cs.vivian.core
                 }
             }
 
+            ShowContent();
+        }
+
+        /**
+         * Called to visualize a Texture2D
+         **/
+        public void Visualize(Texture2D value) {
+            this.ImageContent = value;
             ShowContent();
         }
 
