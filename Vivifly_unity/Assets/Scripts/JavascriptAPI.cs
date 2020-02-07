@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 using System.Runtime.InteropServices;
-
-using de.ugoe.cs.vivian.core;
+using System.IO;
 
 /**
  * Class to handle JSON coloring requests from Javascript
@@ -24,6 +22,18 @@ public class OutlineJSON {
     public string color;
 }
 
+/**
+ * Class to handle JSON screen requests from Javascript
+ **/
+public class ScreenJSON {
+    public string element;
+    public string imageBase64;
+    public float planeX;
+    public float planeY;
+    public float planeZ;
+}
+
+
 public class JavascriptAPI : MonoBehaviour {
 
     // Import js function
@@ -35,22 +45,43 @@ public class JavascriptAPI : MonoBehaviour {
     LightsController lightsController;
     ModelUploader modelUploader;
     CameraController cameraController;
+    ScreensController screensController;
+    MouseController mouseController;
+
+    public Texture2D image;
 
     // Instantiates necessary objects
     void Start() {
+        // initialize controller object
         GameObject viviflyCore = GameObject.Find("ViviflyCore");
         outlineController = viviflyCore.GetComponent<OutlineController>();
         lightsController = viviflyCore.GetComponent<LightsController>();
         modelUploader = viviflyCore.GetComponent<ModelUploader>();
+        screensController = viviflyCore.GetComponent<ScreensController>();
         cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
-    }
+        mouseController = viviflyCore.GetComponent<MouseController>();
 
-    // Update is called once per frame
-    void Update() {
+        // DEBUG ====================
+        /*this.activatePlaneHoverEffect("Cubex");
+        //this.deactivatePlaneHoverEffect();
+        string filepathBase64 = "C:\\Users\\Nico\\Desktop\\imageBase64.txt";
+        string stringBase64 = File.ReadAllText(filepathBase64);
+        string screenJSON1 = "{\"element\": \"Cube1\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 0.0, \"planeY\": 0.0, \"planeZ\": 1.0 }";
+        string screenJSON2 = "{\"element\": \"Cube2\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 0.0, \"planeY\": 1.0, \"planeZ\": 0.0 }";
+        string screenJSON3 = "{\"element\": \"Cube3\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 1.0, \"planeY\": 0.0, \"planeZ\": 0.0 }";
+        string screenJSON4 = "{\"element\": \"Cube4\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 0.0, \"planeY\": 0.0, \"planeZ\": -1.0 }";
+        string screenJSON5 = "{\"element\": \"Cube5\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 0.0, \"planeY\": -1.0, \"planeZ\": 0.0 }";
+        string screenJSON6 = "{\"element\": \"Cube6\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": -1.0, \"planeY\": 0.0, \"planeZ\": 0.0 }";
+        this.DisplayImage(screenJSON1);
+        this.DisplayImage(screenJSON2);
+        this.DisplayImage(screenJSON3);
+        this.DisplayImage(screenJSON4);
+        this.DisplayImage(screenJSON5);
+        this.DisplayImage(screenJSON6);*/
     }
 
     // Tries to find an object by its name and throws error to javascript otherwise
-    private GameObject findObjectByName(string objectName) {
+    private GameObject FindObjectByName(string objectName) {
         GameObject gameObject = GameObject.Find(objectName);
         if (!gameObject) {
             JS_ErrorOccurred(404, "Could not find gameObject " + objectName);
@@ -64,10 +95,10 @@ public class JavascriptAPI : MonoBehaviour {
     // outlines a gameobject
     // Example JSON parameter: {"element": "Cube", "color": "red"}
     // possible color strings: red, deep-orange, light-green, cyan
-    public void setOutline(string outlineJSON) {
+    public void SetOutline(string outlineJSON) {
         OutlineJSON request = new OutlineJSON();
         JsonUtility.FromJsonOverwrite(outlineJSON, request);
-        GameObject objectToOutline = this.findObjectByName(request.element);
+        GameObject objectToOutline = this.FindObjectByName(request.element);
         if (!objectToOutline) {
             // Element does not exist: do nothing
             return;
@@ -77,7 +108,7 @@ public class JavascriptAPI : MonoBehaviour {
 
     // Removes the outline effect of an object
     public void RemoveOutline(string objectName) {
-        GameObject outlinedObject = this.findObjectByName(objectName);
+        GameObject outlinedObject = this.FindObjectByName(objectName);
         if (!outlinedObject) {
             // Element does not exist: do nothing
             return;
@@ -124,18 +155,57 @@ public class JavascriptAPI : MonoBehaviour {
         this.lightsController.RemoveAllLightEffects();
     }
 
+    // =========== SCREEN METHODS =====================================================
+    // Displays an image on a plane of a gameobject
+    public void DisplayImage(string screenJSON) {
+        ScreenJSON request = new ScreenJSON();
+        JsonUtility.FromJsonOverwrite(screenJSON, request);
+        Vector3 planeVector = new Vector3(request.planeX, request.planeY, request.planeZ);
+        this.screensController.displayImage(request.element, request.imageBase64, planeVector);
+    }
+
+    // Removes the screen effect of a certain gameobject
+    public void RemoveScreenEffect(string gameObjectName) {
+        this.screensController.RemoveScreenEffect(gameObjectName);
+    }
+
+    // Removes all screen effects
+    public void RemoveAllScreenEffects() {
+        this.screensController.RemoveAllScreenEffects();
+    }
+
+    // Activates the hover effect for the planes of a gameObject
+    public void activatePlaneHoverEffect(string gameObjectName) {
+        this.mouseController.StartPlaneHoverEffect(gameObjectName);
+    }
+
+    // Deactivates the hover effect for planes
+    public void deactivatePlaneHoverEffect() {
+        this.mouseController.StopPlaneHoverEffect();
+    }
+
     // =========== CAMERA MOVEMENT METHODS ============================================
 
     // Starts movement of camera in the direction that is given as string
     // possible strings: forwards, backwards, left, right
-    public void startCameraMovement(string direction) {
+    public void StartCameraMovement(string direction) {
         cameraController.startMoving(direction);
     }
 
     // Stops movement of camera in the direction that is given as string
     // possible strings: forwards, backwards, left, right
-    public void stopCameraMovement(string direction) {
+    public void StopCameraMovement(string direction) {
         cameraController.stopMoving(direction);
     }
+
+    // =========== OVERALL METHODS ============================================
+
+    // Removes all visual effects such as lights, screens and outlines
+    public void RemoveAllVisualEffects() {
+        this.RemoveAllScreenEffects();
+        this.RemoveAllOutlines();
+        this.RemoveAllLights();
+    }
+
 }
 

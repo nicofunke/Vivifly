@@ -72,11 +72,13 @@ namespace de.ugoe.cs.vivian.core
             // set the resolution of the canvas to the provided one
             transform.sizeDelta = spec.Resolution;
 
-            // move the canvas so that it is minimally above 
-            transform.Translate((Vector3.Scale(-spec.Plane.normalized, effectiveSize) / 2) + (0.0005f * -spec.Plane.normalized));
+            // move the canvas so that it is minimally above the screen
+            transform.Translate((Vector3.Scale(spec.Plane.normalized, effectiveSize) / 2) + (0.0005f * spec.Plane.normalized));
 
             // compensate for the usually wrong orientation of the canvas (away from camera)
-            transform.rotation = base.RepresentedObject.transform.rotation * Quaternion.LookRotation(spec.Plane);
+            transform.rotation = base.RepresentedObject.transform.rotation * Quaternion.LookRotation(-spec.Plane);
+
+
 
             // add an image object to draw image contents
             GameObject imageObject = new GameObject("ScreenContent" + spec.Name);

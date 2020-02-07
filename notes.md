@@ -17,6 +17,7 @@
 - Highlighting: Asset
 - Appprovicder(state) -> UnityWrapper
 - Access Lighteffect and Displayeffect of vivian framework
+- Screen plane calculation (split raycast)
 
 # Interface notes
 
@@ -30,3 +31,16 @@
 - ScreenElement Visualize extended with Texture2D params
 - Screenspec constructor public
 - LightSpec constructor public
+
+# Fragen
+- ist das ganze public machen in Ordnung?
+- ScreenElement Fixes richtig?
+- Ändert Resolution nichts?
+- Plane gibt allgemeinen Winkel der Plane an, passt sich nicht an Plane des Objects an?
+  - Sollte man nur Einheitsvektoren verwenden?
+
+
+Mögliche Dateiformate: 
+stl, fbx (auch in Vivian enthalten), stp (von CAD Software)
+
+Resolution anhand bild

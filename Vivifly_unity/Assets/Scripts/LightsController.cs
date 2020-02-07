@@ -14,15 +14,6 @@ public class LightsController : MonoBehaviour {
     // Maps the name of gameObjects with their correspondend light GameObject if exist
     private Dictionary<string, GameObject> lightObjects = new Dictionary<string, GameObject>();
 
-
-    // Start is called before the first frame update
-    void Start() {
-    }
-
-    // Update is called once per frame
-    void Update() {
-    }
-
     // Adds a light effect to an gameObject 
     public void ChangeColor(string gameObjectName, float red, float green, float blue, float alpha) {
 
@@ -31,7 +22,9 @@ public class LightsController : MonoBehaviour {
         VisualizationElementSpec visualizationSpec = new LightSpec(gameObjectName, emissionColor);
 
         // If exists remove previous light effect
-        this.RemoveLightEffect(gameObjectName);
+        if (lightObjects.ContainsKey(gameObjectName)) {
+            this.RemoveLightEffect(gameObjectName);
+        }
 
         // Add new light effect gameObject
         lightGameObject = VirtualPrototype.CreateVisualizationElement(visualizationSpec, null);
