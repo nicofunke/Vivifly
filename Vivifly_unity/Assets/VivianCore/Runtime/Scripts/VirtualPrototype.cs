@@ -293,7 +293,9 @@ namespace de.ugoe.cs.vivian.core
 
                 if (elementSpec is LightSpec)
                 {
+                    Debug.Log("WASABI - START");
                     visualizationElement.AddComponent<LightElement>().Initialize((LightSpec)elementSpec, effectiveElement);
+                    Debug.Log("WASABI - END");
                 }
                 else if (elementSpec is ScreenSpec)
                 {

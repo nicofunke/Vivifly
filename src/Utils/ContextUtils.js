@@ -48,6 +48,13 @@ export class ContextUtils {
         const visualizationValue = emissionSituation.Values.find(value => value.VisualizationElement === element && value.Type === "FloatValueVisualization")
         // Return 0.0 if element has no visualization currently
         return !!visualizationValue ? visualizationValue.Value : 0.0 
+    }
 
+    /**
+     * Returns the transition of a certain interactionElement in a certain situation
+     */
+    static getTransition(interactionElement, situationId, context){
+        return context.transitions.find(transition =>
+            (transition.SourceStateID === situationId && transition.InteractionElement === interactionElement))
     }
 }

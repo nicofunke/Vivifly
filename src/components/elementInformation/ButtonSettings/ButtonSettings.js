@@ -3,6 +3,7 @@ import { MDBIcon } from 'mdbreact'
 import { AppContext } from '../../Application/AppContext'
 import ButtonChooseTransition from './ButtonChooseTransition'
 import ButtonExistingTransition from './ButtonExistingTransition'
+import { ContextUtils } from '../../../Utils/ContextUtils'
 
 export default class ButtonSettings extends Component {
 
@@ -31,8 +32,7 @@ export default class ButtonSettings extends Component {
     }
 
     render() {
-        const transition = this.context.transitions.find(transition =>
-            (transition.SourceStateID === this.context.applicationState.currentSituationID && transition.InteractionElement === this.context.applicationState.selectedElement))
+        const transition = ContextUtils.getTransition(this.context.applicationState.selectedElement, this.context.applicationState.currentSituationID, this.context)
         return <>
             <button type="button"
                 className="btn btn-link btn-sm p-0 text-default"

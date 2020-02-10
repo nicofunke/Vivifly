@@ -62,9 +62,13 @@ public class JavascriptAPI : MonoBehaviour {
         mouseController = viviflyCore.GetComponent<MouseController>();
 
         // DEBUG ====================
-        /*this.activatePlaneHoverEffect("Cubex");
+        //string objString = File.ReadAllText("C:\\Users\\Nico\\Desktop\\object.txt");
+        //this.UploadStringObject(objString);
+        // this.UploadURLObject("https://user.informatik.uni-goettingen.de/~nico.funke/CoffeeMakerCord_OBJ.obj");
+
+        //this.activatePlaneHoverEffect("Cubey");
         //this.deactivatePlaneHoverEffect();
-        string filepathBase64 = "C:\\Users\\Nico\\Desktop\\imageBase64.txt";
+        /*string filepathBase64 = "C:\\Users\\Nico\\Desktop\\imageBase64.txt";
         string stringBase64 = File.ReadAllText(filepathBase64);
         string screenJSON1 = "{\"element\": \"Cube1\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 0.0, \"planeY\": 0.0, \"planeZ\": 1.0 }";
         string screenJSON2 = "{\"element\": \"Cube2\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 0.0, \"planeY\": 1.0, \"planeZ\": 0.0 }";
@@ -139,7 +143,6 @@ public class JavascriptAPI : MonoBehaviour {
     // Changes the color as defined in the json that is given as string parameter
     // example JSON: {element: "Cube3", red: 0.2, green: 1.0, blue: 0.15, alpha: 0.7 }
     public void SetLightColor(string coloringJSON) {
-
         ColoringJSON request = new ColoringJSON();
         JsonUtility.FromJsonOverwrite(coloringJSON, request);
         this.lightsController.ChangeColor(request.element, request.red, request.green, request.blue, request.alpha);

@@ -11,7 +11,7 @@
   - using a file from link would require to upload the file beforehand
   - sendMessage to unity does not support other types than primitive datatypes (no sending file directly) 
 - Problem with lights/highlights:
-  - Communication from React to WebGL only allows primitive datatypes
+  - Communication from React to WebGL only allows primitive datatypes 
   - It is necessary to send element name and color at least
   - Solution: Send JSON string and parse it in unity
 - Highlighting: Asset

@@ -18,7 +18,7 @@ export default class ElementTypePicker extends React.Component {
                     <div className="mb-2"><MDBIcon icon="lightbulb" size="lg" /></div>
                     <div>Light</div>
                 </MDBBtn>
-                <MDBBtn color="cyan" onClick={() => this.context.setElementType(this.context.applicationState.selectedElement, "Display")}>
+                <MDBBtn color="cyan" onClick={() => this.context.addElementType(this.context.applicationState.selectedElement, "Screen")}>
                     <div className="mb-2"><MDBIcon icon="tv" size="lg" /></div>
                     <div>Display</div>
                 </MDBBtn>

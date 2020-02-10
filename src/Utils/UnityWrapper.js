@@ -14,8 +14,9 @@ export class UnityWrapper {
             "Build/WebGL.json",
             "Build/UnityLoader.js"
         )
-        this.unityContent.on("objectClicked", name => {
-            onClick(name)
+        this.unityContent.on("objectClicked", (clickString) => {
+            const clickObject = JSON.parse(clickString)
+            onClick(clickObject.element, clickObject.planeX, clickObject.planeY, clickObject.planeZ)
         })
         this.unityContent.on("catchUnityError", (code, messageString) => {
             console.log("ERROR" + code + ": " + messageString)
@@ -29,7 +30,6 @@ export class UnityWrapper {
 
     /**
      * Inserting an 3D-model from file. This method is currently used, because it does not require to store the 3D model on the server
-     * (Upload via URL is currently also implemented and works)
      */
     insertFileModel(file) {
         this.uploadingStarted()
@@ -52,7 +52,7 @@ export class UnityWrapper {
     startCameraMovement(direction) {
         this.unityContent.send(
             "JavascriptApi",
-            "startCameraMovement",
+            "StartCameraMovement",
             direction
         )
     }
@@ -65,7 +65,7 @@ export class UnityWrapper {
     stopCameraMovement(direction) {
         this.unityContent.send(
             "JavascriptApi",
-            "stopCameraMovement",
+            "StopCameraMovement",
             direction
         )
     }
@@ -78,7 +78,7 @@ export class UnityWrapper {
         const requestParam = { element: elementName, color: colorName }
         this.unityContent.send(
             "JavascriptApi",
-            "setOutline",
+            "SetOutline",
             JSON.stringify(requestParam)
         )
     }
@@ -99,7 +99,7 @@ export class UnityWrapper {
      * colors and alpha are from 0 to 1
      */
     setLightEffect(elementName, red, green, blue, alpha) {
-        const requestParam = { element: elementName, red: red, blue: blue, green: green, alpha: alpha}
+        const requestParam = { element: elementName, red: red, blue: blue, green: green, alpha: alpha }
         this.unityContent.send(
             "JavascriptApi",
             "SetLightColor",
@@ -110,7 +110,7 @@ export class UnityWrapper {
     /**
      * Removes all light effects from the current visualization
      */
-    removeAllLightEffects(){
+    removeAllLightEffects() {
         this.unityContent.send(
             "JavascriptApi",
             "RemoveAllLights",
@@ -127,5 +127,31 @@ export class UnityWrapper {
             "RemoveLight",
             elementName
         )
+    }
+
+    /**
+     * Activates a hover effect for the planes of an element 
+     */
+    activatePlaneHoverEffect(elementName) {
+        this.unityContent.send(
+            "JavascriptApi",
+            "activatePlaneHoverEffect",
+            elementName
+        )
+    }
+
+    /**
+     * Deactivates plane hover effects
+     */
+    deActivatePlaneHoverEffect() {
+        this.unityContent.send(
+            "JavascriptApi",
+            "deactivatePlaneHoverEffect",
+            ""
+        )
+    }
+
+    addScreenEffect(elementName, image, planeX, planeY, planeZ, resolutionX, resolutionY) {
+        // TODO: Screen effect
     }
 }

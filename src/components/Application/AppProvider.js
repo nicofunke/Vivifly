@@ -26,7 +26,8 @@ export default class AppProvider extends React.Component {
             hasAlreadySelectedAnElement: false,     // if the user has already clicked on an element
             nextSituationID: 1,                     // in order to give new situations a unique ID
             isCurrentlyUploading: false,            // Boolean if the application currently uploads a model
-            modelWasUploaded: true,                // Boolean if a model was already uploaded
+            modelWasUploaded: true,                 // Boolean if a model was already uploaded
+            planeSelectionElementName: null,        // Current element for plane selection for screens ( or null if plane selection is not active )
         },
         unityWrapper: new UnityWrapper(             // Current UnityWrapper object
             this.unityObjectClicked.bind(this),
@@ -40,7 +41,21 @@ export default class AppProvider extends React.Component {
      * Method that gets called if an element is clicked inside unity WebGL
      * Sets it as the currently selected element
      */
-    unityObjectClicked(clickedElement) {
+    unityObjectClicked(clickedElement, planeX, planeY, planeZ) {
+        const planeSelectionElement = this.state.applicationState.planeSelectionElementName
+        if (!!planeSelectionElement) {
+            // Plane selection active -> deactivate
+            this.endPlaneSelection()
+            if (clickedElement === planeSelectionElement) {
+                // Plane was chosen -> store normal vector and return (in order to not change the selected element)
+                // TODO: Would be a good point to get also resolution from unity?
+                const plane = { x: planeX, y: planeY, z: planeZ }
+                this.setScreenPlane(planeSelectionElement, plane)
+                return
+            }
+            // if clicked on another element change the currently selected element
+        }
+        // Change selected element
         if (clickedElement === this.state.applicationState.selectedElement) {
             clickedElement = ""
         }
@@ -91,7 +106,7 @@ export default class AppProvider extends React.Component {
                 if (value.Type === "FloatValueVisualization") {
                     // Light effect
                     const color = ContextUtils.getLightEmissionColor(value.VisualizationElement, this.state)
-                    if(!!color){
+                    if (!!color) {
                         this.state.unityWrapper.setLightEffect(value.VisualizationElement, color.r, color.g, color.b, value.Value)
                     }
                 } else if (value.Type === "ScreenContentVisualization") {
@@ -197,23 +212,17 @@ export default class AppProvider extends React.Component {
     addElementType(element, type) {
         switch (type) {
             case "Button":
-                if (!!this.state.interactionElements.find(interactionElement => interactionElement.Name === element)) {
-                    // Element is already an interactionElement
-                    return
-                }
                 const newInteractionElement = { Name: element, Type: "Button" }
                 this.setState(state => { return { ...state, interactionElements: [...state.interactionElements, newInteractionElement] } })
                 break
-            case "Display":
-                // TODO: Set type display
+            case "Screen":
+                const newScreenElement = { Type: "Screen", Name: element, Plane: null, Resolution: { x: 150, y: 150 } }
+                // TODO: calculate resolution from picture/plane?
+                this.setState(state => { return { ...state, visualizationElements: [...state.visualizationElements, newScreenElement] } })
                 break
             case "Light":
-                if (!!this.state.visualizationElements.find(visualizationElement => visualizationElement.Name === element)) {
-                    // Element is already a visualizationElement
-                    return
-                }
-                const newVisualizationElement = { Type: "Light", Name: element, EmissionColor: { r: 1, g: 0, b: 0, a: 1 } }
-                this.setState(state => { return { ...state, visualizationElements: [...state.visualizationElements, newVisualizationElement] } })
+                const newLightElement = { Type: "Light", Name: element, EmissionColor: { r: 1, g: 0, b: 0, a: 1 } }
+                this.setState(state => { return { ...state, visualizationElements: [...state.visualizationElements, newLightElement] } })
                 break
             default:
                 return
@@ -225,7 +234,6 @@ export default class AppProvider extends React.Component {
      * Currently implemented types: Button, Light & Display
      */
     removeElementType(element, type) {
-        console.log(this.state.transitions)
         switch (type) {
             case "Button":
                 // Remove element from interactionElements and remove all transitions that include the button
@@ -233,26 +241,41 @@ export default class AppProvider extends React.Component {
                     return {
                         ...state,
                         interactionElements: state.interactionElements.filter(interactionElement => interactionElement.Name !== element),
-                        transitions: state.transitions.filter( transition => (transition.InteractionElement !== element))
+                        transitions: state.transitions.filter(transition => (transition.InteractionElement !== element))
                     }
                 })
                 break
-            case "Display":
-                // TODO: Remove type display
+            case "Screen":
+                // Remove from all situations and from visualizationElements list
+                const newSituations = this.state.states.map(situation => {
+                    if (!situation.Values) {
+                        return situation
+                    }
+                    return { ...situation, Values: situation.Values.filter(value => value.VisualizationElement !== element || value.Type !== "ScreenContentVisualization") }
+                })
+                this.setState(state => {
+                    return {
+                        ...state,
+                        states: newSituations,
+                        visualizationElements: state.visualizationElements.filter(visualizationElement => visualizationElement.Name !== element || visualizationElement.Type !== "Screen")
+                    }
+                })
+                // Remove light effects from current WebGL visualization
+                this.state.unityWrapper.removeLightEffect(element)
                 break
             case "Light":
                 // Remove from all situations and from visualizationElements list
-                const newStates = this.state.states.map( situation => {
-                    if(!situation.Values){
+                const newStates = this.state.states.map(situation => {
+                    if (!situation.Values) {
                         return situation
                     }
-                    return {...situation, Values: situation.Values.filter( value => value.VisualizationElement !== element)}
+                    return { ...situation, Values: situation.Values.filter(value => value.VisualizationElement !== element || value.Type !== "FloatValueVisualization") }
                 })
                 this.setState(state => {
                     return {
                         ...state,
                         states: newStates,
-                        visualizationElements: state.visualizationElements.filter(visualizationElement => visualizationElement.Name !== element)
+                        visualizationElements: state.visualizationElements.filter(visualizationElement => visualizationElement.Name !== element || visualizationElement.Type !== "Light")
                     }
                 })
                 // Remove light effects from current WebGL visualization
@@ -331,6 +354,49 @@ export default class AppProvider extends React.Component {
         }
     }
 
+    // ================= SCREEN METHODS =====================
+    /**
+     * Activates the plane selection mode to choose a display plane for a screen element
+     * @param {string} element Name of the screen element to choose the display plane for
+     */
+    startPlaneSelection(element) {
+        // Store the selection element in the current state
+        this.setState(state => {
+            return { ...state, applicationState: { ...state.applicationState, planeSelectionElementName: element } }
+        })
+        // Activate hover effect
+        this.state.unityWrapper.activatePlaneHoverEffect(element)
+    }
+
+    /**
+     * Deactivates the plane selection mode
+     */
+    endPlaneSelection() {
+        this.setState(state => {
+            return { ...state, applicationState: { ...state.applicationState, planeSelectionElementName: null } }
+        })
+        this.state.unityWrapper.deActivatePlaneHoverEffect()
+    }
+
+    /**
+     * Sets the plane normal vector for a screen element
+     * @param {string} screenElement        screen element name
+     * @param {Vector3} plane               new plane normal vector value
+     */
+    setScreenPlane(planeSelectionElement, plane) {
+        this.setState(state => {
+            return {
+                ...state, visualizationElements: state.visualizationElements.map(visualizationElement => {
+                    if (visualizationElement.Name === planeSelectionElement && visualizationElement.Type === "Screen") {
+                        return { ...visualizationElement, Plane: plane }
+                    }
+                    return visualizationElement
+                })
+            }
+        })
+    }
+
+
     //================= RENDER =============================
 
     render() {
@@ -351,7 +417,8 @@ export default class AppProvider extends React.Component {
             setLightColor: this.setLightColor.bind(this),
             setLightEmission: this.setLightEmission.bind(this),
             setSelectedElement: this.setSelectedElement.bind(this),
-            setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this)
+            setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this),
+            startPlaneSelection: this.startPlaneSelection.bind(this)
 
         }}>
             {this.props.children}

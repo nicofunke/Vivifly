@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBIcon, MDBCloseIcon } from 'mdbreact'
 import ElementTypePicker from './ElementTypePicker'
 import ButtonSettings from './ButtonSettings/ButtonSettings'
-import ElementDisplaySettings from './ElementDisplaySettings'
+import DisplaySettings from './DisplaySettings'
 import { AppContext } from '../Application/AppContext'
 import LightSettings from './LightSettings/LightSettings'
 import { ContextUtils } from '../../Utils/ContextUtils'
@@ -66,8 +66,8 @@ export default class ElementInformationWindow extends Component {
         if (elementTypes.find(type => type === "Button")) {
             output.push(<ButtonSettings key="ButtonSettings" className="mt-2" />)
         }
-        if (elementTypes.find(type => type === "Display")) {
-            output.push(<ElementDisplaySettings key="DisplaySettings" className="mt-2" />)
+        if (elementTypes.find(type => type === "Screen")) {
+            output.push(<DisplaySettings key="DisplaySettings" className="mt-2" />)
         }
         if (elementTypes.find(type => type === "Light")) {
             output.push(<LightSettings key="LightSettings" className="mt-2" />)

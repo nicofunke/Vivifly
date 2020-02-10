@@ -1,5 +1,17 @@
 ﻿using UnityEngine;
 using System.Runtime.InteropServices;
+using System;
+
+
+/**
+ * Class to send clicks as JSON to Javascript
+ **/
+public class MouseClickJSON {
+    public string element;
+    public float planeX;
+    public float planeY;
+    public float planeZ;
+}
 
 /// <summary>
 /// Mouse listener which notifies Javascript if left mouse button is clicked
@@ -9,10 +21,7 @@ public class MouseController : MonoBehaviour {
 
     // Import js functions
     [DllImport("__Internal")]
-    private static extern void JS_ObjectClicked(string itemName, float planeX, float planeY, float planeZ);
-
-    [DllImport("__Internal")]
-    private static extern void JS_ErrorOccurred(int code, string message);
+    private static extern void JS_ObjectClicked( string mouseClickJSON);
 
     // Current gameObject with plane hover effect
     private string planeHoverEffectObjectName = null;
@@ -48,12 +57,22 @@ public class MouseController : MonoBehaviour {
 
                     GameObject clickedObject = hit.transform.gameObject;
                     clickedObjectName = clickedObject.name;
-                    clickedPlane = hit.transform.InverseTransformDirection(hit.normal);
+                    // Get clicked plane and round by 
+                    clickedPlane = GetPlaneVector(hit);
+
                 }
             }
 
-            // Send feedback to javascript
-            JS_ObjectClicked(clickedObjectName, clickedPlane.x, clickedPlane.y, clickedPlane.y);
+            // Store click information in JSON string 
+            MouseClickJSON clickJSONObject = new MouseClickJSON();
+            clickJSONObject.element = clickedObjectName;
+            clickJSONObject.planeX = clickedPlane.x;
+            clickJSONObject.planeY = clickedPlane.y;
+            clickJSONObject.planeZ = clickedPlane.z;
+            string clickJSONString = JsonUtility.ToJson(clickJSONObject);
+            
+            // Send feedback to Javascript
+            JS_ObjectClicked(clickJSONString);
         }
     }
 
@@ -72,7 +91,7 @@ public class MouseController : MonoBehaviour {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit)) {
                 if (hit.transform && hit.transform.gameObject.name == planeHoverEffectObjectName) {
-                    Vector3 hoveredPlane = hit.transform.InverseTransformDirection(hit.normal);
+                    Vector3 hoveredPlane = GetPlaneVector(hit);
                     screensController.displayImage(planeHoverEffectObjectName, hoverTexture, hoveredPlane);
 
                 }
@@ -100,6 +119,18 @@ public class MouseController : MonoBehaviour {
     }
 
 
+    /// <summary>
+    /// Returns the plane normal vector of a plane that is hit by a RaycastHit 
+    /// </summary>
+    /// <param name="hit">RaycastHit that hits the plane of a gameObject</param>
+    /// <returns>Normal vector of the hit plane</returns>
+    private Vector3 GetPlaneVector(RaycastHit hit) {
+        Vector3 vector = hit.transform.InverseTransformDirection(hit.normal);
+        return new Vector3((float)Math.Round(vector.x, 2), (float)Math.Round(vector.y, 2), (float)Math.Round(vector.z, 2));
+    }
+
+
+
 
     //========================================================================================================
     // ----- METHODS BELOW THIS POINT ARE CURRENTLY NOT USED, SINCE THEY CAN BE REPLACED BY USING 'hit.normal'
@@ -109,7 +140,7 @@ public class MouseController : MonoBehaviour {
     /// </summary>
     /// <param name="hit">RaycastHit that hits the plane of a gameObject</param>
     /// <returns></returns>
-    private Vector3 GetPlaneVector(RaycastHit hit) {
+    /*private Vector3 GetPlaneVector(RaycastHit hit) {
 
         Vector3[] collisionPoints = getThreeCollisionPoints(hit);
 
@@ -171,4 +202,5 @@ public class MouseController : MonoBehaviour {
         }
         return collisionPoints;
     }
+    */
 }

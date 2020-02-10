@@ -16,7 +16,6 @@ public class LightsController : MonoBehaviour {
 
     // Adds a light effect to an gameObject 
     public void ChangeColor(string gameObjectName, float red, float green, float blue, float alpha) {
-
         GameObject lightGameObject;
         Color emissionColor = new Color(red, green, blue);
         VisualizationElementSpec visualizationSpec = new LightSpec(gameObjectName, emissionColor);
@@ -27,8 +26,8 @@ public class LightsController : MonoBehaviour {
         }
 
         // Add new light effect gameObject
-        lightGameObject = VirtualPrototype.CreateVisualizationElement(visualizationSpec, null);
-        lightGameObject.GetComponent<LightElement>().Visualize(0.5F);
+        lightGameObject = VirtualPrototype.CreateVisualizationElement(visualizationSpec, null); // Here is a bug?!
+        lightGameObject.GetComponent<LightElement>().Visualize(alpha);
 
         // Store light effect in mapping
         this.lightObjects.Add(gameObjectName, lightGameObject);
