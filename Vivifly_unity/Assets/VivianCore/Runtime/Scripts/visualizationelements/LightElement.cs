@@ -32,41 +32,26 @@ namespace de.ugoe.cs.vivian.core
          */
         public new void Initialize(LightSpec spec, GameObject representedObject)
         {
-            Debug.Log("WASABI - INI");
             base.Initialize(spec, representedObject);
-            Debug.Log("WASABI - 2");
             MeshFilter meshFilter = representedObject.GetComponent<MeshFilter>();
-            Debug.Log("WASABI - 3");
             if (meshFilter != null)
             {
-                Debug.Log("WASABI - 4");
                 MeshFilter meshFilterCopy = (MeshFilter)this.gameObject.AddComponent(meshFilter.GetType());
-                Debug.Log("WASABI - 5");
                 Utils.CopyComponentValues(meshFilterCopy, meshFilter);
             }
-            Debug.Log("WASABI - 6");
             MeshRenderer meshRenderer = representedObject.GetComponent<MeshRenderer>();
 
             if (meshRenderer != null)
             {
-                Debug.Log("WASABI - 7");
                 MeshRenderer meshRendererCopy = (MeshRenderer)this.gameObject.AddComponent(meshRenderer.GetType());
-                Debug.Log("WASABI - 8");
                 Utils.CopyComponentValues(meshRendererCopy, meshRenderer);
-                Debug.Log("WASABI - 9");
 
                 this.Material = new Material(Shader.Find("UI/Default"));
-                Debug.Log("WASABI - 10");
                 //this.Material.SetColor("_Color", Color.clear);
                 this.Material.color = new Color(this.Spec.EmissionColor.r, this.Spec.EmissionColor.g, this.Spec.EmissionColor.b, 0);
-                Debug.Log("WASABI - 11");
-
                 meshRendererCopy.material = this.Material;
-                Debug.Log("WASABI - 12");
             }
-            Debug.Log("WASABI - 13");
             this.Light = representedObject.GetComponent<Light>();
-            Debug.Log("WASABI - INI END");
         }
 
         /**

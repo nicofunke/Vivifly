@@ -1,0 +1,1 @@
+export type OutlineColor = "red" | "deep-orange" | "light-green" | "cyan" 
