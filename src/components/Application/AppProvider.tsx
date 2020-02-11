@@ -127,9 +127,9 @@ export default class AppProvider extends React.Component {
                     }
                 }
             }
-            // Restore outline of selected element
-            this.state.unityWrapper?.outlineElement(this.state.applicationState.selectedElement, OUTLINE_COLOR_RED)
         }
+        // Restore outline of selected element
+        this.state.unityWrapper?.outlineElement(this.state.applicationState.selectedElement, OUTLINE_COLOR_RED)
     }
 
     /**
@@ -203,46 +203,39 @@ export default class AppProvider extends React.Component {
     // =============== TRANSITION METHODS ================================
 
     // TODO: Instead of add transition and change transition -> set transition?!
-    /**
-     * Adds a new transition from one situation to another, that is triggered by pressing a button
-     *
-     * @param sourceSituationID
-     * @param destinationSituationID 
-     * @param button                    name of the button that leads to the transition
-     */
-    addButtonTransition(sourceSituationID: number, destinationSituationID: number, button: string) {
-        // Stop if there is already a transition
-        if (!!ContextUtils.getTransition(button, sourceSituationID, this.state)) {
-            return
-        }
-        const newTransition = {
-            SourceStateID: sourceSituationID,
-            InteractionElement: button,
-            event: 0,
-            DestinationStateID: destinationSituationID
-        }
-        this.setState((state: ContextState) => {
-            return { ...state, transitions: [...state.transitions, newTransition] }
-        })
-    }
 
     /**
-     * Changes the destination of a specific button transition
-     *
-     * @param sourceSituationID             id of the source situation
-     * @param button                        name of the button that leads to the transition
-     * @param newDestinationSituationID     id of the destination situation
+     * Sets the transition, triggered by a button
+     * @param sourceSituationID         Source situation ID
+     * @param destinationSituationID    Destination situation ID
+     * @param button                    Name of the Button that triggers the transition
      */
-    changeButtonTransitionDestination(sourceSituationID: number, button: string, newDestinationSituationID: number) {
-        this.setState((state: ContextState) => {
-            return {
-                ...state,
-                transitions: state.transitions.map(transition =>
-                    (transition.SourceStateID === sourceSituationID && transition.InteractionElement === button) ?
-                        { ...transition, DestinationStateID: newDestinationSituationID } : transition
-                )
+    setTransition(sourceSituationID: number, destinationSituationID: number, button: string) {
+
+        if (!ContextUtils.getTransition(button, sourceSituationID, this.state)) {
+            // Add new transition
+            const newTransition = {
+                SourceStateID: sourceSituationID,
+                InteractionElement: button,
+                event: 0,
+                DestinationStateID: destinationSituationID
             }
-        })
+            this.setState((state: ContextState) => {
+                return { ...state, transitions: [...state.transitions, newTransition] }
+            })
+        } else {
+            // Change the existing transition
+            this.setState((state: ContextState) => {
+                return {
+                    ...state,
+                    transitions: state.transitions.map(transition =>
+                        (transition.SourceStateID === sourceSituationID && transition.InteractionElement === button) ?
+                            { ...transition, DestinationStateID: destinationSituationID } : transition
+                    )
+                }
+            })
+        }
+
     }
 
     // ================== ELEMENT-TYPE METHODS =================================
@@ -519,9 +512,8 @@ export default class AppProvider extends React.Component {
             unityWrapper: this.state.unityWrapper,
             visualizationElements: this.state.visualizationElements,
 
-            addButtonTransition: this.addButtonTransition.bind(this),
+            setTransition: this.setTransition.bind(this),
             addElementType: this.addElementType.bind(this),
-            changeButtonTransitionDestination: this.changeButtonTransitionDestination.bind(this),
             createNewSituation: this.createNewSituation.bind(this),
             removeElementType: this.removeElementType.bind(this),
             renameSituation: this.renameSituation.bind(this),

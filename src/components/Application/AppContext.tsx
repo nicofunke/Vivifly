@@ -18,9 +18,7 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     visualizationElements: [],
 
     // Methods
-    addButtonTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => { },
     addElementType: (element: string, type: string) => { },
-    changeButtonTransitionDestination: (sourceSituationID: number, button: string, newDestinationSituationID: number) => { },
     createNewSituation: (newSituationName: string) => { },
     removeElementType: (element: string, type: string) => { },
     renameSituation: (situationID: number, newSituationName: string) => { },
@@ -29,6 +27,7 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => { },
     setScreenImage: (element: string, situationID: number, imageFile: File) => { },
     setSelectedElement: (selectedElement: string) => { },
+    setTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => {},
     setUnityLoadingProgress: (progress: number) => { },
     startPlaneSelection: (element: string) => { }
 }

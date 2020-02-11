@@ -19,9 +19,7 @@ export interface AppContextType {
     visualizationElements: VisualizationElement[],
 
     // Methods
-    addButtonTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => void,
     addElementType: (element: string, type: string) => void,
-    changeButtonTransitionDestination: (sourceSituationID: number, button: string, newDestinationSituationID: number) => void,
     createNewSituation: (newSituationName: string) => void,
     removeElementType: (element: string, type: string) => void,
     renameSituation: (situationID: number, newSituationName: string) => void,
@@ -30,6 +28,7 @@ export interface AppContextType {
     setScreenImage: (element: string, situationID: number, imageFile: File) => void,
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => void,
     setSelectedElement: (selectedElement: string) => void,
+    setTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => void,
     setUnityLoadingProgress: (progress: number) => void,
     startPlaneSelection: (element: string) => void
 }

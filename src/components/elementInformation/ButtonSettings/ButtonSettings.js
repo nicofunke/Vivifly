@@ -16,8 +16,10 @@ export default class ButtonSettings extends Component {
      */
     newSituationButtonClicked() {
         const newSituationID = this.context.createNewSituation("")
-        this.context.addButtonTransition(this.context.applicationState.currentSituationID,
-            newSituationID, this.context.applicationState.selectedElement)
+        this.context.setTransition(
+            this.context.applicationState.currentSituationID,
+            newSituationID,
+            this.context.applicationState.selectedElement)
         this.context.setCurrentSituation(newSituationID)
         this.context.setSelectedElement("")
     }
@@ -27,8 +29,10 @@ export default class ButtonSettings extends Component {
      * Creates a new transition without destination
      */
     existingSituationButtonClicked() {
-        this.context.addButtonTransition(this.context.applicationState.currentSituationID,
-            null, this.context.applicationState.selectedElement)
+        this.context.setTransition(
+            this.context.applicationState.currentSituationID,
+            null,
+            this.context.applicationState.selectedElement)
     }
 
     render() {
@@ -49,7 +53,7 @@ export default class ButtonSettings extends Component {
                 <ButtonExistingTransition
                     transition={transition}
                     states={this.context.states}
-                    changeDestination={destination => this.context.changeButtonTransitionDestination(transition.SourceStateID, transition.InteractionElement ,destination)} />}
+                    changeDestination={destination => this.context.setTransition(transition.SourceStateID, destination, transition.InteractionElement)} />}
         </>
     }
 }
