@@ -27,6 +27,7 @@ export interface AppContextType {
     renameSituation: (situationID: number, newSituationName: string) => void,
     setCurrentSituation: (currentSituationID: number) => void,
     setLightColor: (element: string, red: number, green: number, blue: number) => void,
+    setScreenImage: (element: string, situationID: number, imageFile: File) => void,
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => void,
     setSelectedElement: (selectedElement: string) => void,
     setUnityLoadingProgress: (progress: number) => void,

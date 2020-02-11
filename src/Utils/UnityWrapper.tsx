@@ -1,6 +1,7 @@
 import { UnityContent } from "react-unity-webgl"
 import { Direction } from "../types/direction.type"
 import { OutlineColor } from '../types/outline-color.type';
+import { VisualizationElement } from '../interfaces/visualization-element.interface';
 
 // Types for the constructor params
 type onClickFunction = (clickedElement: string, planeX: number, planeY: number, planeZ: number) => void
@@ -37,7 +38,7 @@ export class UnityWrapper {
     /**
      * Inserting an 3D-model from file. This method is currently used, because it does not require to store the 3D model on the server
      */
-    insertFileModel(file: File): void {
+    insertFileModel(file: File) {
         this.uploadingStarted()
         var reader: FileReader = new FileReader()
         reader.onload = (event) => {
@@ -54,7 +55,7 @@ export class UnityWrapper {
     /**
      * Starts moving the camera inside WebGL
      */
-    startCameraMovement(direction: Direction): void {
+    startCameraMovement(direction: Direction) {
         this.unityContent.send(
             "JavascriptApi",
             "StartCameraMovement",
@@ -66,7 +67,7 @@ export class UnityWrapper {
     /**
      * Stops camera movement inside WebGL
      */
-    stopCameraMovement(direction: Direction): void {
+    stopCameraMovement(direction: Direction) {
         this.unityContent.send(
             "JavascriptApi",
             "StopCameraMovement",
@@ -77,7 +78,7 @@ export class UnityWrapper {
     /**
      * Outlines an element inside WebGL
      */
-    outlineElement(elementName: string, colorName: OutlineColor): void {
+    outlineElement(elementName: string, colorName: OutlineColor) {
         this.unityContent.send(
             "JavascriptApi",
             "SetOutline",
@@ -88,7 +89,7 @@ export class UnityWrapper {
     /**
      * Removes outline of an element 
      */
-    removeOutline(elementName: string): void {
+    removeOutline(elementName: string) {
         this.unityContent.send(
             "JavascriptApi",
             "RemoveOutline",
@@ -100,7 +101,7 @@ export class UnityWrapper {
      * Changes the light effect of an element
      * colors and alpha are from 0 to 1
      */
-    setLightEffect(elementName: string, red: number, green: number, blue: number, alpha: number): void {
+    setLightEffect(elementName: string, red: number, green: number, blue: number, alpha: number) {
         this.unityContent.send(
             "JavascriptApi",
             "SetLightColor",
@@ -111,7 +112,7 @@ export class UnityWrapper {
     /**
      * Removes all light effects from the current visualization
      */
-    removeAllLightEffects(): void {
+    removeAllLightEffects() {
         this.unityContent.send(
             "JavascriptApi",
             "RemoveAllLights",
@@ -122,7 +123,7 @@ export class UnityWrapper {
     /**
      * Removes the light effect of a certain element
      */
-    removeLightEffect(elementName: string): void {
+    removeLightEffect(elementName: string) {
         this.unityContent.send(
             "JavascriptApi",
             "RemoveLight",
@@ -131,9 +132,20 @@ export class UnityWrapper {
     }
 
     /**
+     * Removes all currently active visual effects
+     */
+    removeAllVisualEffects() {
+        this.unityContent.send(
+            "JavascriptApi",
+            "RemoveAllVisualEffects",
+            ""
+        )
+    }
+
+    /**
      * Activates a hover effect for the planes of an element 
      */
-    activatePlaneHoverEffect(elementName: string): void {
+    activatePlaneHoverEffect(elementName: string) {
         this.unityContent.send(
             "JavascriptApi",
             "activatePlaneHoverEffect",
@@ -144,7 +156,7 @@ export class UnityWrapper {
     /**
      * Deactivates plane hover effects
      */
-    deActivatePlaneHoverEffect(): void {
+    deActivatePlaneHoverEffect() {
         this.unityContent.send(
             "JavascriptApi",
             "deactivatePlaneHoverEffect",
@@ -152,7 +164,42 @@ export class UnityWrapper {
         )
     }
 
-    /**addScreenEffect(elementName, image, planeX, planeY, planeZ, resolutionX, resolutionY) {
-        // TODO: Screen effect
-    }**/
+    /**
+     * Adds a screen effect to an element
+     * @param visualizationElement  Definition of the screen element
+     * @param imageFile             File that should be displayed
+     */
+    addScreenEffect(visualizationElement: VisualizationElement, imageFile: File) {
+        var reader: FileReader = new FileReader()
+        reader.onload = (event) => {
+            if(!!event.target && event.target.result && typeof event.target.result === 'string') {
+                const params = {
+                    element: visualizationElement.Name,
+                    imageBase64: event.target?.result?.split(',')[1],       // cut off data type
+                    // TODO: use correct plane and resolution values
+                    planeX: 0,
+                    planeY: 0,
+                    planeZ: 1
+                }
+                this.unityContent.send(
+                    "JavascriptApi",
+                    "DisplayImage",
+                    JSON.stringify(params)
+                )
+            }
+        }
+        reader.readAsDataURL(imageFile)
+    }
+
+    /**
+     * Removes the screen effect of an element
+     * @param element   Name of the elemen
+     */
+    removeScreenEffect(element: string){
+        this.unityContent.send(
+            "JavascriptApi",
+            "RemoveScreenEffect",
+            element
+        )
+    }
 }

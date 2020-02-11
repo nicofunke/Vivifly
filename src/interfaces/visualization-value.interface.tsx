@@ -1,9 +1,14 @@
+import { VisualizationType } from "../types/visualization-type.type";
+
+/**
+ * Interface for visualization effects during states in the Vivian Framework
+ */
 export interface VisualizationValue {
-    Type: "FloatValueVisualization" | "ScreenContentVisualization",
+    Type: VisualizationType,
     VisualizationElement: string,
 
     // float visualization specific parameters ( for lights )
-    Value: number,
+    Value?: number,
 
     // Screen specific parameters
     FileName?: string               // This parameter is optional since it will be generated on export

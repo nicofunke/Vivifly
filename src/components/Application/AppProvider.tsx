@@ -1,11 +1,16 @@
 import React from 'react'
 import { AppContext } from './AppContext'
 import { UnityWrapper } from '../../Utils/UnityWrapper'
-import { ContextUtils } from '../../Utils/ContextUtils'
+import { ContextUtils } from '../../Utils/ContextUtils';
 import { ContextState } from '../../interfaces/context-state.interface';
 import { VisualizationValue } from '../../interfaces/visualization-value.interface';
 import { Vector3 } from '../../interfaces/vector3.interface';
 import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface';
+import { ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT } from '../../types/element-type.type';
+import { VISUALIZATION_TYPE_FLOAT, VISUALIZATION_TYPE_SCREEN } from '../../types/visualization-type.type';
+import { State } from '../../interfaces/state.interface';
+import { VisualizationElement } from '../../interfaces/visualization-element.interface';
+import { OUTLINE_COLOR_RED } from '../../types/outline-color.type';
 
 /**
  * Provides the context AppContext for the whole application
@@ -100,20 +105,30 @@ export default class AppProvider extends React.Component {
             }
         })
         // Change visualization
-        this.state.unityWrapper.removeAllLightEffects()
+        this.state.unityWrapper?.removeAllVisualEffects()
         const newSituation = this.state.states.find(situation => situation.id === currentSituationID)
         if (!!newSituation && !!newSituation.Values) {
             for (const value of newSituation.Values) {
-                if (value.Type === "FloatValueVisualization") {
-                    // Light effect
+                if (value.Type === VISUALIZATION_TYPE_FLOAT) {
+                    // Add light effects
                     const color = ContextUtils.getLightEmissionColor(value.VisualizationElement, this.state)
                     if (!!color) {
-                        this.state.unityWrapper.setLightEffect(value.VisualizationElement, color.r, color.g, color.b, value.Value)
+                        this.state.unityWrapper?.setLightEffect(value.VisualizationElement, color.r, color.g, color.b, value.Value || 0.0)
                     }
-                } else if (value.Type === "ScreenContentVisualization") {
-                    // TODO: Screen visualization
+                } else if (value.Type === VISUALIZATION_TYPE_SCREEN) {
+                    // Add screen effects
+                    const visualizationElement = this.state.visualizationElements.find(
+                        (visualizationElement: VisualizationElement) => (
+                            visualizationElement.Name === value.VisualizationElement && visualizationElement.Type === ELEMENT_TYPE_SCREEN
+                        )
+                    )
+                    if (!!visualizationElement && !!value.File) {
+                        this.state.unityWrapper?.addScreenEffect(visualizationElement, value.File)
+                    }
                 }
             }
+            // Restore outline of selected element
+            this.state.unityWrapper?.outlineElement(this.state.applicationState.selectedElement, OUTLINE_COLOR_RED)
         }
     }
 
@@ -125,12 +140,21 @@ export default class AppProvider extends React.Component {
     setSelectedElement(selectedElement: string) {
         const previousSelectedElement = this.state.applicationState.selectedElement
         if (previousSelectedElement !== "") {
-            this.state.unityWrapper.removeOutline(previousSelectedElement)
+            this.state.unityWrapper?.removeOutline(previousSelectedElement)
         }
         if (selectedElement !== "") {
-            this.state.unityWrapper.outlineElement(selectedElement, "red")
+            this.state.unityWrapper?.outlineElement(selectedElement, OUTLINE_COLOR_RED)
         }
-        this.setState((state: ContextState) => { return { ...state, applicationState: { ...state.applicationState, selectedElement: selectedElement, hasAlreadySelectedAnElement: true } } })
+        this.setState((state: ContextState) => {
+            return {
+                ...state,
+                applicationState: {
+                    ...state.applicationState,
+                    selectedElement: selectedElement,
+                    hasAlreadySelectedAnElement: true
+                }
+            }
+        })
     }
 
     // =============== SITUATION/STATE METHODS ========================
@@ -177,6 +201,8 @@ export default class AppProvider extends React.Component {
     }
 
     // =============== TRANSITION METHODS ================================
+
+    // TODO: Instead of add transition and change transition -> set transition?!
     /**
      * Adds a new transition from one situation to another, that is triggered by pressing a button
      *
@@ -185,9 +211,8 @@ export default class AppProvider extends React.Component {
      * @param button                    name of the button that leads to the transition
      */
     addButtonTransition(sourceSituationID: number, destinationSituationID: number, button: string) {
-        if (this.state.transitions.find(transition =>
-            (transition.SourceStateID === sourceSituationID && transition.InteractionElement === button))) {
-            // There is already a transition
+        // Stop if there is already a transition
+        if (!!ContextUtils.getTransition(button, sourceSituationID, this.state)) {
             return
         }
         const newTransition = {
@@ -281,8 +306,8 @@ export default class AppProvider extends React.Component {
                         visualizationElements: state.visualizationElements.filter(visualizationElement => visualizationElement.Name !== element || visualizationElement.Type !== "Screen")
                     }
                 })
-                // Remove light effects from current WebGL visualization
-                this.state.unityWrapper.removeLightEffect(element)
+                // Remove screen effects from current WebGL visualization
+                this.state.unityWrapper?.removeScreenEffect(element)
                 break
             case "Light":
                 // Remove from all situations and from visualizationElements list
@@ -300,7 +325,7 @@ export default class AppProvider extends React.Component {
                     }
                 })
                 // Remove light effects from current WebGL visualization
-                this.state.unityWrapper.removeLightEffect(element)
+                this.state.unityWrapper?.removeLightEffect(element)
                 break
             default:
                 return
@@ -318,8 +343,8 @@ export default class AppProvider extends React.Component {
      * @param blue      from 0-1
      */
     setLightColor(element: string, red: number, green: number, blue: number) {
-        if (!this.state.visualizationElements.find(visualizationElement => visualizationElement.Name === element)) {
-            // Element is no light -> Stop
+        // Check if element is a light
+        if (!ContextUtils.elementHasType(element, ELEMENT_TYPE_LIGHT, this.state)) {
             return
         }
         this.setState((state: ContextState) => {
@@ -338,7 +363,7 @@ export default class AppProvider extends React.Component {
         if (!emissionStrength) {
             return
         }
-        this.state.unityWrapper.setLightEffect(element, red, green, blue, emissionStrength)
+        this.state.unityWrapper?.setLightEffect(element, red, green, blue, emissionStrength)
     }
 
     /**
@@ -382,7 +407,7 @@ export default class AppProvider extends React.Component {
         if (emissionSituationID === this.state.applicationState.currentSituationID) {
             const color = ContextUtils.getLightEmissionColor(element, this.state)
             if (!!color) {
-                this.state.unityWrapper.setLightEffect(element, color.r, color.g, color.b, emissionStrength)
+                this.state.unityWrapper?.setLightEffect(element, color.r, color.g, color.b, emissionStrength)
             }
         }
     }
@@ -398,7 +423,7 @@ export default class AppProvider extends React.Component {
             return { ...state, applicationState: { ...state.applicationState, planeSelectionElementName: element } }
         })
         // Activate hover effect
-        this.state.unityWrapper.activatePlaneHoverEffect(element)
+        this.state.unityWrapper?.activatePlaneHoverEffect(element)
     }
 
     /**
@@ -408,7 +433,7 @@ export default class AppProvider extends React.Component {
         this.setState((state: ContextState) => {
             return { ...state, applicationState: { ...state.applicationState, planeSelectionElementName: null } }
         })
-        this.state.unityWrapper.deActivatePlaneHoverEffect()
+        this.state.unityWrapper?.deActivatePlaneHoverEffect()
     }
 
     /**
@@ -429,6 +454,59 @@ export default class AppProvider extends React.Component {
         })
     }
 
+    /**
+     * Sets the visualized image for a certain screen in a certain situation 
+     * @param element           Name of the screen element
+     * @param situationID       Id of the situation
+     * @param imageFile         Image file that should be displayed
+     */
+    setScreenImage(element: string, situationID: number, imageFile: File) {
+        // Check if element is a screen element
+        if (!ContextUtils.elementHasType(element, ELEMENT_TYPE_SCREEN, this.state)) {
+            return
+        }
+
+        // Change state
+        this.setState((state: ContextState) => {
+            return {
+                ...state, states: state.states.map(
+                    (situation: State) => {
+                        if (situation.id === situationID) {
+                            let valueChanged = false
+                            let newVisualizationValues = situation.Values?.map((visualizationValue: VisualizationValue) => {
+
+                                // If there is already a screen visualization just change it ...
+                                if (visualizationValue.VisualizationElement === element && visualizationValue.Type === VISUALIZATION_TYPE_SCREEN) {
+                                    valueChanged = true
+                                    return { ...visualizationValue, File: imageFile }
+                                }
+                                return visualizationValue
+                            })
+
+                            // ... otherwise add a new screen visualization
+                            if (!valueChanged) {
+                                const newVisualizationValue: VisualizationValue = { Type: VISUALIZATION_TYPE_SCREEN, File: imageFile, VisualizationElement: element }
+                                newVisualizationValues = !!newVisualizationValues ? [...newVisualizationValues, newVisualizationValue] : [newVisualizationValue]
+                            }
+                            return { ...situation, Values: newVisualizationValues }
+                        }
+                        return situation
+                    }
+                )
+            }
+        })
+
+        // Update WebGL if necessary
+        if (this.state.applicationState.currentSituationID === situationID) {
+            const visualizationElement = this.state.visualizationElements.find(
+                (visualizationElement: VisualizationElement) => visualizationElement.Name === element && visualizationElement.Type === ELEMENT_TYPE_SCREEN
+            )
+            if (!!visualizationElement) {
+                this.state.unityWrapper?.addScreenEffect(visualizationElement, imageFile)
+            }
+        }
+    }
+
 
     //================= RENDER =============================
 
@@ -440,6 +518,7 @@ export default class AppProvider extends React.Component {
             transitions: this.state.transitions,
             unityWrapper: this.state.unityWrapper,
             visualizationElements: this.state.visualizationElements,
+
             addButtonTransition: this.addButtonTransition.bind(this),
             addElementType: this.addElementType.bind(this),
             changeButtonTransitionDestination: this.changeButtonTransitionDestination.bind(this),
@@ -449,6 +528,7 @@ export default class AppProvider extends React.Component {
             setCurrentSituation: this.setCurrentSituation.bind(this),
             setLightColor: this.setLightColor.bind(this),
             setLightEmission: this.setLightEmission.bind(this),
+            setScreenImage: this.setScreenImage.bind(this),
             setSelectedElement: this.setSelectedElement.bind(this),
             setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this),
             startPlaneSelection: this.startPlaneSelection.bind(this)

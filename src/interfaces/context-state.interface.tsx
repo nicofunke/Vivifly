@@ -14,5 +14,5 @@ export interface ContextState {
         transitions: Transition[],
         visualizationElements: VisualizationElement[],
         applicationState: ApplicationState,
-        unityWrapper: UnityWrapper
+        unityWrapper?: UnityWrapper
 }

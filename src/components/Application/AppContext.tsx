@@ -27,6 +27,7 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     setCurrentSituation: (currentSituationID: number) => { },
     setLightColor: (element: string, red: number, green: number, blue: number) => { },
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => { },
+    setScreenImage: (element: string, situationID: number, imageFile: File) => { },
     setSelectedElement: (selectedElement: string) => { },
     setUnityLoadingProgress: (progress: number) => { },
     startPlaneSelection: (element: string) => { }
