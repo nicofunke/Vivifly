@@ -50,3 +50,24 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
+.hover-icon {
+  opacity: 0.5;
+  &:hover {
+    opacity: 0.9;
+    cursor: pointer;
+  }
+}
+
+.element-type-button {
+  &:hover {
+    cursor: pointer;
+    .rounded-circle {
+      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.35) !important;
+    }
+  }
+  .rounded-circle{
+    min-width: 53.6px;
+    min-height: 53.6px;
+  }
+}

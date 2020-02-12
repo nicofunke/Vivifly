@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { AppContext, APP_CONTEXT_DEFAULT } from '../../Application/AppContext'
-import { MDBIcon } from 'mdbreact'
+import { MDBIcon, MDBCardText } from 'mdbreact'
 import { ContextUtils } from '../../../Utils/ContextUtils'
 import DisplayImageUploader from './DisplayImageUploader'
 import { VisualizationElement } from '../../../interfaces/visualization-element.interface'
@@ -70,20 +70,23 @@ export default class DisplaySettings extends Component {
         }
     }
 
-
     render() {
-        /**const visualizationElement = this.context.visualizationElements.find(
-            (visualizationElement: VisualizationElement) => visualizationElement.Name === this.context.applicationState.selectedElement
-        )**/
         const currentImage = ContextUtils.getScreenImage(this.context.applicationState.selectedElement, this.context.applicationState.currentSituationID, this.context)
         return <>
-            <button type="button"
-                className="btn btn-link btn-sm p-0 text-default"
-                onClick={() => this.context.removeElementType(this.context.applicationState.selectedElement, "Screen")}>
-                <MDBIcon icon="angle-left" /> This is no display
-            </button>
-            <h5 className="cyan-text"><MDBIcon icon="tv" className="mr-1" /> Display </h5>
-            <DisplayImageUploader handleNewImage={this.handleNewImage.bind(this)} currentImage={currentImage} />
+
+            <div className="row">
+                <div className="col-1 p-0 d-flex justify-content-center align-items-center">
+                    <MDBIcon icon="tv" size="lg" className="cyan-text" />
+                </div>
+                <div className="col-11">
+                    <div className="mb-1" > Display </div>
+                    <div className="card-text">A display can show images on its surface
+                    <div className="mt-2">
+                            <DisplayImageUploader handleNewImage={this.handleNewImage.bind(this)} currentImage={currentImage} />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
     }
 }

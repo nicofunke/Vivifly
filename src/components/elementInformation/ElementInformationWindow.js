@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { MDBCard, MDBCardBody, MDBCardTitle, MDBIcon, MDBCloseIcon } from 'mdbreact'
+import { MDBCard, MDBCardBody } from 'mdbreact'
 import ElementTypePicker from './ElementTypePicker'
 import ButtonSettings from './ButtonSettings/ButtonSettings'
 import DisplaySettings from './DisplaySettings/DisplaySettings'
 import { AppContext } from '../Application/AppContext'
 import LightSettings from './LightSettings/LightSettings'
 import { ContextUtils } from '../../Utils/ContextUtils'
+import ElementInformationHeader from './ElementInformationHeader'
 
 export default class ElementInformationWindow extends Component {
 
@@ -35,25 +36,6 @@ export default class ElementInformationWindow extends Component {
         document.removeEventListener("keydown", this.onKeyPressed.bind(this), false)
     }
 
-    render() {
-        if (!this.context.applicationState.selectedElement || this.context.applicationState.selectedElement === "") {
-            return null
-        }
-        return <>
-            <div className="window-upper-right">
-                <MDBCard>
-                    <MDBCardBody>
-                        <div className="row align-items-start">
-                            <MDBCardTitle className="col-10">{this.context.applicationState.selectedElement}</MDBCardTitle>
-                            <MDBCloseIcon className="col-2" onClick={() => this.context.setSelectedElement("")} />
-                        </div>
-                        {this.elementTypeSettings()}
-                    </MDBCardBody>
-                </MDBCard>
-            </div>
-        </>
-    }
-
     /**
      * Returns the correspondent settings for the current element as JSX
      */
@@ -74,10 +56,27 @@ export default class ElementInformationWindow extends Component {
         }
         return <>
             {output}
-            <div className="d-flex justify-content-end">
-                <button type="button" className="btn btn-link btn-sm p-0 text-default">
-                    <MDBIcon icon="plus" /> Add another function to this element
-                </button>
+        </>
+    }
+
+    render() {
+        if (!this.context.applicationState.selectedElement || this.context.applicationState.selectedElement === "") {
+            return null
+        }
+        return <>
+            <div className="window-upper-right">
+                <MDBCard>
+                    <div className="primary-color-dark text-white">
+                        <MDBCardBody className="pb-1">
+                            <ElementInformationHeader
+                                title={this.context.applicationState.selectedElement}
+                                onClose={() => this.context.setSelectedElement("")} />
+                        </MDBCardBody>
+                    </div>
+                    <MDBCardBody>
+                        {this.elementTypeSettings()}
+                    </MDBCardBody>
+                </MDBCard>
             </div>
         </>
     }
