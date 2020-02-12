@@ -1,3 +1,4 @@
+import { Vector3 } from './vector3.interface';
 
 /**
  * Interface for the application state during a session
@@ -10,7 +11,8 @@ export interface ApplicationState {
     nextSituationID: number,                    // in order to give new situations a unique ID
     isCurrentlyUploading: boolean,              // If the application currently uploads a model
     modelWasUploaded: boolean,                  // If a model was already uploaded
-    planeSelectionElementName: string | null,          // Current element for plane selection for screens ( or null if plane selection is not active )
+    planeSelectionElementName: string | null,   // Current element for plane selection for screens ( or null if plane selection is not active )
+    clickedPlane: Vector3 | undefined,          // Stores the normal vector of the plane of the selected element the user clicked on on
 }
 
 /**
@@ -24,5 +26,6 @@ export const APPLICATION_STATE_DEFAULT: ApplicationState = {
     nextSituationID: 1,
     isCurrentlyUploading: false,
     modelWasUploaded: true,
-    planeSelectionElementName: null
+    planeSelectionElementName: null,
+    clickedPlane: undefined
 }

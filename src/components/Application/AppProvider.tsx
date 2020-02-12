@@ -11,6 +11,7 @@ import { VISUALIZATION_TYPE_FLOAT, VISUALIZATION_TYPE_SCREEN } from '../../types
 import { State } from '../../interfaces/state.interface';
 import { VisualizationElement } from '../../interfaces/visualization-element.interface';
 import { OUTLINE_COLOR_RED } from '../../types/outline-color.type';
+import { Vector2 } from '../../interfaces/vector2.interface';
 
 /**
  * Provides the context AppContext for the whole application
@@ -44,25 +45,22 @@ export default class AppProvider extends React.Component {
      * @param planeY            y value of the normal vector of the plane that was clicked on
      * @param planeZ            z value of the normal vector of the plane that was clicked on
      */
-    unityObjectClicked(clickedElement: string, planeX: number, planeY: number, planeZ: number): void {
+    unityObjectClicked(clickedElement: string, clickedPlane: Vector3): void {
         const planeSelectionElement = this.state.applicationState.planeSelectionElementName
         if (!!planeSelectionElement) {
             // Plane selection active -> deactivate
             this.endPlaneSelection()
             if (clickedElement === planeSelectionElement) {
                 // Plane was chosen -> store normal vector and return (in order to not change the selected element)
-                // TODO: Would be a good point to get also resolution from unity?
-                const plane = { x: planeX, y: planeY, z: planeZ }
-                this.setScreenPlane(planeSelectionElement, plane)
+                this.setScreenPlane(planeSelectionElement, clickedPlane)
                 return
             }
-            // if clicked on another element change the currently selected element
         }
         // Change selected element
         if (clickedElement === this.state.applicationState.selectedElement) {
             clickedElement = ""
         }
-        this.setSelectedElement(clickedElement)
+        this.setSelectedElement(clickedElement, clickedPlane)
     }
 
     /**
@@ -137,21 +135,25 @@ export default class AppProvider extends React.Component {
      *
      * @param selectedElement   name of the element that should be selected
      */
-    setSelectedElement(selectedElement: string) {
+    setSelectedElement(selectedElement: string, clickedPlane: Vector3) {
         const previousSelectedElement = this.state.applicationState.selectedElement
+        // Remove old outline
         if (previousSelectedElement !== "") {
             this.state.unityWrapper?.removeOutline(previousSelectedElement)
         }
+        // Add new outline
         if (selectedElement !== "") {
             this.state.unityWrapper?.outlineElement(selectedElement, OUTLINE_COLOR_RED)
         }
+        // Change state
         this.setState((state: ContextState) => {
             return {
                 ...state,
                 applicationState: {
                     ...state.applicationState,
                     selectedElement: selectedElement,
-                    hasAlreadySelectedAnElement: true
+                    hasAlreadySelectedAnElement: true,
+                    clickedPlane: selectedElement === "" ? undefined : clickedPlane
                 }
             }
         })
@@ -252,12 +254,11 @@ export default class AppProvider extends React.Component {
                 this.setState((state: ContextState) => { return { ...state, interactionElements: [...state.interactionElements, newInteractionElement] } })
                 break
             case "Screen":
-                const newScreenElement = { Type: "Screen", Name: element, Plane: null, Resolution: { x: 150, y: 150 } }
-                // TODO: calculate resolution from picture/plane?
+                const newScreenElement = { Type: "Screen", Name: element, Plane: null}
                 this.setState((state: ContextState) => { return { ...state, visualizationElements: [...state.visualizationElements, newScreenElement] } })
                 break
             case "Light":
-                const newLightElement = { Type: "Light", Name: element, EmissionColor: { r: 1, g: 0, b: 0, a: 1 } }
+                const newLightElement = { Type: "Light", Name: element, EmissionColor: { r: 1, g: 0, b: 0, a: 0.5 } }
                 this.setState((state: ContextState) => { return { ...state, visualizationElements: [...state.visualizationElements, newLightElement] } })
                 break
             default:
@@ -448,6 +449,24 @@ export default class AppProvider extends React.Component {
     }
 
     /**
+     * Sets the resolution for a screen element
+     * @param element       Screen element name
+     * @param resolution    New resolution
+     */
+    setScreenResolution(element: string, resolution: Vector2) {
+        this.setState((state: ContextState) => {
+            return {
+                ...state, visualizationElements: state.visualizationElements.map(visualizationElement => {
+                    if (visualizationElement.Name === element && visualizationElement.Type === "Screen") {
+                        return { ...visualizationElement, Resolution: resolution }
+                    }
+                    return visualizationElement
+                })
+            }
+        })
+    }
+
+    /**
      * Sets the visualized image for a certain screen in a certain situation 
      * @param element           Name of the screen element
      * @param situationID       Id of the situation
@@ -521,6 +540,8 @@ export default class AppProvider extends React.Component {
             setLightColor: this.setLightColor.bind(this),
             setLightEmission: this.setLightEmission.bind(this),
             setScreenImage: this.setScreenImage.bind(this),
+            setScreenPlane: this.setScreenPlane.bind(this),
+            setScreenResolution: this.setScreenResolution.bind(this),
             setSelectedElement: this.setSelectedElement.bind(this),
             setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this),
             startPlaneSelection: this.startPlaneSelection.bind(this)

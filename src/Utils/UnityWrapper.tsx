@@ -2,9 +2,10 @@ import { UnityContent } from "react-unity-webgl"
 import { Direction } from "../types/direction.type"
 import { OutlineColor } from '../types/outline-color.type';
 import { VisualizationElement } from '../interfaces/visualization-element.interface';
+import { Vector3 } from '../interfaces/vector3.interface';
 
 // Types for the constructor params
-type onClickFunction = (clickedElement: string, planeX: number, planeY: number, planeZ: number) => void
+type onClickFunction = (clickedElement: string, clickedPlane: Vector3) => void
 type onProgressFunction = (progress: number) => void
 
 export class UnityWrapper {
@@ -23,7 +24,8 @@ export class UnityWrapper {
         )
         this.unityContent.on("objectClicked", (clickString: string) => {
             const clickObject = JSON.parse(clickString)
-            onClick(clickObject.element, clickObject.planeX, clickObject.planeY, clickObject.planeZ)
+            const clickedPlane: Vector3 = { x: clickObject.planeX, y: clickObject.planeY, z: clickObject.planeZ }
+            onClick(clickObject.element, clickedPlane)
         })
         this.unityContent.on("catchUnityError", (code: number, messageString: string) => {
             console.log("ERROR" + code + ": " + messageString)
@@ -172,14 +174,14 @@ export class UnityWrapper {
     addScreenEffect(visualizationElement: VisualizationElement, imageFile: File) {
         var reader: FileReader = new FileReader()
         reader.onload = (event) => {
-            if(!!event.target && event.target.result && typeof event.target.result === 'string') {
+            if (!!event.target && event.target.result && typeof event.target.result === 'string') {
                 const params = {
                     element: visualizationElement.Name,
                     imageBase64: event.target?.result?.split(',')[1],       // cut off data type
-                    // TODO: use correct plane and resolution values
-                    planeX: 0,
-                    planeY: 0,
-                    planeZ: 1
+                    // TODO: use correct resolution values
+                    planeX: visualizationElement.Plane?.x,
+                    planeY: visualizationElement.Plane?.y,
+                    planeZ: visualizationElement.Plane?.z
                 }
                 this.unityContent.send(
                     "JavascriptApi",
@@ -195,7 +197,7 @@ export class UnityWrapper {
      * Removes the screen effect of an element
      * @param element   Name of the elemen
      */
-    removeScreenEffect(element: string){
+    removeScreenEffect(element: string) {
         this.unityContent.send(
             "JavascriptApi",
             "RemoveScreenEffect",

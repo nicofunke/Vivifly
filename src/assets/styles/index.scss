@@ -1,18 +1,17 @@
-
 // Object specific styling
 .window-upper-right {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  width: 25vw; 
+  width: 25vw;
   min-width: 400px;
 }
 
-.dropzone:hover{
+.dropzone:hover {
   background-color: #eeeeee;
 }
 
-.window-top-center{
+.window-top-center {
   position: absolute;
   top: 1rem;
   left: 50%;
@@ -20,21 +19,20 @@
   transform: translateX(-50%);
   width: 25vw;
   min-width: 350px;
-
 }
 
 // z-index for overlays
 
-.popup-overlay{
+.popup-overlay {
   z-index: 1001;
 }
-.upload-overlay{
+.upload-overlay {
   z-index: 1002;
 }
-.loading-overlay{
+.loading-overlay {
   z-index: 1003;
 }
-.starting-overlay{
+.starting-overlay {
   z-index: 1004;
 }
 
@@ -44,5 +42,11 @@
 }
 
 .bg-white-transparent {
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.text-trim {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }

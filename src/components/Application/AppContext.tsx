@@ -1,6 +1,8 @@
 import React from 'react'
 import { AppContextType } from '../../interfaces/app-context-type.interface';
 import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface';
+import { Vector3 } from '../../interfaces/vector3.interface';
+import { Vector2 } from '../../interfaces/vector2.interface';
 /**
  * This file provides the necessary variables to handle a context provided by AppProvider
  * see https://www.freecodecamp.org/news/react-context-in-5-minutes/
@@ -26,8 +28,10 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     setLightColor: (element: string, red: number, green: number, blue: number) => { },
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => { },
     setScreenImage: (element: string, situationID: number, imageFile: File) => { },
-    setSelectedElement: (selectedElement: string) => { },
-    setTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => {},
+    setScreenPlane: (planeSelectionElement: string, plane: Vector3) => { },
+    setScreenResolution: (element: string, resolution: Vector2) => { },
+    setSelectedElement: (selectedElement: string, clickedPlane: Vector3) => { },
+    setTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => { },
     setUnityLoadingProgress: (progress: number) => { },
     startPlaneSelection: (element: string) => { }
 }

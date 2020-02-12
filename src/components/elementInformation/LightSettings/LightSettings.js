@@ -27,6 +27,7 @@ export default class LightSettings extends React.Component {
     render() {
         const currentElement = this.context.applicationState.selectedElement
         const currentSituationID = this.context.applicationState.currentSituationID
+        console.log(ContextUtils.getLightEmissionStrength(currentElement, currentSituationID, this.context ))
         return <>
             <button type="button"
                 className="btn btn-link btn-sm p-0 text-default"

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { AppContext, APP_CONTEXT_DEFAULT } from '../../Application/AppContext';
+import { AppContext, APP_CONTEXT_DEFAULT } from '../../Application/AppContext'
 import { MDBIcon } from 'mdbreact'
-import { VisualizationElement } from '../../../interfaces/visualization-element.interface';
-import { ContextUtils } from '../../../Utils/ContextUtils';
-import DisplayImageUploader from './DisplayImageUploader';
+import { ContextUtils } from '../../../Utils/ContextUtils'
+import DisplayImageUploader from './DisplayImageUploader'
+import { VisualizationElement } from '../../../interfaces/visualization-element.interface'
+import { Vector2 } from '../../../interfaces/vector2.interface';
 
 export default class DisplaySettings extends Component {
 
@@ -16,24 +17,28 @@ export default class DisplaySettings extends Component {
     }
 
     /**
-     * Checks if the normal vector for the screen plane is set and activates the plane selection mode if it is not set yet
-     
+     * Checks if the plane for the display iss already set and sets it if necessary
+     */
     componentDidMount() {
         const visualizationElement = this.context.visualizationElements.find(
             (visualizationElement: VisualizationElement) => visualizationElement.Name === this.context.applicationState.selectedElement
         )
-        if (!!visualizationElement && !visualizationElement.Plane
-            && this.context.applicationState.planeSelectionElementName !== this.context.applicationState.selectedElement) {
-
-            this.context.startPlaneSelection(this.context.applicationState.selectedElement)
+        if ((!visualizationElement || !visualizationElement.Plane) && !!this.context.applicationState.clickedPlane) {
+            this.context.setScreenPlane(this.context.applicationState.selectedElement, this.context.applicationState.clickedPlane)
         }
-    }*/
+    }
 
     /**
-     * 
+     * Handles newly selected files. Stores the file and sets the screen resolution if no resolution was set yet
+     * @param event Event from the file input
      */
-    setCurrentImage(file: File): void {
-        // Stop if file is no image
+    handleNewImage(event: React.ChangeEvent<HTMLInputElement>): void {
+        // Stop if no files chosen
+        if (!event.target.files) {
+            return
+        }
+        const file = event.target.files[0]
+        // Check if file is image
         if (file.type.split('/')[0] !== 'image') {
             this.setState({ wrongFileTypeSubmitted: true })
             return
@@ -45,20 +50,24 @@ export default class DisplaySettings extends Component {
             this.context.applicationState.currentSituationID,
             file)
 
-       /* var reader: FileReader = new FileReader()
-        reader.onload = (event) => {
-            console.log(event.target?.result)
-            var img = new Image()
-            img.onload = () => {
-                console.log(img.height + " x " + img.width)
+        // Store resolution if no resolution was set yet
+        const visualizationElement = this.context.visualizationElements.find(
+            (visualizationElement: VisualizationElement) => visualizationElement.Name === this.context.applicationState.selectedElement
+        )
+        if (!visualizationElement || !visualizationElement.Resolution) {
+            var reader: FileReader = new FileReader()
+            reader.onload = (event) => {
+                var img = new Image()
+                img.onload = () => {
+                    const resolution: Vector2 = { x: img.width, y: img.height }
+                    this.context.setScreenResolution(this.context.applicationState.selectedElement, resolution)
+                }
+                if (!!reader.result && typeof reader.result === 'string') {
+                    img.src = reader.result
+                }
             }
-            if (!!reader.result && typeof reader.result === 'string') {
-                img.src = reader.result
-            }
+            reader.readAsDataURL(file)
         }
-        console.log(file.type)
-        reader.readAsDataURL(file)
-        console.log(file.name) */
     }
 
 
@@ -74,9 +83,7 @@ export default class DisplaySettings extends Component {
                 <MDBIcon icon="angle-left" /> This is no display
             </button>
             <h5 className="cyan-text"><MDBIcon icon="tv" className="mr-1" /> Display </h5>
-            {
-                !!currentImage ? <div>Current image: { currentImage.name } </div> : <DisplayImageUploader uploadImage={this.setCurrentImage.bind(this)} />
-            }
+            <DisplayImageUploader handleNewImage={this.handleNewImage.bind(this)} currentImage={currentImage} />
         </>
     }
 }
