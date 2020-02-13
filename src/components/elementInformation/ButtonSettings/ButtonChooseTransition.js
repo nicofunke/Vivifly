@@ -1,7 +1,6 @@
 import React from 'react'
 import { MDBIcon, MDBBtn } from 'mdbreact'
 
-// TODO: Somewhere here it should be possible to choose new situation
 export default function ButtonChooseTransition(props) {
     return <>
         <div>Pushing a button leads to a new situation, e.g. lights turned on or off.<br />

@@ -221,8 +221,6 @@ export default class AppProvider extends React.Component {
 
     // =============== TRANSITION METHODS ================================
 
-    // TODO: Instead of add transition and change transition -> set transition?!
-
     /**
      * Sets the transition, triggered by a button
      * @param sourceSituationID         Source situation ID

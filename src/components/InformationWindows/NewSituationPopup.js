@@ -6,20 +6,22 @@ import { AppContext } from '../Application/AppContext'
  * Popup to define a name for the current situation
  * Only pop ups if the name of the current situation is ""
  */
-// TODO: Validation warnings
 export default class NewSituationPopup extends React.Component {
 
     // Default: not active (gets activated if the current situation is "")
-    state = { currentlyActive: false }
+    state = {
+        currentlyActive: false
+    }
 
     /**
-     * Method that gets called if the textfield for the situation name is used
-     * calls the method to change the name globally 
+     * Method that gets called if the textfield for the situation name is changed.
+     * Calls the method to change the name globally
      */
     handleChange(event) {
         const currentSituationId = this.context.applicationState.currentSituationID
+        const value = event.target.value
         this.setState({ currentlyActive: true })
-        this.context.renameSituation(currentSituationId, event.target.value)
+        this.context.renameSituation(currentSituationId, value)
     }
 
     /**
@@ -35,7 +37,7 @@ export default class NewSituationPopup extends React.Component {
      * Closes the popup if the current situation has an appropriate name
      */
     closePopup() {
-        if( this.isProperSituationName()){
+        if (this.isProperSituationName()) {
             this.setState({ currentlyActive: false })
             this.context.showNewSituationInformationWindow()
         }
@@ -44,16 +46,17 @@ export default class NewSituationPopup extends React.Component {
     /**
      * Returns if the current situation name is appropriate and can be used
      */
-    isProperSituationName(){
-        const currentSituationID =  this.context.applicationState.currentSituationID
+    isProperSituationName() {
+        const currentSituationID = this.context.applicationState.currentSituationID
         const currentSituation = this.context.states.find(situation => situation.id === currentSituationID)
-        const isDuplicate = this.context.states.filter( state => state.Name === currentSituation.Name).length > 1
-        return !!currentSituation && currentSituation.Name !=="" && !isDuplicate
+        const isDuplicate = this.context.states.filter(state => state.Name === currentSituation.Name).length > 1
+        return !!currentSituation && currentSituation.Name !== "" && !isDuplicate
     }
 
     render() {
         const currentSituationID = this.context.applicationState.currentSituationID
         const currentSituation = this.context.states.find(situation => situation.id === currentSituationID)
+        const isProperSituationName = this.isProperSituationName()
         if (!this.state.currentlyActive &&
             (!currentSituation || currentSituation.Name !== "")) {
             return null
@@ -75,8 +78,16 @@ export default class NewSituationPopup extends React.Component {
                             value={currentSituation.Name}
                             onChange={this.handleChange.bind(this)}
                             onKeyDown={this.handleKeyDown.bind(this)}
+                            className="mb-1"
                             outline
-                            autoFocus  />
+                            autoFocus />
+
+                        {(!!currentSituation.Name && !isProperSituationName) &&
+                            <><small className="text-danger">
+                                The name of the situation must be unique
+                            </small><br/></>}
+
+
                         <small className="grey-text">
                             Meaningful names are for example
                             turnedOff, ready or gettingReady
@@ -85,7 +96,7 @@ export default class NewSituationPopup extends React.Component {
                             <MDBBtn
                                 color="primary"
                                 onClick={this.closePopup.bind(this)}
-                                disabled={!this.isProperSituationName()}>Okay</MDBBtn>
+                                disabled={!isProperSituationName}>Okay</MDBBtn>
                         </div>
                     </MDBCardBody>
                 </MDBCard>

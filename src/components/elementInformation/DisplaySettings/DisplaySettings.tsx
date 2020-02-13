@@ -45,6 +45,7 @@ export default class DisplaySettings extends Component {
             this.setState({ wrongFileTypeSubmitted: true })
             return
         }
+        this.setState({ wrongFileTypeSubmitted: false })
 
         // Store file
         this.context.setScreenImage(
@@ -108,7 +109,10 @@ export default class DisplaySettings extends Component {
                     <div className="card-text">
                         <div>A display can show different images on its surface, dependent on the situation</div>
                         <div className="mt-2">
-                            <DisplayImageUploader handleNewImage={this.handleNewImage.bind(this)} currentImage={currentImage} />
+                            <DisplayImageUploader 
+                            handleNewImage={this.handleNewImage.bind(this)} 
+                            currentImage={currentImage}
+                            wrongFileTypeSubmitted={this.state.wrongFileTypeSubmitted} />
                         </div>
                     </div>
                 </div>

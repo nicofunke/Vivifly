@@ -35,7 +35,7 @@ export default class ElementTypePicker extends React.Component {
                             <div className="d-flex justify-content-center align-items-center cyan text-white rounded-circle">
                                 <MDBIcon icon="desktop" size="lg" />
                             </div>
-                            <span>Screen</span>
+                            <span>Display</span>
                         </div>
                     </div>
                 </div>

@@ -21,8 +21,12 @@
   min-width: 350px;
 }
 
-// z-index for overlays
+.md-form.md-outline{    // Removes that big ugly margin from the mdbootstrap outline input elements 
+  margin-top: 0;
+  margin-bottom: 0;
+}
 
+// z-index for overlays
 .popup-overlay {
   z-index: 1001;
 }
@@ -67,7 +71,7 @@
     }
   }
   .rounded-circle{
-    min-width: 53.6px;
+    min-width: 53.6px;    // Hotfix, since those icons are no squares
     min-height: 53.6px;
   }
 }

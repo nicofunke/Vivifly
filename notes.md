@@ -17,7 +17,7 @@
 - Highlighting: Asset
 - Appprovicder(state) -> UnityWrapper
 - Access Lighteffect and Displayeffect of vivian framework
-- Screen plane calculation (split raycast)
+- Typescript
 
 # Interface notes
 

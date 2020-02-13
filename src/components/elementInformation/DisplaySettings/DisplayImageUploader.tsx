@@ -3,6 +3,7 @@ import React from 'react'
 type propsType = {
     currentImage: File | undefined,
     handleNewImage: ((event: React.ChangeEvent<HTMLInputElement>) => void),
+    wrongFileTypeSubmitted: boolean
 }
 
 export default function DisplayImageUploader(props: propsType) {
@@ -13,6 +14,9 @@ export default function DisplayImageUploader(props: propsType) {
                 {!!props.currentImage ? props.currentImage.name : "Choose image"}
             </label>
         </div>
+        {props.wrongFileTypeSubmitted
+            && <><small className="text-danger">Please choose a non-transparent JPG or PNG file</small><br /></>}
+
     </>
 
 }
