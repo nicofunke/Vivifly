@@ -1,6 +1,7 @@
 import React from 'react'
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBIcon, MDBCardText, MDBInput, MDBBtn } from 'mdbreact'
 import { AppContext } from '../Application/AppContext'
+import { ContextUtils } from '../../Utils/ContextUtils'
 
 /**
  * Popup to define a name for the current situation
@@ -50,8 +51,7 @@ export default class NewSituationPopup extends React.Component {
     isProperSituationName() {
         const currentSituationID = this.context.applicationState.currentSituationID
         const currentSituation = this.context.states.find(situation => situation.id === currentSituationID)
-        const isDuplicate = this.context.states.filter(state => state.Name === currentSituation.Name).length > 1
-        return !!currentSituation && currentSituation.Name !== "" && !isDuplicate
+        return ContextUtils.isProperSituationName(currentSituation.Name, this.context)
     }
 
     render() {

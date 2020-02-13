@@ -132,4 +132,14 @@ export class ContextUtils {
         // Unknown type 
         return false
     }
+
+    /**
+     * Checks if a situation name is currently valid (is no duplicate)
+     * @param name          Situation name to check
+     * @param context       Current context
+     */
+    static isProperSituationName(name: string, context: ContextState): boolean{
+        const isDuplicate = context.states.filter(state => state.Name === name).length > 1
+        return !!name && name !== "" && !isDuplicate
+    }
 }

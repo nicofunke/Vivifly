@@ -1,6 +1,7 @@
 import React from 'react'
 import SituationsListElement from './SituationsListElement'
 import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext';
+import { ContextUtils } from '../../Utils/ContextUtils';
 
 export default class SituationsList extends React.Component {
 
@@ -28,6 +29,8 @@ export default class SituationsList extends React.Component {
                     name={state.Name}
                     onElementClick={() => this.context.setCurrentSituation(state.id)}
                     isSelected={this.context.applicationState.currentSituationID === state.id}
+                    renameSituation={(newName: string) => this.context.renameSituation(state.id, newName)}
+                    isProperSituationName={ (newName: string) => ContextUtils.isProperSituationName(newName, this.context)}
                     isStart={state.id === 0}
                     key={state.id} />)
         }
