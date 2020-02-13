@@ -1,28 +1,30 @@
 import React from 'react'
 import LightColorPicker from './LightColorPicker'
 import LightEmissionSlider from './LightEmissionSlider'
-import { AppContext } from '../../Application/AppContext'
+import { AppContext, APP_CONTEXT_DEFAULT } from '../../Application/AppContext';
 import { MDBIcon } from 'mdbreact'
 import { ContextUtils } from '../../../Utils/ContextUtils'
 import { ELEMENT_TYPE_LIGHT } from '../../../types/element-type.type'
 import ReactTooltip from 'react-tooltip'
+import { Color } from '../../../interfaces/color.interface';
 
 export default class LightSettings extends React.Component {
 
     static contextType = AppContext
+    context = APP_CONTEXT_DEFAULT
 
 
     /**
      * Changes the main color of the current element(Light) 
      */
-    setColor(r, g, b) {
-        this.context.setLightColor(this.context.applicationState.selectedElement, r, g, b)
+    setColor(color: Color) {
+        this.context.setLightColor(this.context.applicationState.selectedElement, color)
     }
 
     /**
      * Changes the emission strength of the current element in the current situation 
      */
-    setEmission(alpha) {
+    setEmission(alpha: number) {
         this.context.setLightEmission(this.context.applicationState.selectedElement, this.context.applicationState.currentSituationID, alpha)
     }
 
@@ -47,7 +49,7 @@ export default class LightSettings extends React.Component {
                             <ReactTooltip place="bottom" effect="solid" id="element-light-actions" />
                         </div>
                     </div>
-                    <div class="card-text">
+                    <div className="card-text">
                         <div>A light has a fixed color and can change its emission strength dependent on the situation</div>
                         <label className="mt-1">Current Emission:</label>
                         <LightEmissionSlider alphaChanged={this.setEmission.bind(this)} alpha={ContextUtils.getLightEmissionStrength(currentElement, currentSituationID, this.context)} />

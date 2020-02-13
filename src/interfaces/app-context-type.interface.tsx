@@ -6,10 +6,11 @@ import { UnityWrapper } from '../Utils/UnityWrapper';
 import { VisualizationElement } from './visualization-element.interface';
 import { Vector3 } from './vector3.interface';
 import { Vector2 } from './vector2.interface';
+import { Color } from './color.interface';
 
- /**
- * Interface to type the AppContext
- */
+/**
+* Interface to type the AppContext
+*/
 export interface AppContextType {
 
     // Context variables
@@ -26,7 +27,7 @@ export interface AppContextType {
     removeElementType: (element: string, type: string) => void,
     renameSituation: (situationID: number, newSituationName: string) => void,
     setCurrentSituation: (currentSituationID: number) => void,
-    setLightColor: (element: string, red: number, green: number, blue: number) => void,
+    setLightColor: (element: string, color: Color) => void,
     setScreenImage: (element: string, situationID: number, imageFile: File) => void,
     setScreenPlane: (planeSelectionElement: string, plane: Vector3) => void,
     setScreenResolution: (element: string, resolution: Vector2) => void,

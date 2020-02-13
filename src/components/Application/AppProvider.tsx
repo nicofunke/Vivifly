@@ -12,6 +12,7 @@ import { State } from '../../interfaces/state.interface';
 import { VisualizationElement } from '../../interfaces/visualization-element.interface';
 import { OUTLINE_COLOR_RED } from '../../types/outline-color.type';
 import { Vector2 } from '../../interfaces/vector2.interface';
+import { Color } from '../../interfaces/color.interface';
 
 /**
  * Provides the context AppContext for the whole application
@@ -254,7 +255,7 @@ export default class AppProvider extends React.Component {
                 this.setState((state: ContextState) => { return { ...state, interactionElements: [...state.interactionElements, newInteractionElement] } })
                 break
             case "Screen":
-                const newScreenElement = { Type: "Screen", Name: element, Plane: null}
+                const newScreenElement = { Type: "Screen", Name: element, Plane: null }
                 this.setState((state: ContextState) => { return { ...state, visualizationElements: [...state.visualizationElements, newScreenElement] } })
                 break
             case "Light":
@@ -332,11 +333,9 @@ export default class AppProvider extends React.Component {
      * Changes the main color of a light element
      *
      * @param element   name of the light element
-     * @param red       from 0-1
-     * @param green     from 0-1
-     * @param blue      from 0-1
+     * @param color     new color
      */
-    setLightColor(element: string, red: number, green: number, blue: number) {
+    setLightColor(element: string, color: Color) {
         // Check if element is a light
         if (!ContextUtils.elementHasType(element, ELEMENT_TYPE_LIGHT, this.state)) {
             return
@@ -346,7 +345,7 @@ export default class AppProvider extends React.Component {
                 ...state,
                 visualizationElements: state.visualizationElements.map(visualizationElement => {
                     return visualizationElement.Name === element ?
-                        { ...visualizationElement, EmissionColor: { r: red, g: green, b: blue, a: 1.0 } }
+                        { ...visualizationElement, EmissionColor: color }
                         : visualizationElement
                 })
             }
@@ -357,7 +356,7 @@ export default class AppProvider extends React.Component {
         if (!emissionStrength) {
             return
         }
-        this.state.unityWrapper?.setLightEffect(element, red, green, blue, emissionStrength)
+        this.state.unityWrapper?.setLightEffect(element, color.r, color.g, color.b, emissionStrength)
     }
 
     /**

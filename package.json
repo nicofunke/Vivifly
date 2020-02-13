@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@trendmicro/react-sidenav": "^0.4.5",
+    "@types/react-color": "^3.0.1",
     "@types/react-tooltip": "^3.11.0",
     "mdbreact": "^4.21.1",
     "node-sass": "^4.13.1",
