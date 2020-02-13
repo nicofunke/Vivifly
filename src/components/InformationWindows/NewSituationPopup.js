@@ -6,6 +6,7 @@ import { AppContext } from '../Application/AppContext'
  * Popup to define a name for the current situation
  * Only pop ups if the name of the current situation is ""
  */
+// TODO: Change the whole setup to not created yet
 export default class NewSituationPopup extends React.Component {
 
     // Default: not active (gets activated if the current situation is "")

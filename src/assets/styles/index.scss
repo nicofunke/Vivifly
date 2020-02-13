@@ -1,45 +1,3 @@
-// Object specific styling
-.window-upper-right {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 25vw;
-  min-width: 400px;
-}
-
-.dropzone:hover {
-  background-color: #eeeeee;
-}
-
-.window-top-center {
-  position: absolute;
-  top: 1rem;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-  width: 25vw;
-  min-width: 350px;
-}
-
-.md-form.md-outline{    // Removes that big ugly margin from the mdbootstrap outline input elements 
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-// z-index for overlays
-.popup-overlay {
-  z-index: 1001;
-}
-.upload-overlay {
-  z-index: 1002;
-}
-.loading-overlay {
-  z-index: 1003;
-}
-.starting-overlay {
-  z-index: 1004;
-}
-
 // Main styles
 .cursor-pointer:hover {
   cursor: pointer;
@@ -74,4 +32,51 @@
     min-width: 53.6px;    // Hotfix, since those icons are no squares
     min-height: 53.6px;
   }
+}
+
+// Object specific styling
+.window-upper-right {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 25vw;
+  min-width: 400px;
+}
+
+.dropzone:hover {
+  background-color: #eeeeee;
+}
+
+.window-top-center {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  width: 25vw;
+  min-width: 350px;
+}
+
+.md-form.md-outline{    // Removes that big ugly margin from the mdbootstrap outline input elements 
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.situation-list-element:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+// z-index for overlays
+.popup-overlay {
+  z-index: 1001;
+}
+.upload-overlay {
+  z-index: 1002;
+}
+.loading-overlay {
+  z-index: 1003;
+}
+.starting-overlay {
+  z-index: 1004;
 }

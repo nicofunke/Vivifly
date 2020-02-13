@@ -1,8 +1,12 @@
 import React from 'react'
 import SituationsListElement from './SituationsListElement'
-import { AppContext } from '../Application/AppContext'
+import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext';
 
 export default class SituationsList extends React.Component {
+
+    // Import AppContext
+    static contextType = AppContext
+    context = APP_CONTEXT_DEFAULT
 
     render() {
         return (
@@ -10,7 +14,7 @@ export default class SituationsList extends React.Component {
                 <div className="text-dark w-100 p-2">
                     <h2>Situations</h2>
                 </div>
-                <hr className="my-0"/>
+                <hr className="my-0" />
                 {this.renderSituationList()}
             </div>
         )
@@ -20,9 +24,11 @@ export default class SituationsList extends React.Component {
         const listElements = []
         for (const state of this.context.states) {
             listElements.push(
-                <SituationsListElement 
+                <SituationsListElement
                     name={state.Name}
-                    id={state.id} 
+                    onElementClick={() => this.context.setCurrentSituation(state.id)}
+                    isSelected={this.context.applicationState.currentSituationID === state.id}
+                    isStart={state.id === 0}
                     key={state.id} />)
         }
         return (
@@ -32,5 +38,3 @@ export default class SituationsList extends React.Component {
         )
     }
 }
-
-SituationsList.contextType = AppContext
