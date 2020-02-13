@@ -1,5 +1,6 @@
 import React from 'react'
-import { MDBIcon, MDBCloseIcon } from 'mdbreact'
+import { MDBIcon } from 'mdbreact'
+import ReactTooltip from 'react-tooltip'
 
 type propsType = {
     title: string,
@@ -9,11 +10,12 @@ type propsType = {
 export default function ElementInformationHeader(props: propsType) {
     return <>
         <div className="row">
-            <div className="col-1 p-0 text-center"><MDBCloseIcon className="mr-1 text-white" onClick={props.onClose} /></div>
-            <div className="col-11">
+            <div className="col-11 offset-1">
                 <div className="d-flex justify-content-end">
-                    <MDBIcon icon="plus" className="mx-2 hover-icon" />
-                    <MDBIcon far icon="trash-alt" className="mx-2 hover-icon" />
+                    <MDBIcon icon="plus" className="mx-2 hover-icon" data-tip="Add effect" data-for="element-global-actions"/>
+                    <MDBIcon far icon="trash-alt" className="mx-2 hover-icon" data-tip="Remove all effects" data-for="element-global-actions" />
+                    <MDBIcon  icon="times" className="mx-2 hover-icon" onClick={props.onClose} data-tip="Close" data-for="element-global-actions" />
+                    <ReactTooltip place="bottom" effect="solid" id="element-global-actions"/>
                 </div>
             </div>
             <div className="col-11 offset-1 pt-4">

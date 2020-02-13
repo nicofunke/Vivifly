@@ -4,6 +4,8 @@ import { AppContext } from '../../Application/AppContext'
 import ButtonChooseTransition from './ButtonChooseTransition'
 import ButtonExistingTransition from './ButtonExistingTransition'
 import { ContextUtils } from '../../../Utils/ContextUtils'
+import { ELEMENT_TYPE_BUTTON } from '../../../types/element-type.type'
+import ReactTooltip from 'react-tooltip'
 
 export default class ButtonSettings extends Component {
 
@@ -38,22 +40,39 @@ export default class ButtonSettings extends Component {
     render() {
         const transition = ContextUtils.getTransition(this.context.applicationState.selectedElement, this.context.applicationState.currentSituationID, this.context)
         return <>
-            <button type="button"
-                className="btn btn-link btn-sm p-0 text-default"
-                onClick={() => this.context.removeElementType(this.context.applicationState.selectedElement, "Button")}>
-                <MDBIcon icon="angle-left" /> This is no button
-            </button>
-            <h5 className="light-green-text"><MDBIcon icon="fingerprint" className="mr-1" /> Button </h5>
-            {!transition ?
-                <ButtonChooseTransition
-                    newSituationButtonClicked={this.newSituationButtonClicked.bind(this)}
-                    existingSituationButtonClicked={this.existingSituationButtonClicked.bind(this)}
-                    existingSituationButtonDisabled={!!this.context.states && this.context.states.length <= 1} />
-                :
-                <ButtonExistingTransition
-                    transition={transition}
-                    states={this.context.states}
-                    changeDestination={destination => this.context.setTransition(transition.SourceStateID, destination, transition.InteractionElement)} />}
+            <div className="row">
+                <div className="col-1 p-0 d-flex justify-content-center align-items-center">
+                    <MDBIcon icon="fingerprint" size="lg" className="light-green-text" />
+                </div>
+                <div className="col-11">
+                    <div className="mb-1" >
+                        <div className="d-inline">Button</div>
+                        <div className="d-inline-block float-right">
+                            <MDBIcon far icon="trash-alt"
+                                className="mx-2 hover-icon"
+                                data-tip="Remove button effect"
+                                data-for="element-button-actions"
+                                onClick={() => this.context.removeElementType(this.context.applicationState.selectedElement, ELEMENT_TYPE_BUTTON)}
+                            />
+                            <ReactTooltip place="bottom" effect="solid" id="element-button-actions" />
+                        </div>
+                    </div>
+
+                    <div class="card-text">
+                        {!transition ?
+                            <ButtonChooseTransition
+                                newSituationButtonClicked={this.newSituationButtonClicked.bind(this)}
+                                existingSituationButtonClicked={this.existingSituationButtonClicked.bind(this)}
+                                existingSituationButtonDisabled={!!this.context.states && this.context.states.length <= 1} />
+                            :
+                            <ButtonExistingTransition
+                                transition={transition}
+                                states={this.context.states}
+                                changeDestination={destination => this.context.setTransition(transition.SourceStateID, destination, transition.InteractionElement)}
+                                newSituationButtonClicked={this.newSituationButtonClicked.bind(this)} />}
+                    </div>
+                </div>
+            </div>
         </>
     }
 }

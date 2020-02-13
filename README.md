@@ -43,3 +43,4 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 - [React Unity](https://www.npmjs.com/package/react-unity-webgl)
 - [React Color](https://casesandberg.github.io/react-color/)
 - [react-dropzone](https://github.com/react-dropzone/react-dropzone)
+- [react-tooltip](https://www.npmjs.com/package/react-tooltip)

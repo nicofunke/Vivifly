@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@trendmicro/react-sidenav": "^0.4.5",
+    "@types/react-tooltip": "^3.11.0",
     "mdbreact": "^4.21.1",
     "node-sass": "^4.13.1",
     "react": "^16.10.2",
@@ -11,6 +12,7 @@
     "react-dom": "^16.10.2",
     "react-dropzone": "^10.2.1",
     "react-scripts": "^3.3.0",
+    "react-tooltip": "^4.0.3",
     "react-unity-webgl": "^7.1.8",
     "storm-react-diagrams": "^5.2.1"
   },

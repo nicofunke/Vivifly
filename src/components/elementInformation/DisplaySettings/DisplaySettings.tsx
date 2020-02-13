@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { AppContext, APP_CONTEXT_DEFAULT } from '../../Application/AppContext'
-import { MDBIcon, MDBCardText } from 'mdbreact'
+import { MDBIcon } from 'mdbreact'
 import { ContextUtils } from '../../../Utils/ContextUtils'
 import DisplayImageUploader from './DisplayImageUploader'
 import { VisualizationElement } from '../../../interfaces/visualization-element.interface'
-import { Vector2 } from '../../../interfaces/vector2.interface';
+import { Vector2 } from '../../../interfaces/vector2.interface'
+import ReactTooltip from 'react-tooltip'
+import { ELEMENT_TYPE_SCREEN } from '../../../types/element-type.type'
 
 export default class DisplaySettings extends Component {
 
@@ -55,33 +57,57 @@ export default class DisplaySettings extends Component {
             (visualizationElement: VisualizationElement) => visualizationElement.Name === this.context.applicationState.selectedElement
         )
         if (!visualizationElement || !visualizationElement.Resolution) {
-            var reader: FileReader = new FileReader()
-            reader.onload = (event) => {
-                var img = new Image()
-                img.onload = () => {
-                    const resolution: Vector2 = { x: img.width, y: img.height }
-                    this.context.setScreenResolution(this.context.applicationState.selectedElement, resolution)
-                }
-                if (!!reader.result && typeof reader.result === 'string') {
-                    img.src = reader.result
-                }
-            }
-            reader.readAsDataURL(file)
+            this.saveResolution(file)
         }
+    }
+
+    /**
+     * Reads the resolution from a file and sets it as the resolution of the current display
+     * @param imageFile File to get the resolution from
+     */
+    saveResolution(imageFile: File) {
+        var reader: FileReader = new FileReader()
+        reader.onload = (event) => {
+            var img = new Image()
+            img.onload = () => {
+                const resolution: Vector2 = { x: img.width, y: img.height }
+                this.context.setScreenResolution(this.context.applicationState.selectedElement, resolution)
+            }
+            if (!!reader.result && typeof reader.result === 'string') {
+                img.src = reader.result
+            }
+        }
+        reader.readAsDataURL(imageFile)
     }
 
     render() {
         const currentImage = ContextUtils.getScreenImage(this.context.applicationState.selectedElement, this.context.applicationState.currentSituationID, this.context)
         return <>
-
             <div className="row">
                 <div className="col-1 p-0 d-flex justify-content-center align-items-center">
                     <MDBIcon icon="tv" size="lg" className="cyan-text" />
                 </div>
                 <div className="col-11">
-                    <div className="mb-1" > Display </div>
-                    <div className="card-text">A display can show images on its surface
-                    <div className="mt-2">
+                    <div className="mb-1" >
+                        <div className="d-inline">Display</div>
+                        <div className="d-inline-block float-right">
+                            <MDBIcon icon="arrows-alt"
+                                className="mx-2 hover-icon"
+                                data-tip="Change screen position"
+                                data-for="element-display-actions"
+                            />
+                            <MDBIcon far icon="trash-alt"
+                                className="mx-2 hover-icon"
+                                data-tip="Remove display effect"
+                                data-for="element-display-actions"
+                                onClick={() => this.context.removeElementType(this.context.applicationState.selectedElement, ELEMENT_TYPE_SCREEN)}
+                            />
+                            <ReactTooltip place="bottom" effect="solid" id="element-display-actions" />
+                        </div>
+                    </div>
+                    <div className="card-text">
+                        <div>A display can show different images on its surface, dependent on the situation</div>
+                        <div className="mt-2">
                             <DisplayImageUploader handleNewImage={this.handleNewImage.bind(this)} currentImage={currentImage} />
                         </div>
                     </div>
