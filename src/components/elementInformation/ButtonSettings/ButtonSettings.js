@@ -58,7 +58,7 @@ export default class ButtonSettings extends Component {
                         </div>
                     </div>
 
-                    <div class="card-text">
+                    <div className="card-text">
                         {!transition ?
                             <ButtonChooseTransition
                                 newSituationButtonClicked={this.newSituationButtonClicked.bind(this)}

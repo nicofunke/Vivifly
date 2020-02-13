@@ -6,11 +6,11 @@ export default class ElementTypePicker extends React.Component {
 
     render() {
         return <>
-            <div class="row">
-                <div class="col-1">
+            <div className="row">
+                <div className="col-1">
 
                 </div>
-                <div class="col-11 card-text">
+                <div className="col-11 card-text">
                     <p>
                         What kind of element is this?
                     </p>

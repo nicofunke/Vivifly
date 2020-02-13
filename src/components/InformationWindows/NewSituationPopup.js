@@ -37,6 +37,7 @@ export default class NewSituationPopup extends React.Component {
     closePopup() {
         if( this.isProperSituationName()){
             this.setState({ currentlyActive: false })
+            this.context.showNewSituationInformationWindow()
         }
     }
 

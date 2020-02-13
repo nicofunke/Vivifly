@@ -154,7 +154,23 @@ export default class AppProvider extends React.Component {
                     ...state.applicationState,
                     selectedElement: selectedElement,
                     hasAlreadySelectedAnElement: true,
+                    isNewSituation: false,
                     clickedPlane: selectedElement === "" ? undefined : clickedPlane
+                }
+            }
+        })
+    }
+
+    /**
+     * Opens the information window for a new situation
+     */
+    showNewSituationInformationWindow(){
+        this.setState( (state: ContextState) => {
+            return {
+                ...state,
+                applicationState: {
+                    ...state.applicationState,
+                    isNewSituation: true
                 }
             }
         })
@@ -535,6 +551,7 @@ export default class AppProvider extends React.Component {
             createNewSituation: this.createNewSituation.bind(this),
             removeElementType: this.removeElementType.bind(this),
             renameSituation: this.renameSituation.bind(this),
+            showNewSituationInformationWindow: this.showNewSituationInformationWindow.bind(this),
             setCurrentSituation: this.setCurrentSituation.bind(this),
             setLightColor: this.setLightColor.bind(this),
             setLightEmission: this.setLightEmission.bind(this),

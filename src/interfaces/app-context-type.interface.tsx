@@ -26,6 +26,7 @@ export interface AppContextType {
     createNewSituation: (newSituationName: string) => void,
     removeElementType: (element: string, type: string) => void,
     renameSituation: (situationID: number, newSituationName: string) => void,
+    showNewSituationInformationWindow: () => void,
     setCurrentSituation: (currentSituationID: number) => void,
     setLightColor: (element: string, color: Color) => void,
     setScreenImage: (element: string, situationID: number, imageFile: File) => void,

@@ -25,6 +25,7 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     createNewSituation: (newSituationName: string) => { },
     removeElementType: (element: string, type: string) => { },
     renameSituation: (situationID: number, newSituationName: string) => { },
+    showNewSituationInformationWindow: () => {},
     setCurrentSituation: (currentSituationID: number) => { },
     setLightColor: (element: string, color: Color) => { },
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => { },
