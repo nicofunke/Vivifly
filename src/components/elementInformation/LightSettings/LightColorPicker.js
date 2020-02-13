@@ -23,7 +23,7 @@ export default class LightColorPicker extends React.Component {
         return (
             <HuePicker
                 onChange={this.handleChange.bind(this)}
-                width={360}
+                width="100%"
                 color={this.relativeColorToAbsolute(this.props.color)} />)
     }
 }

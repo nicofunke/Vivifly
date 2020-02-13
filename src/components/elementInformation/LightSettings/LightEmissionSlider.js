@@ -5,6 +5,7 @@ export default class LightEmissionSlider extends React.Component {
     /**
      * Method gets called if the slider value changes
      * Calls the method from props to change the emission strength(alpha value) 
+     * @param event slider change event
      */
     handleChange(event){
         const alpha = event.target.value / 100.0

@@ -1,8 +1,11 @@
 import React from 'react'
-import { MDBIcon } from 'mdbreact'
 
 export default class ButtonExistingTransition extends React.Component {
 
+    /**
+     * Gets called if the situation dropdown changes
+     * @param event  
+     */
     handleChange(event) {
         const value = event.target.value
         if (value === "new") {

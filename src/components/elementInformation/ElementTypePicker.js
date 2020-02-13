@@ -25,7 +25,7 @@ export default class ElementTypePicker extends React.Component {
                         <div className="col-3 d-flex flex-column align-items-center justify-content-center cursor-pointer element-type-button"
                             onClick={() => this.context.addElementType(this.context.applicationState.selectedElement, "Light")}>
                             <div className="d-flex justify-content-center align-items-center deep-orange text-white rounded-circle">
-                                <MDBIcon icon="lightbulb" size="lg" />
+                                <MDBIcon far icon="lightbulb" size="lg" />
                             </div>
 
                             <span>Light</span>
