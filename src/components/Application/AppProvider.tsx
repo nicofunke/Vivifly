@@ -99,7 +99,8 @@ export default class AppProvider extends React.Component {
             return {
                 ...state, applicationState: {
                     ...state.applicationState,
-                    currentSituationID: currentSituationID
+                    currentSituationID: currentSituationID,
+                    showFirstSituationWindow: false
                 }
             }
         })
@@ -154,7 +155,7 @@ export default class AppProvider extends React.Component {
                     ...state.applicationState,
                     selectedElement: selectedElement,
                     hasAlreadySelectedAnElement: true,
-                    isNewSituation: false,
+                    showFirstSituationWindow: false,
                     clickedPlane: selectedElement === "" ? undefined : clickedPlane
                 }
             }
@@ -164,13 +165,13 @@ export default class AppProvider extends React.Component {
     /**
      * Opens the information window for a new situation
      */
-    showNewSituationInformationWindow(){
-        this.setState( (state: ContextState) => {
+    showFirstSituationInformationWindow() {
+        this.setState((state: ContextState) => {
             return {
                 ...state,
                 applicationState: {
                     ...state.applicationState,
-                    isNewSituation: true
+                    showFirstSituationWindow: true
                 }
             }
         })
@@ -178,8 +179,8 @@ export default class AppProvider extends React.Component {
 
     // =============== SITUATION/STATE METHODS ========================
     /**
-     * Creates a new situation and returns the ID of the new situation
-     * Aborts and returns false if the name is already taken
+     * Creates a new situation and returns the ID of the new situation.
+     * Aborts if the name is already taken. Opens the naming popup if "" is given
      *
      * @param newSituationName  name of the new situation
      */
@@ -194,7 +195,11 @@ export default class AppProvider extends React.Component {
             return {
                 ...state,
                 states: [...state.states, { Name: newSituationName, id: newID }],
-                applicationState: { ...state.applicationState, nextSituationID: nextID }
+                applicationState: {
+                    ...state.applicationState,
+                    nextSituationID: nextID,
+                    showSituationNamingWindow: newSituationName === ""
+                }
             }
         })
         return newID
@@ -215,6 +220,22 @@ export default class AppProvider extends React.Component {
                     }
                     return situation
                 })
+            }
+        })
+    }
+
+    /**
+     * Hides/Displays the situation naming popup
+     * @param isVisible If the popup should be visible
+     */
+    setSituationNamingPopupVisibility(isVisible: boolean) {
+        this.setState((state: ContextState) => {
+            return {
+                ...state,
+                applicationState: {
+                    ...state.applicationState,
+                    showSituationNamingWindow: isVisible
+                }
             }
         })
     }
@@ -549,7 +570,7 @@ export default class AppProvider extends React.Component {
             createNewSituation: this.createNewSituation.bind(this),
             removeElementType: this.removeElementType.bind(this),
             renameSituation: this.renameSituation.bind(this),
-            showNewSituationInformationWindow: this.showNewSituationInformationWindow.bind(this),
+            showFirstSituationInformationWindow: this.showFirstSituationInformationWindow.bind(this),
             setCurrentSituation: this.setCurrentSituation.bind(this),
             setLightColor: this.setLightColor.bind(this),
             setLightEmission: this.setLightEmission.bind(this),
@@ -557,6 +578,7 @@ export default class AppProvider extends React.Component {
             setScreenPlane: this.setScreenPlane.bind(this),
             setScreenResolution: this.setScreenResolution.bind(this),
             setSelectedElement: this.setSelectedElement.bind(this),
+            setSituationNamingPopupVisibility: this.setSituationNamingPopupVisibility.bind(this),
             setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this),
             startPlaneSelection: this.startPlaneSelection.bind(this)
 

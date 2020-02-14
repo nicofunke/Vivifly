@@ -26,7 +26,7 @@ export interface AppContextType {
     createNewSituation: (newSituationName: string) => void,
     removeElementType: (element: string, type: string) => void,
     renameSituation: (situationID: number, newSituationName: string) => void,
-    showNewSituationInformationWindow: () => void,
+    showFirstSituationInformationWindow: () => void,
     setCurrentSituation: (currentSituationID: number) => void,
     setLightColor: (element: string, color: Color) => void,
     setScreenImage: (element: string, situationID: number, imageFile: File) => void,
@@ -34,6 +34,7 @@ export interface AppContextType {
     setScreenResolution: (element: string, resolution: Vector2) => void,
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => void,
     setSelectedElement: (selectedElement: string, clickedPlane: Vector3) => void,
+    setSituationNamingPopupVisibility: (isVisible: boolean) => void,
     setTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => void,
     setUnityLoadingProgress: (progress: number) => void,
     startPlaneSelection: (element: string) => void

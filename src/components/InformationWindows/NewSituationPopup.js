@@ -10,11 +10,6 @@ import { ContextUtils } from '../../Utils/ContextUtils'
 // TODO: Change the whole setup to not created yet
 export default class NewSituationPopup extends React.Component {
 
-    // Default: not active (gets activated if the current situation is "")
-    state = {
-        currentlyActive: false
-    }
-
     /**
      * Method that gets called if the textfield for the situation name is changed.
      * Calls the method to change the name globally
@@ -22,7 +17,6 @@ export default class NewSituationPopup extends React.Component {
     handleChange(event) {
         const currentSituationId = this.context.applicationState.currentSituationID
         const value = event.target.value
-        this.setState({ currentlyActive: true })
         this.context.renameSituation(currentSituationId, value)
     }
 
@@ -40,8 +34,8 @@ export default class NewSituationPopup extends React.Component {
      */
     closePopup() {
         if (this.isProperSituationName()) {
-            this.setState({ currentlyActive: false })
-            this.context.showNewSituationInformationWindow()
+            this.context.setSituationNamingPopupVisibility(false)   // Hide this popup
+            this.context.showFirstSituationInformationWindow()      // Open new situation informations
         }
     }
 
@@ -58,8 +52,7 @@ export default class NewSituationPopup extends React.Component {
         const currentSituationID = this.context.applicationState.currentSituationID
         const currentSituation = this.context.states.find(situation => situation.id === currentSituationID)
         const isProperSituationName = this.isProperSituationName()
-        if (!this.state.currentlyActive &&
-            (!currentSituation || currentSituation.Name !== "")) {
+        if ( !this.context.applicationState.showSituationNamingWindow) {
             return null
         }
         return <>

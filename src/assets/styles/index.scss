@@ -67,6 +67,14 @@
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.situation-options-tooltip{
+  width: 300px !important;
+  font-size: 1rem !important;
+  font-weight: 400;
+  pointer-events: auto !important; // Otherwise links are not clickable
+}
+
+
 // z-index for overlays
 .popup-overlay {
   z-index: 1001;

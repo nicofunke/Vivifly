@@ -30,8 +30,9 @@ export default class SituationsList extends React.Component {
                     onElementClick={() => this.context.setCurrentSituation(state.id)}
                     isSelected={this.context.applicationState.currentSituationID === state.id}
                     renameSituation={(newName: string) => this.context.renameSituation(state.id, newName)}
-                    isProperSituationName={ (newName: string) => ContextUtils.isProperSituationName(newName, this.context)}
+                    isProperSituationName={(newName: string) => ContextUtils.isProperSituationName(newName, this.context)}
                     isStart={state.id === 0}
+                    id={state.id}
                     key={state.id} />)
         }
         return (

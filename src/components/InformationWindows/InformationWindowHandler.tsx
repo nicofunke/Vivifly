@@ -20,7 +20,7 @@ export default class InformationWindowHandler extends React.Component {
         if(!applicationState.hasAlreadySelectedAnElement){
             return <WelcomeWindow />
         }
-        if( applicationState.isNewSituation ){
+        if( applicationState.showFirstSituationWindow ){
             return <NewSituationInformation />
         }
         return null
