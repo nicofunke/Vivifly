@@ -1,7 +1,7 @@
 import React from 'react'
 import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext'
 import SituationNamingModal from './SituationNamingModal'
-import TimeBasedTransitionModal from './TimeBasedTransitionModals/TImeBasedTransitionModal';
+import TimeBasedTransitionModal from './TimeBasedTransitionModals/TimeBasedTransitionModal';
 
 /**
  * Handler that displays modals such as the modal for naming situations and the modal to set a time-based transition

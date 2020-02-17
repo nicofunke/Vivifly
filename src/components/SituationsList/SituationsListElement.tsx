@@ -78,7 +78,7 @@ export default class SituationsListElement extends React.Component<PropsType> {
                             </>}
                     </div>
                     <div
-                        className={"text-trim col-" + (this.props.isSelected ? "8" : "10")}
+                        className="text-trim col-8"
                         onDoubleClick={this.onDoubleClick.bind(this)}>
                         {this.state.editMode ?
                             // Input field to change name
@@ -95,10 +95,10 @@ export default class SituationsListElement extends React.Component<PropsType> {
 
                         }
                     </div>
-                    {this.props.isSelected &&
-                        <>
+                    
+                   
                             <div
-                                className="col-2 hover-icon"
+                                className={"col-2 hover-icon" + (this.props.isSelected? "" : " icon-invisible")}
                                 data-tip="options"
                                 data-event='click focus'
                                 data-for={"situation" + this.props.id + "-options-tooltip"}  >
@@ -119,7 +119,7 @@ export default class SituationsListElement extends React.Component<PropsType> {
                                     onStartClick={() => console.log("Set start situation")}
                                     situationID={this.props.id} />
                             </ReactTooltip>
-                        </>}
+                   
                 </div>
             </div>
         )

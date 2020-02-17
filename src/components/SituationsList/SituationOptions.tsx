@@ -1,6 +1,6 @@
 import React from 'react'
 import { MDBIcon } from 'mdbreact'
-import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext';
+import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext'
 
 // Typed props
 type PropsType = {
@@ -8,7 +8,6 @@ type PropsType = {
     onStartClick: () => void,
     situationID: number
 }
-// TODO: Delete Situation option
 
 /**
  * Displays options to edit a situation. This gets shown inside a tooltip

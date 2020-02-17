@@ -95,7 +95,7 @@ export default class SituationNamingModal extends React.Component {
                         </small>
                 <div className="d-flex justify-content-between mt-2">
                     <MDBBtn
-                        color="secondary"
+                        color="light"
                         onClick={this.cancel.bind(this)}>Cancel</MDBBtn>
                     <MDBBtn
                         color="primary"
