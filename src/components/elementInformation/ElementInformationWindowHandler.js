@@ -8,7 +8,7 @@ import LightSettings from './LightSettings/LightSettings'
 import { ContextUtils } from '../../Utils/ContextUtils'
 import ElementInformationHeader from './ElementInformationHeader'
 
-export default class ElementInformationWindow extends Component {
+export default class ElementInformationWindowHandler extends Component {
 
     static contextType = AppContext
 
@@ -26,14 +26,15 @@ export default class ElementInformationWindow extends Component {
      * Start listening to keydown events after mounting(catching ESC)
      */
     componentDidMount() {
-        document.addEventListener("keydown", this.onKeyPressed.bind(this), false)
+        this.onKeyPressed = this.onKeyPressed.bind(this)    // Method needs to be binded here, otherwise the listener can't be removed
+        document.addEventListener("keydown", this.onKeyPressed, false)
     }
 
     /**
      * Stop listening to keydown events on unmounting(catching ESC)
      */
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.onKeyPressed.bind(this), false)
+        document.removeEventListener("keydown", this.onKeyPressed, false)
     }
 
     /**

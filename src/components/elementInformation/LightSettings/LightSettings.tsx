@@ -1,12 +1,12 @@
 import React from 'react'
 import LightColorPicker from './LightColorPicker'
 import LightEmissionSlider from './LightEmissionSlider'
-import { AppContext, APP_CONTEXT_DEFAULT } from '../../Application/AppContext';
+import { AppContext, APP_CONTEXT_DEFAULT } from '../../Application/AppContext'
 import { MDBIcon } from 'mdbreact'
 import { ContextUtils } from '../../../Utils/ContextUtils'
 import { ELEMENT_TYPE_LIGHT } from '../../../types/element-type.type'
 import ReactTooltip from 'react-tooltip'
-import { Color } from '../../../interfaces/color.interface';
+import { Color } from '../../../interfaces/color.interface'
 
 export default class LightSettings extends React.Component {
 

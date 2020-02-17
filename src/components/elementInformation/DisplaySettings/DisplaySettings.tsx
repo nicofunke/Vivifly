@@ -41,7 +41,6 @@ export default class DisplaySettings extends Component {
         }
         const file = event.target.files[0]
         // Check if file is image
-        console.log(file.size)
         if (file.type.split('/')[0] !== 'image' || file.size > 2000000) {
             this.setState({ wrongFileTypeSubmitted: true })
             return

@@ -16,7 +16,5 @@ export default function DisplayImageUploader(props: propsType) {
         </div>
         {props.wrongFileTypeSubmitted
             && <><small className="text-danger">Please choose a non-transparent JPG or PNG file smaller than 2MB</small><br /></>}
-
     </>
-
 }

@@ -2,6 +2,8 @@ import React from 'react'
 
 export default class ButtonExistingTransition extends React.Component {
 
+    // TODO: Add goto situation button
+    
     /**
      * Gets called if the situation dropdown changes
      * @param event  

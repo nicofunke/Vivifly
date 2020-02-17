@@ -14,7 +14,7 @@ export default class ButtonSettings extends Component {
     /**
      * Function that gets called if the new situation button is pressed
      * Creates a new situation and sets a transition from the current button to this situation
-     * Since the situation is created without a name it will open a popup to give it a name
+     * Opens the naming modal
      */
     newSituationButtonClicked() {
         const newSituationID = this.context.createNewSituation("")
@@ -23,7 +23,7 @@ export default class ButtonSettings extends Component {
             newSituationID,
             this.context.applicationState.selectedElement)
         this.context.setCurrentSituation(newSituationID)
-        this.context.setSelectedElement("")
+        this.context.setSituationNamingModalVisibility(true)
     }
 
     /**

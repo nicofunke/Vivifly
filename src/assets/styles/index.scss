@@ -3,8 +3,8 @@
   cursor: pointer;
 }
 
-.bg-white-transparent {
-  background-color: rgba(255, 255, 255, 0.5);
+.bg-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .text-trim {
@@ -41,6 +41,10 @@
   right: 1rem;
   width: 25vw;
   min-width: 400px;
+}
+
+.modal-body {
+  max-width: 500px;
 }
 
 .dropzone:hover {

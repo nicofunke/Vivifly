@@ -1,23 +1,22 @@
 import React from 'react'
 import { AppContext } from './AppContext'
 import { UnityWrapper } from '../../Utils/UnityWrapper'
-import { ContextUtils } from '../../Utils/ContextUtils';
-import { ContextState } from '../../interfaces/context-state.interface';
-import { VisualizationValue } from '../../interfaces/visualization-value.interface';
-import { Vector3 } from '../../interfaces/vector3.interface';
-import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface';
-import { ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT } from '../../types/element-type.type';
-import { VISUALIZATION_TYPE_FLOAT, VISUALIZATION_TYPE_SCREEN } from '../../types/visualization-type.type';
-import { State } from '../../interfaces/state.interface';
-import { VisualizationElement } from '../../interfaces/visualization-element.interface';
-import { OUTLINE_COLOR_RED } from '../../types/outline-color.type';
-import { Vector2 } from '../../interfaces/vector2.interface';
-import { Color } from '../../interfaces/color.interface';
+import { ContextUtils } from '../../Utils/ContextUtils'
+import { ContextState } from '../../interfaces/context-state.interface'
+import { VisualizationValue } from '../../interfaces/visualization-value.interface'
+import { Vector3 } from '../../interfaces/vector3.interface'
+import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface'
+import { ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT } from '../../types/element-type.type'
+import { VISUALIZATION_TYPE_FLOAT, VISUALIZATION_TYPE_SCREEN } from '../../types/visualization-type.type'
+import { State } from '../../interfaces/state.interface'
+import { VisualizationElement } from '../../interfaces/visualization-element.interface'
+import { OUTLINE_COLOR_RED } from '../../types/outline-color.type'
+import { Vector2 } from '../../interfaces/vector2.interface'
+import { Color } from '../../interfaces/color.interface'
 
 /**
  * Provides the context AppContext for the whole application
  */
-// TODO: Think about conditional rerendering to speed up everything
 export default class AppProvider extends React.Component {
 
     /**
@@ -99,8 +98,10 @@ export default class AppProvider extends React.Component {
             return {
                 ...state, applicationState: {
                     ...state.applicationState,
-                    currentSituationID: currentSituationID,
-                    showFirstSituationWindow: false
+                    currentSituationID: (!!state.states.find(situation => situation.id === currentSituationID)) ?
+                        currentSituationID : state.states[0].id,    // If situation does not exist just go to the first situation in the list
+                    showFirstSituationWindow: false,
+                    lastSituationID: state.applicationState.currentSituationID
                 }
             }
         })
@@ -137,7 +138,7 @@ export default class AppProvider extends React.Component {
      *
      * @param selectedElement   name of the element that should be selected
      */
-    setSelectedElement(selectedElement: string, clickedPlane: Vector3) {
+    setSelectedElement(selectedElement: string, clickedPlane: Vector3 | undefined) {
         const previousSelectedElement = this.state.applicationState.selectedElement
         // Remove old outline
         if (previousSelectedElement !== "") {
@@ -161,6 +162,7 @@ export default class AppProvider extends React.Component {
             }
         })
     }
+
 
     /**
      * Opens the information window for a new situation
@@ -197,8 +199,7 @@ export default class AppProvider extends React.Component {
                 states: [...state.states, { Name: newSituationName, id: newID }],
                 applicationState: {
                     ...state.applicationState,
-                    nextSituationID: nextID,
-                    showSituationNamingWindow: newSituationName === ""
+                    nextSituationID: nextID
                 }
             }
         })
@@ -225,10 +226,35 @@ export default class AppProvider extends React.Component {
     }
 
     /**
+     * Removes a situation and all its transitions
+     * @param situationID Id of the situation that should be removed
+     */
+    removeSituation(situationID: number) {
+        // Stop if it's the only situation
+        if (this.state.states.length <= 1) {
+            return
+        }
+        // If the situation is the current one change the situation to the last one
+        if (this.state.applicationState.currentSituationID === situationID) {
+            this.setCurrentSituation(this.state.applicationState.lastSituationID)
+        }
+        // Remove situation from list of states and all transition that contain this situation
+        this.setState((state: ContextState) => {
+            return {
+                ...state,
+                states: state.states.filter(situation => situation.id !== situationID),    // Remove from states list
+                transitions: state.transitions.filter(transition =>                         // Remove from transitions
+                    (transition.DestinationStateID !== situationID && transition.SourceStateID !== situationID))
+            }
+        })
+    }
+
+
+    /**
      * Hides/Displays the situation naming popup
      * @param isVisible If the popup should be visible
      */
-    setSituationNamingPopupVisibility(isVisible: boolean) {
+    setSituationNamingModalVisibility(isVisible: boolean) {
         this.setState((state: ContextState) => {
             return {
                 ...state,
@@ -273,7 +299,22 @@ export default class AppProvider extends React.Component {
                 }
             })
         }
+    }
 
+    /**
+     * Changes if the options window for time based transitions should be visible
+     * @param isVisible If the window should be displayed or not
+     */
+    setTimeBasedTransitionWindowVisibility(isVisible: boolean) {
+        this.setState((state: ContextState) => {
+            return {
+                ...state,
+                applicationState: {
+                    ...state.applicationState,
+                    showTimeBasedTransitionWindow: isVisible
+                }
+            }
+        })
     }
 
     // ================== ELEMENT-TYPE METHODS =================================
@@ -569,6 +610,7 @@ export default class AppProvider extends React.Component {
             addElementType: this.addElementType.bind(this),
             createNewSituation: this.createNewSituation.bind(this),
             removeElementType: this.removeElementType.bind(this),
+            removeSituation: this.removeSituation.bind(this),
             renameSituation: this.renameSituation.bind(this),
             showFirstSituationInformationWindow: this.showFirstSituationInformationWindow.bind(this),
             setCurrentSituation: this.setCurrentSituation.bind(this),
@@ -578,7 +620,8 @@ export default class AppProvider extends React.Component {
             setScreenPlane: this.setScreenPlane.bind(this),
             setScreenResolution: this.setScreenResolution.bind(this),
             setSelectedElement: this.setSelectedElement.bind(this),
-            setSituationNamingPopupVisibility: this.setSituationNamingPopupVisibility.bind(this),
+            setSituationNamingModalVisibility: this.setSituationNamingModalVisibility.bind(this),
+            setTimeBasedTransitionWindowVisibility: this.setTimeBasedTransitionWindowVisibility.bind(this),
             setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this),
             startPlaneSelection: this.startPlaneSelection.bind(this)
 

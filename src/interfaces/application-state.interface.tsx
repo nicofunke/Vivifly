@@ -11,10 +11,12 @@ export interface ApplicationState {
     nextSituationID: number,                    // in order to give new situations a unique ID
     isCurrentlyUploading: boolean,              // If the application currently uploads a model
     showFirstSituationWindow: boolean,          // If the information for the first created situation should be visible
-    showSituationNamingWindow: boolean,         // If the window to choose a name for the situation shoul be visible
+    showSituationNamingWindow: boolean,         // If the window to choose a name for the situation should be visible
+    showTimeBasedTransitionWindow: boolean,     // If the window to create a time based transition should be visible
     modelWasUploaded: boolean,                  // If a model was already uploaded
     planeSelectionElementName: string | null,   // Current element for plane selection for screens ( or null if plane selection is not active )
     clickedPlane: Vector3 | undefined,          // Stores the normal vector of the plane of the selected element the user clicked on on
+    lastSituationID: number,                    // Stores the last visited situation in order to go back to this situation if the current one gets removed 
 }
 
 /**
@@ -29,7 +31,9 @@ export const APPLICATION_STATE_DEFAULT: ApplicationState = {
     isCurrentlyUploading: false,
     showFirstSituationWindow: false,
     showSituationNamingWindow: false,
+    showTimeBasedTransitionWindow: false,
     modelWasUploaded: true,
     planeSelectionElementName: null,
-    clickedPlane: undefined
+    clickedPlane: undefined,
+    lastSituationID: 0,
 }

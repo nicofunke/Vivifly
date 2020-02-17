@@ -117,7 +117,7 @@ export default class SituationsListElement extends React.Component<PropsType> {
                                 <SituationOptions
                                     onRenameClick={() => this.setState({ editMode: true, previousSituationName: this.props.name })}
                                     onStartClick={() => console.log("Set start situation")}
-                                    onTimeClick={() => console.log("Add time based transition")} />
+                                    situationID={this.props.id} />
                             </ReactTooltip>
                         </>}
                 </div>
