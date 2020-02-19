@@ -1,7 +1,7 @@
-import { Vector3 } from './vector3.interface';
-import { Vector2 } from './vector2.interface';
-import { Color } from './color.interface';
-import { ElementType } from '../types/element-type.type';
+import { Vector3 } from './vector3.interface'
+import { Vector2 } from './vector2.interface'
+import { Color } from './color.interface'
+import { ElementType } from '../types/element-type.type'
 
 /**
  * Visualization element definition as it is used in Vivian Framework
@@ -11,7 +11,7 @@ export interface VisualizationElement {
     Name: string,
 
     // Light specific values
-    EmissionColor: Color,
+    EmissionColor?: Color,
 
     // Screen specific values
     Plane?: Vector3,

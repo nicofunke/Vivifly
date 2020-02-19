@@ -1,12 +1,13 @@
-import { ApplicationState } from './application-state.interface';
-import { InterActionElement } from './interaction-element.interface';
-import { State } from './state.interface';
-import { Transition } from './transition.interface';
-import { UnityWrapper } from '../Utils/UnityWrapper';
-import { VisualizationElement } from './visualization-element.interface';
-import { Vector3 } from './vector3.interface';
-import { Vector2 } from './vector2.interface';
-import { Color } from './color.interface';
+import { ApplicationState } from './application-state.interface'
+import { InterActionElement } from './interaction-element.interface'
+import { State } from './state.interface'
+import { Transition } from './transition.interface'
+import { UnityWrapper } from '../Utils/UnityWrapper'
+import { VisualizationElement } from './visualization-element.interface'
+import { Vector3 } from './vector3.interface'
+import { Vector2 } from './vector2.interface'
+import { Color } from './color.interface'
+import { ElementType } from '../types/element-type.type'
 
 /**
 * Interface to type the AppContext
@@ -22,10 +23,11 @@ export interface AppContextType {
     visualizationElements: VisualizationElement[],
 
     // Methods
-    addElementType: (element: string, type: string) => void,
+    addElementType: (element: string, type: ElementType) => void,
     createNewSituation: (newSituationName: string) => number,
     removeElementType: (element: string, type: string) => void,
     removeSituation: (situationID: number) => void,
+    removeTimeBasedTransition: (sourceSituationID: number) => void,
     renameSituation: (situationID: number, newSituationName: string) => void,
     showFirstSituationInformationWindow: () => void,
     setCurrentSituation: (currentSituationID: number) => void,

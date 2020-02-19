@@ -39,7 +39,6 @@ export default class TBTTimeout extends React.Component<PropsType, StateType> {
                         {this.state?.timeout > 0 || "Please choose a positive value"}</small>
                 </div>
             </div>
-
             <div className="d-flex justify-content-between mt-2">
                 <MDBBtn
                     color="light"

@@ -1,9 +1,10 @@
 import React from 'react'
-import { AppContextType } from '../../interfaces/app-context-type.interface';
-import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface';
-import { Vector3 } from '../../interfaces/vector3.interface';
-import { Vector2 } from '../../interfaces/vector2.interface';
-import { Color } from '../../interfaces/color.interface';
+import { AppContextType } from '../../interfaces/app-context-type.interface'
+import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface'
+import { Vector3 } from '../../interfaces/vector3.interface'
+import { Vector2 } from '../../interfaces/vector2.interface'
+import { Color } from '../../interfaces/color.interface'
+import { ElementType } from '../../types/element-type.type';
 /**
  * This file provides the necessary variables to handle a context provided by AppProvider
  * see https://www.freecodecamp.org/news/react-context-in-5-minutes/
@@ -21,10 +22,11 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     visualizationElements: [],
 
     // Methods
-    addElementType: (element: string, type: string) => { },
+    addElementType: (element: string, type: ElementType) => { },
     createNewSituation: (newSituationName: string) => -1,
     removeElementType: (element: string, type: string) => { },
     removeSituation: (situationID: number) => { },
+    removeTimeBasedTransition: (sourceSituationID: number) => { },
     renameSituation: (situationID: number, newSituationName: string) => { },
     showFirstSituationInformationWindow: () => { },
     setCurrentSituation: (currentSituationID: number) => { },
@@ -35,7 +37,7 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     setScreenResolution: (element: string, resolution: Vector2) => { },
     setSelectedElement: (selectedElement: string, clickedPlane: Vector3 | undefined) => { },
     setSituationNamingModalVisibility: (isVisible: boolean) => { },
-    setTimeBasedTransition: (sourceSituationID: number, destinationSituationID: number, timeout: number) => {},
+    setTimeBasedTransition: (sourceSituationID: number, destinationSituationID: number, timeout: number) => { },
     setTimeBasedTransitionModalVisibility: (isVisible: boolean) => { },
     setButtonTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => { },
     setUnityLoadingProgress: (progress: number) => { },

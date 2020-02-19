@@ -1,7 +1,7 @@
 import React from 'react'
 import SituationSelect from '../../core/SituationSelect'
 import { State } from '../../../interfaces/state.interface'
-import { Transition } from '../../../interfaces/transition.interface';
+import { Transition } from '../../../interfaces/transition.interface'
 
 /**
  * Type for props
@@ -16,6 +16,7 @@ type PropsType = {
 export default class ButtonExistingTransition extends React.Component<PropsType> {
 
     // TODO: Add goto situation button
+    // TODO: No transition should be possible
 
     /**
      * Gets called if the situation dropdown changes

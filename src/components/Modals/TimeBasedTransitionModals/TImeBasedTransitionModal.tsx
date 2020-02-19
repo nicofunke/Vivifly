@@ -2,9 +2,11 @@ import React from 'react'
 import Modal from '../Modal'
 import { AppContext, APP_CONTEXT_DEFAULT } from '../../Application/AppContext'
 import TBTInformation from './TBTInformation'
-import { Transition } from '../../../interfaces/transition.interface';
-import TBTTimeout from './TBTTimeout';
-import TBTDestination from './TBTDestination';
+import { Transition } from '../../../interfaces/transition.interface'
+import TBTTimeout from './TBTTimeout'
+import TBTDestination from './TBTDestination'
+import { ContextUtils } from '../../../Utils/ContextUtils'
+import TBTOverview from './TBTOverview'
 
 /**
  * Modal to define a time-based transition
@@ -18,6 +20,17 @@ export default class TimeBasedTransitionModal extends React.Component<{}, Transi
     // Import AppContext
     static contextType = AppContext
     context = APP_CONTEXT_DEFAULT
+
+    /**
+     * Gets called when the component is mounted
+     * Stores the existing transition to the components state
+     */
+    componentDidMount() {
+        const existingTransition = ContextUtils.getTimeBasedTransition(this.context.applicationState.currentSituationID, this.context)
+        if (!!existingTransition) {
+            this.setState(existingTransition)
+        }
+    }
 
     /**
      * Changes the timeout of the transition
@@ -70,6 +83,14 @@ export default class TimeBasedTransitionModal extends React.Component<{}, Transi
     }
 
     /**
+     * Removes the time-based transition globally and closes the modal
+     */
+    removeTransition(){
+        this.context.removeTimeBasedTransition(this.context.applicationState.currentSituationID)
+        this.context.setTimeBasedTransitionModalVisibility(false)
+    }
+
+    /**
      * Returns the correspondent modal content for the transition
      * @param transition Current transition element
      */
@@ -93,7 +114,15 @@ export default class TimeBasedTransitionModal extends React.Component<{}, Transi
                 finish={this.saveDestinationAndClose.bind(this)}
                 states={this.context.states} />
         }
-        return <></>
+
+        // Everything is set => Show overview
+        return <TBTOverview
+            cancel={this.cancel.bind(this)}
+            finish={ this.saveDestinationAndClose.bind(this)}
+            states={this.context.states}
+            transition={this.state}
+            setTimeout={this.setTimeout.bind(this)} 
+            removeTransition={this.removeTransition.bind(this)}/>
     }
 
 

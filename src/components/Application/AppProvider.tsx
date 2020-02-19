@@ -2,22 +2,23 @@ import React from 'react'
 import { AppContext } from './AppContext'
 import { UnityWrapper } from '../../Utils/UnityWrapper'
 import { ContextUtils } from '../../Utils/ContextUtils';
-import { ContextState } from '../../interfaces/context-state.interface'
+import { ContextState } from '../../interfaces/context-state.interface';
 import { VisualizationValue } from '../../interfaces/visualization-value.interface'
 import { Vector3 } from '../../interfaces/vector3.interface'
 import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface'
-import { ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT } from '../../types/element-type.type'
+import { ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT, ElementType, ELEMENT_TYPE_BUTTON } from '../../types/element-type.type';
 import { VISUALIZATION_TYPE_FLOAT, VISUALIZATION_TYPE_SCREEN } from '../../types/visualization-type.type'
 import { State } from '../../interfaces/state.interface'
 import { VisualizationElement } from '../../interfaces/visualization-element.interface'
 import { OUTLINE_COLOR_RED } from '../../types/outline-color.type'
 import { Vector2 } from '../../interfaces/vector2.interface'
 import { Color } from '../../interfaces/color.interface'
+import { InterActionElement } from '../../interfaces/interaction-element.interface';
 
 /**
  * Provides the context AppContext for the whole application
  */
-export default class AppProvider extends React.Component {
+export default class AppProvider extends React.Component<{}, ContextState> {
 
     /**
      * Default state
@@ -25,7 +26,7 @@ export default class AppProvider extends React.Component {
     state: ContextState = {
         interactionElements: [],
         states: [{ Name: "Start", id: 0 }],
-        transitions: [],
+        transitions: [{DestinationStateID: 0, SourceStateID:0, Timeout: 12}],
         visualizationElements: [],
         applicationState: APPLICATION_STATE_DEFAULT,
         unityWrapper: new UnityWrapper(             // Current UnityWrapper object
@@ -332,6 +333,19 @@ export default class AppProvider extends React.Component {
     }
 
     /**
+     * Removes a time-based transition
+     * @param sourceSituationID source situation of the time-based transition
+     */
+    removeTimeBasedTransition(sourceSituationID: number){
+        this.setState( state => {
+            return{
+            ...state,
+            transitions: state.transitions.filter( transition => transition.SourceStateID !== sourceSituationID || !transition.Timeout )
+            }
+        })
+    }
+
+    /**
      * Changes if the options window for time based transitions should be visible
      * @param isVisible If the window should be displayed or not
      */
@@ -354,18 +368,18 @@ export default class AppProvider extends React.Component {
      * @param element   name of the element
      * @param type      type that should be added
      */
-    addElementType(element: string, type: string) {
+    addElementType(element: string, type: ElementType) {
         switch (type) {
-            case "Button":
-                const newInteractionElement = { Name: element, Type: "Button" }
+            case ELEMENT_TYPE_BUTTON:
+                const newInteractionElement: InterActionElement = { Name: element, Type: type }
                 this.setState((state: ContextState) => { return { ...state, interactionElements: [...state.interactionElements, newInteractionElement] } })
                 break
-            case "Screen":
-                const newScreenElement = { Type: "Screen", Name: element, Plane: null }
+            case ELEMENT_TYPE_SCREEN:
+                const newScreenElement: VisualizationElement = { Type: type, Name: element, Plane: undefined }
                 this.setState((state: ContextState) => { return { ...state, visualizationElements: [...state.visualizationElements, newScreenElement] } })
                 break
-            case "Light":
-                const newLightElement = { Type: "Light", Name: element, EmissionColor: { r: 1, g: 0, b: 0, a: 0.5 } }
+            case ELEMENT_TYPE_LIGHT:
+                const newLightElement: VisualizationElement = { Type: type, Name: element, EmissionColor: { r: 1, g: 0, b: 0, a: 0.5 } }
                 this.setState((state: ContextState) => { return { ...state, visualizationElements: [...state.visualizationElements, newLightElement] } })
                 break
             default:
@@ -641,6 +655,7 @@ export default class AppProvider extends React.Component {
             createNewSituation: this.createNewSituation.bind(this),
             removeElementType: this.removeElementType.bind(this),
             removeSituation: this.removeSituation.bind(this),
+            removeTimeBasedTransition: this.removeTimeBasedTransition.bind(this),
             renameSituation: this.renameSituation.bind(this),
             showFirstSituationInformationWindow: this.showFirstSituationInformationWindow.bind(this),
             setCurrentSituation: this.setCurrentSituation.bind(this),

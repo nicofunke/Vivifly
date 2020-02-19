@@ -29,7 +29,7 @@ export default class SituationSelect extends React.Component<PropsType> {
                 {this.props.possibleStates.map(state =>
                     <option key={state.id} value={state.id}>{state.Name}</option>
                 )}
-                <option key="new" value="new" className="text-white bg-success"> + New Situation</option>
+                <option key="new" value="new" className="text-success font-weight-bold"> + New Situation</option>
             </select>
         </div>
     }

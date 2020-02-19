@@ -32,6 +32,8 @@ export default class SituationsList extends React.Component {
                     renameSituation={(newName: string) => this.context.renameSituation(state.id, newName)}
                     isProperSituationName={(newName: string) => ContextUtils.isProperSituationName(newName, this.context)}
                     isStart={state.id === 0}
+                    hasTimeBasedTransition={!!ContextUtils.getTimeBasedTransition(state.id, this.context)}
+                    openTimeBasedOptions={() => this.context.setTimeBasedTransitionModalVisibility(true)}
                     id={state.id}
                     key={state.id} />)
         }
