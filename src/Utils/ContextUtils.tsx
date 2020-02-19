@@ -1,12 +1,12 @@
-import { ElementType, ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT, ELEMENT_TYPE_BUTTON } from '../types/element-type.type';
-import { ContextState } from '../interfaces/context-state.interface';
-import { Color } from '../interfaces/color.interface';
-import { Transition } from '../interfaces/transition.interface';
-import { State } from '../interfaces/state.interface';
-import { VisualizationValue } from '../interfaces/visualization-value.interface';
-import { VISUALIZATION_TYPE_SCREEN } from '../types/visualization-type.type';
-import { VisualizationElement } from '../interfaces/visualization-element.interface';
-import { InterActionElement } from '../interfaces/interaction-element.interface';
+import { ElementType, ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT, ELEMENT_TYPE_BUTTON } from '../types/element-type.type'
+import { ContextState } from '../interfaces/context-state.interface'
+import { Color } from '../interfaces/color.interface'
+import { Transition } from '../interfaces/transition.interface'
+import { State } from '../interfaces/state.interface'
+import { VisualizationValue } from '../interfaces/visualization-value.interface'
+import { VISUALIZATION_TYPE_SCREEN } from '../types/visualization-type.type'
+import { VisualizationElement } from '../interfaces/visualization-element.interface'
+import { InterActionElement } from '../interfaces/interaction-element.interface'
 
 /**
  * Utils class with static helper functions to work with the application state(context)
@@ -73,13 +73,23 @@ export class ContextUtils {
     /**
      * Returns the transition of a certain interactionElement in a certain situation
      * 
-     * @param interactionElement    Name of the elemen that triggers the transition
+     * @param interactionElement    Name of the element that triggers the transition
      * @param situationId           Id of the source state
      * @param context               Current context
      */
-    static getTransition(interactionElement: string, situationId: number, context: ContextState): Transition | undefined {
+    static getButtonTransition(interactionElement: string, situationID: number, context: ContextState): Transition | undefined {
         return context.transitions.find(transition =>
-            (transition.SourceStateID === situationId && transition.InteractionElement === interactionElement))
+            (transition.SourceStateID === situationID && transition.InteractionElement === interactionElement))
+    }
+
+    /**
+     * Returns the time-based transition of a certain source situation
+     * @param situationID   ID of the source situation
+     * @param context       Current context
+     */
+    static getTimeBasedTransition(situationID: number, context: ContextState): Transition | undefined {
+        return context.transitions.find( transition => 
+            (!!transition.Timeout && transition.SourceStateID === situationID ))
     }
 
     /**

@@ -1,6 +1,7 @@
 import React from 'react'
 import { MDBIcon } from 'mdbreact'
 import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext'
+import { ContextUtils } from '../../Utils/ContextUtils';
 
 // Typed props
 type PropsType = {
@@ -20,9 +21,12 @@ export default class SituationOptions extends React.Component<PropsType> {
 
     render() {
         return <>
-            <div className="row situation-list-element hover-icon py-2 px-1" onClick={() =>this.context.setTimeBasedTransitionWindowVisibility(true)}>
+            <div className="row situation-list-element hover-icon py-2 px-1" onClick={() => this.context.setTimeBasedTransitionModalVisibility(true)}>
                 <div className="col-2"><MDBIcon icon="clock" /></div>
-                <div className="col-10">Add time-based transition</div>
+                <div className="col-10">
+                    {!!ContextUtils.getTimeBasedTransition(this.props.situationID, this.context) ?
+                        "Change time-based transition" : "Add time-based transition"}
+                </div>
             </div>
             <div className="row situation-list-element hover-icon py-2 px-1" onClick={this.props.onRenameClick}>
                 <div className="col-2"><MDBIcon icon="pen" /></div>

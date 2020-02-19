@@ -18,7 +18,7 @@ export default class ButtonSettings extends Component {
      */
     newSituationButtonClicked() {
         const newSituationID = this.context.createNewSituation("")
-        this.context.setTransition(
+        this.context.setButtonTransition(
             this.context.applicationState.currentSituationID,
             newSituationID,
             this.context.applicationState.selectedElement)
@@ -31,14 +31,14 @@ export default class ButtonSettings extends Component {
      * Creates a new transition without destination
      */
     existingSituationButtonClicked() {
-        this.context.setTransition(
+        this.context.setButtonTransition(
             this.context.applicationState.currentSituationID,
             null,
             this.context.applicationState.selectedElement)
     }
 
     render() {
-        const transition = ContextUtils.getTransition(this.context.applicationState.selectedElement, this.context.applicationState.currentSituationID, this.context)
+        const transition = ContextUtils.getButtonTransition(this.context.applicationState.selectedElement, this.context.applicationState.currentSituationID, this.context)
         return <>
             <div className="row">
                 <div className="col-1 p-0 d-flex justify-content-center align-items-center">
@@ -68,7 +68,7 @@ export default class ButtonSettings extends Component {
                             <ButtonExistingTransition
                                 transition={transition}
                                 states={this.context.states}
-                                changeDestination={destination => this.context.setTransition(transition.SourceStateID, destination, transition.InteractionElement)}
+                                changeDestination={destination => this.context.setButtonTransition(transition.SourceStateID, destination, transition.InteractionElement)}
                                 newSituationButtonClicked={this.newSituationButtonClicked.bind(this)} />}
                     </div>
                 </div>

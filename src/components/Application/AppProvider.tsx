@@ -1,7 +1,7 @@
 import React from 'react'
 import { AppContext } from './AppContext'
 import { UnityWrapper } from '../../Utils/UnityWrapper'
-import { ContextUtils } from '../../Utils/ContextUtils'
+import { ContextUtils } from '../../Utils/ContextUtils';
 import { ContextState } from '../../interfaces/context-state.interface'
 import { VisualizationValue } from '../../interfaces/visualization-value.interface'
 import { Vector3 } from '../../interfaces/vector3.interface'
@@ -186,10 +186,10 @@ export default class AppProvider extends React.Component {
      *
      * @param newSituationName  name of the new situation
      */
-    createNewSituation(newSituationName: string) {
+    createNewSituation(newSituationName: string): number {
         if (this.state.states.find(state => state.Name === newSituationName)) {
             // State does already exist
-            return
+            return -1
         }
         const newID = this.state.applicationState.nextSituationID
         const nextID = newID + 1
@@ -274,9 +274,8 @@ export default class AppProvider extends React.Component {
      * @param destinationSituationID    Destination situation ID
      * @param button                    Name of the Button that triggers the transition
      */
-    setTransition(sourceSituationID: number, destinationSituationID: number, button: string) {
-
-        if (!ContextUtils.getTransition(button, sourceSituationID, this.state)) {
+    setButtonTransition(sourceSituationID: number, destinationSituationID: number, button: string) {
+        if (!ContextUtils.getButtonTransition(button, sourceSituationID, this.state)) {
             // Add new transition
             const newTransition = {
                 SourceStateID: sourceSituationID,
@@ -288,7 +287,7 @@ export default class AppProvider extends React.Component {
                 return { ...state, transitions: [...state.transitions, newTransition] }
             })
         } else {
-            // Change the existing transition
+            // Change existing transition
             this.setState((state: ContextState) => {
                 return {
                     ...state,
@@ -302,10 +301,41 @@ export default class AppProvider extends React.Component {
     }
 
     /**
+     * Sets the transition triggered by a timeout (time-based transition)
+     * @param sourceSituationID         ID of the source situation
+     * @param destinationSituationID    ID of the destination situation
+     * @param timeout                   Timeout in ms
+     */
+    setTimeBasedTransition(sourceSituationID: number, destinationSituationID: number, timeout: number) {
+        if (!ContextUtils.getTimeBasedTransition(sourceSituationID, this.state)) {
+            // Add new transition
+            const newTransition = {
+                SourceStateID: sourceSituationID,
+                Timeout: timeout,
+                DestinationStateID: destinationSituationID
+            }
+            this.setState((state: ContextState) => {
+                return { ...state, transitions: [...state.transitions, newTransition] }
+            })
+        } else {
+            // Change existing transition
+            this.setState((state: ContextState) => {
+                return {
+                    ...state,
+                    transitions: state.transitions.map(transition =>
+                        (transition.SourceStateID === sourceSituationID && !!transition.Timeout) ?
+                            { ...transition, DestinationStateID: destinationSituationID, Timeout: timeout } : transition
+                    )
+                }
+            })
+        }
+    }
+
+    /**
      * Changes if the options window for time based transitions should be visible
      * @param isVisible If the window should be displayed or not
      */
-    setTimeBasedTransitionWindowVisibility(isVisible: boolean) {
+    setTimeBasedTransitionModalVisibility(isVisible: boolean) {
         this.setState((state: ContextState) => {
             return {
                 ...state,
@@ -596,7 +626,7 @@ export default class AppProvider extends React.Component {
 
 
     //================= RENDER =============================
-
+    // TODO: Bundle methods to 'Actions'
     render() {
         return <AppContext.Provider value={{
             applicationState: this.state.applicationState,
@@ -606,7 +636,7 @@ export default class AppProvider extends React.Component {
             unityWrapper: this.state.unityWrapper,
             visualizationElements: this.state.visualizationElements,
 
-            setTransition: this.setTransition.bind(this),
+            setButtonTransition: this.setButtonTransition.bind(this),
             addElementType: this.addElementType.bind(this),
             createNewSituation: this.createNewSituation.bind(this),
             removeElementType: this.removeElementType.bind(this),
@@ -621,7 +651,8 @@ export default class AppProvider extends React.Component {
             setScreenResolution: this.setScreenResolution.bind(this),
             setSelectedElement: this.setSelectedElement.bind(this),
             setSituationNamingModalVisibility: this.setSituationNamingModalVisibility.bind(this),
-            setTimeBasedTransitionWindowVisibility: this.setTimeBasedTransitionWindowVisibility.bind(this),
+            setTimeBasedTransition: this.setTimeBasedTransition.bind(this),
+            setTimeBasedTransitionModalVisibility: this.setTimeBasedTransitionModalVisibility.bind(this),
             setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this),
             startPlaneSelection: this.startPlaneSelection.bind(this)
 

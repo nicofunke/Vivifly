@@ -23,7 +23,7 @@ export interface AppContextType {
 
     // Methods
     addElementType: (element: string, type: string) => void,
-    createNewSituation: (newSituationName: string) => void,
+    createNewSituation: (newSituationName: string) => number,
     removeElementType: (element: string, type: string) => void,
     removeSituation: (situationID: number) => void,
     renameSituation: (situationID: number, newSituationName: string) => void,
@@ -36,8 +36,9 @@ export interface AppContextType {
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => void,
     setSelectedElement: (selectedElement: string, clickedPlane: Vector3 | undefined) => void,
     setSituationNamingModalVisibility: (isVisible: boolean) => void,
-    setTimeBasedTransitionWindowVisibility: (isVisible: boolean) => void,
-    setTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => void,
+    setTimeBasedTransition: (sourceSituationID: number, destinationSituationID: number, timeout: number) => void,
+    setTimeBasedTransitionModalVisibility: (isVisible: boolean) => void,
+    setButtonTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => void,
     setUnityLoadingProgress: (progress: number) => void,
     startPlaneSelection: (element: string) => void
 }

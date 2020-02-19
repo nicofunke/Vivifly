@@ -22,7 +22,7 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
 
     // Methods
     addElementType: (element: string, type: string) => { },
-    createNewSituation: (newSituationName: string) => { },
+    createNewSituation: (newSituationName: string) => -1,
     removeElementType: (element: string, type: string) => { },
     removeSituation: (situationID: number) => { },
     renameSituation: (situationID: number, newSituationName: string) => { },
@@ -35,8 +35,9 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     setScreenResolution: (element: string, resolution: Vector2) => { },
     setSelectedElement: (selectedElement: string, clickedPlane: Vector3 | undefined) => { },
     setSituationNamingModalVisibility: (isVisible: boolean) => { },
-    setTimeBasedTransitionWindowVisibility: (isVisible: boolean) => { },
-    setTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => { },
+    setTimeBasedTransition: (sourceSituationID: number, destinationSituationID: number, timeout: number) => {},
+    setTimeBasedTransitionModalVisibility: (isVisible: boolean) => { },
+    setButtonTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => { },
     setUnityLoadingProgress: (progress: number) => { },
     startPlaneSelection: (element: string) => { }
 }

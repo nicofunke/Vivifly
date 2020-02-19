@@ -7,6 +7,9 @@ type propsType = {
     onClose: () => void
 }
 
+// TODO: Add new effect
+// TODO: Remove all effects
+
 export default function ElementInformationHeader(props: propsType) {
     return <>
         <div className="row">
