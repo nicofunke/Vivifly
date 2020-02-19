@@ -40,7 +40,7 @@ export interface AppContextType {
     setSituationNamingModalVisibility: (isVisible: boolean) => void,
     setTimeBasedTransition: (sourceSituationID: number, destinationSituationID: number, timeout: number) => void,
     setTimeBasedTransitionModalVisibility: (isVisible: boolean) => void,
-    setButtonTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => void,
+    setButtonTransition: (sourceSituationID: number, destinationSituationID: number | undefined, button: string) => void,
     setUnityLoadingProgress: (progress: number) => void,
     startPlaneSelection: (element: string) => void
 }

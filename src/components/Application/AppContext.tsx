@@ -39,7 +39,7 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     setSituationNamingModalVisibility: (isVisible: boolean) => { },
     setTimeBasedTransition: (sourceSituationID: number, destinationSituationID: number, timeout: number) => { },
     setTimeBasedTransitionModalVisibility: (isVisible: boolean) => { },
-    setButtonTransition: (sourceSituationID: number, destinationSituationID: number, button: string) => { },
+    setButtonTransition: (sourceSituationID: number, destinationSituationID: number | undefined, button: string) => { },
     setUnityLoadingProgress: (progress: number) => { },
     startPlaneSelection: (element: string) => { }
 }

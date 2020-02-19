@@ -66,6 +66,7 @@ export default class TBTOverview extends React.Component<PropsType, StateType> {
                 selectSituation={DestinationStateID => this.setState({ destinationStateID: DestinationStateID })}
                 situationID={this.state.destinationStateID}
                 possibleStates={this.props.states}
+                emptyChoiceAllowed={false}
             />
 
             <div className="d-flex justify-content-between mt-2">

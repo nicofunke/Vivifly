@@ -17,6 +17,8 @@ type PropsType = {
     openTimeBasedOptions: () => void
 }
 
+// TODO: Unreachable warning
+
 export default class SituationsListElement extends React.Component<PropsType> {
 
     // Default state

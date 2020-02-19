@@ -275,7 +275,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
      * @param destinationSituationID    Destination situation ID
      * @param button                    Name of the Button that triggers the transition
      */
-    setButtonTransition(sourceSituationID: number, destinationSituationID: number, button: string) {
+    setButtonTransition(sourceSituationID: number, destinationSituationID: number | undefined, button: string) {
         if (!ContextUtils.getButtonTransition(button, sourceSituationID, this.state)) {
             // Add new transition
             const newTransition = {

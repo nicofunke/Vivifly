@@ -8,7 +8,7 @@ import { Transition } from '../../../interfaces/transition.interface'
  */
 type PropsType = {
     newSituationButtonClicked: () => void,
-    changeDestination: (destinationSituationID: number) => void,
+    changeDestination: (destinationSituationID: number | undefined) => void,
     states: State[],
     transition: Transition
 }
@@ -16,13 +16,11 @@ type PropsType = {
 export default class ButtonExistingTransition extends React.Component<PropsType> {
 
     // TODO: Add goto situation button
-    // TODO: No transition should be possible
-
     /**
-     * Gets called if the situation dropdown changes
+     * Sets a new destination for the button in the current situation
      * @param situationID new chosen situation
      */
-    setSituation(situationID: number | "new") {
+    setDestination(situationID: number | "new" | undefined) {
         if (situationID === "new") {
             this.props.newSituationButtonClicked()
         } else {
@@ -32,12 +30,14 @@ export default class ButtonExistingTransition extends React.Component<PropsType>
 
     render() {
         const DestinationState = this.props.states.find(state => state.id === this.props.transition.DestinationStateID)
+        console.log("Updating existing")
         return <>
             <div>Clicking this button in the current situation leads to </div>
             <SituationSelect
-                selectSituation={this.setSituation.bind(this)}
+                selectSituation={this.setDestination.bind(this)}
                 possibleStates={this.props.states}
                 situationID={DestinationState?.id}
+                emptyChoiceAllowed={true}
             />
         </>
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { MDBIcon } from 'mdbreact'
-import { AppContext } from '../../Application/AppContext'
+import { AppContext, APP_CONTEXT_DEFAULT } from '../../Application/AppContext'
 import ButtonChooseTransition from './ButtonChooseTransition'
 import ButtonExistingTransition from './ButtonExistingTransition'
 import { ContextUtils } from '../../../Utils/ContextUtils'
@@ -10,6 +10,7 @@ import ReactTooltip from 'react-tooltip'
 export default class ButtonSettings extends Component {
 
     static contextType = AppContext
+    context = APP_CONTEXT_DEFAULT
 
     /**
      * Function that gets called if the new situation button is pressed
@@ -33,11 +34,12 @@ export default class ButtonSettings extends Component {
     existingSituationButtonClicked() {
         this.context.setButtonTransition(
             this.context.applicationState.currentSituationID,
-            null,
+            undefined,
             this.context.applicationState.selectedElement)
     }
 
     render() {
+        console.log("Updating settings")
         const transition = ContextUtils.getButtonTransition(this.context.applicationState.selectedElement, this.context.applicationState.currentSituationID, this.context)
         return <>
             <div className="row">
@@ -68,7 +70,8 @@ export default class ButtonSettings extends Component {
                             <ButtonExistingTransition
                                 transition={transition}
                                 states={this.context.states}
-                                changeDestination={destination => this.context.setButtonTransition(transition.SourceStateID, destination, transition.InteractionElement)}
+                                changeDestination={(destination: number | undefined) => transition.SourceStateID !== undefined && !!transition.InteractionElement
+                                    && this.context.setButtonTransition(transition.SourceStateID, destination, transition.InteractionElement)}
                                 newSituationButtonClicked={this.newSituationButtonClicked.bind(this)} />}
                     </div>
                 </div>
