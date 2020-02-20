@@ -17,7 +17,7 @@ type PropsType = {
     openTimeBasedOptions: () => void
 }
 
-// TODO: Unreachable warning
+// TODO: 3 Unreachable warning
 
 export default class SituationsListElement extends React.Component<PropsType> {
 
@@ -67,7 +67,7 @@ export default class SituationsListElement extends React.Component<PropsType> {
         this.setState({ editMode: false, previousSituationName: "" })
     }
 
-    // TODO: Set Start situation
+    // TODO: 2 Set Start situation
     render() {
         return (
             <div

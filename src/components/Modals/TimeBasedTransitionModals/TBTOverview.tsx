@@ -17,7 +17,7 @@ type StateType = {
     destinationStateID: number | "new" | undefined
 }
 
-// TODO: Rename to time-based change
+// TODO: 3 Rename to time-based change
 /**
  * Component for the time-based transition overview window, which allows to change destination and timeout
  */

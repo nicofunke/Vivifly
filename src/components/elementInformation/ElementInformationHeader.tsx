@@ -7,8 +7,8 @@ type propsType = {
     onClose: () => void
 }
 
-// TODO: Add new effect
-// TODO: Remove all effects
+// TODO: 1 Add new effect
+// TODO: 1 Remove all effects
 
 export default function ElementInformationHeader(props: propsType) {
     return <>

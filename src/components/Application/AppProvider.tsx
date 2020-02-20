@@ -640,7 +640,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
 
 
     //================= RENDER =============================
-    // TODO: Bundle methods to 'Actions'
+    // TODO: 2 Bundle methods to 'Actions'
     render() {
         return <AppContext.Provider value={{
             applicationState: this.state.applicationState,

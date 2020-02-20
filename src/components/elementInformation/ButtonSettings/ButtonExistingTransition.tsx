@@ -15,7 +15,7 @@ type PropsType = {
 
 export default class ButtonExistingTransition extends React.Component<PropsType> {
 
-    // TODO: Add goto situation button
+    // TODO: 2 Add goto situation button
     /**
      * Sets a new destination for the button in the current situation
      * @param situationID new chosen situation

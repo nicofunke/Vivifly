@@ -14,7 +14,7 @@ import TBTOverview from './TBTOverview'
  */
 export default class TimeBasedTransitionModal extends React.Component<{}, Transition> {
 
-    // TODO: Change all values modal
+    // TODO: 2 Continue on enter
     state: Transition = {}
 
     // Import AppContext

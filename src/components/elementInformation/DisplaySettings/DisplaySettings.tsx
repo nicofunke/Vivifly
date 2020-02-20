@@ -8,7 +8,7 @@ import { Vector2 } from '../../../interfaces/vector2.interface'
 import ReactTooltip from 'react-tooltip'
 import { ELEMENT_TYPE_SCREEN } from '../../../types/element-type.type'
 
-// TODO: Move screen
+// TODO: 1 Move screen
 export default class DisplaySettings extends Component {
 
     // Import AppContext
