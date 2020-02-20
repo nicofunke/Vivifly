@@ -39,7 +39,6 @@ export default class ButtonSettings extends Component {
     }
 
     render() {
-        console.log("Updating settings")
         const transition = ContextUtils.getButtonTransition(this.context.applicationState.selectedElement, this.context.applicationState.currentSituationID, this.context)
         return <>
             <div className="row">

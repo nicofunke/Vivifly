@@ -2,7 +2,7 @@ import React from 'react'
 import { MDBInput, MDBBtn } from 'mdbreact';
 import { ContextUtils } from '../../Utils/ContextUtils'
 import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext'
-import Modal from './Modal';
+import Modal from './Modal'
 
 /**
  * Modal to define a name for the current situation

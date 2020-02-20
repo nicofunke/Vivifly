@@ -34,7 +34,7 @@ export default class TBTTimeout extends React.Component<PropsType, StateType> {
             </p>
             <div className="d-flex justify-content-center my-4">
                 <div>
-                    <MDBInput label="Timeout in ms" type="number" outline value={this.state.timeout} onChange={this.handleChange.bind(this)} />
+                    <MDBInput label="Timeout in ms" type="number" outline value={this.state.timeout} onChange={this.handleChange.bind(this)} autofocus/>
                     <small className="text-danger">
                         {this.state?.timeout > 0 || "Please choose a positive value"}</small>
                 </div>

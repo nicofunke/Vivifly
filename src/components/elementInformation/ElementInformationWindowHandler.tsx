@@ -3,38 +3,23 @@ import { MDBCard, MDBCardBody } from 'mdbreact'
 import ElementTypePicker from './ElementTypePicker'
 import ButtonSettings from './ButtonSettings/ButtonSettings'
 import DisplaySettings from './DisplaySettings/DisplaySettings'
-import { AppContext } from '../Application/AppContext'
+import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext'
 import LightSettings from './LightSettings/LightSettings'
 import { ContextUtils } from '../../Utils/ContextUtils'
 import ElementInformationHeader from './ElementInformationHeader'
+import KeyListener from '../core/KeyListener'
 
 export default class ElementInformationWindowHandler extends Component {
 
+    // Import context
     static contextType = AppContext
-
-
-    /**
-     * Listener for the escape key, to close window if escape is pressed
-     */
-    onKeyPressed(event) {
-        if (event.keyCode === 27) {
-            this.context.setSelectedElement("")
-        }
-    }
+    context = APP_CONTEXT_DEFAULT
 
     /**
-     * Start listening to keydown events after mounting(catching ESC)
+     * Gets called when escape is pressed. Sets the currently selected element to none
      */
-    componentDidMount() {
-        this.onKeyPressed = this.onKeyPressed.bind(this)    // Method needs to be binded here, otherwise the listener can't be removed
-        document.addEventListener("keydown", this.onKeyPressed, false)
-    }
-
-    /**
-     * Stop listening to keydown events on unmounting(catching ESC)
-     */
-    componentWillUnmount() {
-        document.removeEventListener("keydown", this.onKeyPressed, false)
+    onEscape() {
+        this.context.setSelectedElement("", undefined)
     }
 
     /**
@@ -45,15 +30,15 @@ export default class ElementInformationWindowHandler extends Component {
         if (!elementTypes || elementTypes.length === 0) {
             return <ElementTypePicker />
         }
-        let output = []
+        let output: JSX.Element[] = []
         if (elementTypes.find(type => type === "Button")) {
-            output.push(<ButtonSettings key="ButtonSettings" className="mt-2" />)
+            output.push(<div className="my-2" key="ButtonSettings"><ButtonSettings /></div>)
         }
         if (elementTypes.find(type => type === "Screen")) {
-            output.push(<DisplaySettings key="DisplaySettings" className="mt-2" />)
+            output.push(<div className="my-2" key="DisplaySettings"><DisplaySettings /></div>)
         }
         if (elementTypes.find(type => type === "Light")) {
-            output.push(<LightSettings key="LightSettings" className="mt-2" />)
+            output.push(<div className="my-2" key="LightSettings"><LightSettings /></div>)
         }
         return <>
             {output}
@@ -65,13 +50,14 @@ export default class ElementInformationWindowHandler extends Component {
             return null
         }
         return <>
+            <KeyListener onEsc={this.onEscape.bind(this)} />
             <div className="window-upper-right">
                 <MDBCard>
                     <div className="primary-color-dark text-white">
                         <MDBCardBody className="pb-1">
                             <ElementInformationHeader
                                 title={this.context.applicationState.selectedElement}
-                                onClose={() => this.context.setSelectedElement("")} />
+                                onClose={() => this.context.setSelectedElement("", undefined)} />
                         </MDBCardBody>
                     </div>
                     <MDBCardBody>
