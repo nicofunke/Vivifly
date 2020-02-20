@@ -29,7 +29,6 @@ export default class SituationSelect extends React.Component<PropsType> {
     }
 
     render() {
-        console.log("Updating sleect")
         return <div className="form-group">
             <select className="form-control browser-default custom-select mt-2" value={this.props.situationID} onChange={this.handleChange.bind(this)}>
                 <option value={undefined} disabled={!this.props.emptyChoiceAllowed} selected={this.props.situationID === undefined}>

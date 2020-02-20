@@ -12,7 +12,7 @@ export interface ApplicationState {
     isCurrentlyUploading: boolean,                  // If the application currently uploads a model
     showFirstSituationInformation: boolean,         // If the information for the first created situation should be visible
     showNewElementTypeModal: boolean,               // If the modal to add a new type to an element should be visible
-    showSituationNamingModal: boolean,              // If the modal to choose a name for the situation should be visible
+    newSituationID?: number,                        // ID of the newly generated situation which still misses a name
     showTimeBasedTransitionModal: boolean,          // If the modal to create a time based transition should be visible
     modelWasUploaded: boolean,                      // If a model was already uploaded
     planeSelectionElementName?: string,             // Current element for plane selection for screens ( or null if plane selection is not active )
@@ -32,7 +32,6 @@ export const APPLICATION_STATE_DEFAULT: ApplicationState = {
     isCurrentlyUploading: false,
     showFirstSituationInformation: false,
     showNewElementTypeModal: false,
-    showSituationNamingModal: false,
     showTimeBasedTransitionModal: false,
     modelWasUploaded: true,
     lastSituationID: 0,

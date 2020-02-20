@@ -91,7 +91,6 @@ export default class AppProvider extends React.Component<{}, ContextState> {
     //============== Session specific methods =========================
     /**
     * Changes the currently selected situation
-    * // TODO: Update only if new situation
     * @param currentSituationID     id of the situation that should be selected
     */
     setCurrentSituation(currentSituationID: number) {
@@ -262,16 +261,16 @@ export default class AppProvider extends React.Component<{}, ContextState> {
 
 
     /**
-     * Hides/Displays the situation naming popup
-     * @param isVisible If the popup should be visible
+     * Sets/Unsets the situation which can be renamed with the new situation modal
+     * @param situationID If the popup should be visible
      */
-    setSituationNamingModalVisibility(isVisible: boolean) {
+    setRenamingModalSituation(situationID: number | undefined) {
         this.setState((state: ContextState) => {
             return {
                 ...state,
                 applicationState: {
                     ...state.applicationState,
-                    showSituationNamingModal: isVisible
+                    newSituationID: situationID
                 }
             }
         })
@@ -572,9 +571,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
             const visualizationElement = this.state.visualizationElements.find(visualizationElement =>
                 (visualizationElement.Name === element && visualizationElement.Type === ELEMENT_TYPE_SCREEN))
             const image = ContextUtils.getScreenImage(element, this.state.applicationState.currentSituationID, this.state)
-            console.log(updateWebGL)
             if( updateWebGL && !!visualizationElement && !!image){
-                console.log("update")
                 this.state.unityWrapper?.addScreenEffect(visualizationElement, image)
             }
 
@@ -706,7 +703,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
             setScreenPlane: this.setScreenPlane.bind(this),
             setScreenResolution: this.setScreenResolution.bind(this),
             setSelectedElement: this.setSelectedElement.bind(this),
-            setSituationNamingModalVisibility: this.setSituationNamingModalVisibility.bind(this),
+            setRenamingModalSituation: this.setRenamingModalSituation.bind(this),
             setTimeBasedTransition: this.setTimeBasedTransition.bind(this),
             setTimeBasedTransitionModalVisibility: this.setTimeBasedTransitionModalVisibility.bind(this),
             setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this),

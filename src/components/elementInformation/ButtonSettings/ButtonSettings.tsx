@@ -23,8 +23,7 @@ export default class ButtonSettings extends Component {
             this.context.applicationState.currentSituationID,
             newSituationID,
             this.context.applicationState.selectedElement)
-        this.context.setCurrentSituation(newSituationID)
-        this.context.setSituationNamingModalVisibility(true)
+        this.context.setRenamingModalSituation(newSituationID)
     }
 
     /**

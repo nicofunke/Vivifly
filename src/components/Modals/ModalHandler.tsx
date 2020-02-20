@@ -15,8 +15,8 @@ export default class ModalHandler extends React.Component {
 
 
     render() {
-        if( this.context.applicationState.showSituationNamingModal){
-            return <SituationNamingModal />
+        if( this.context.applicationState.newSituationID !== undefined){
+            return <SituationNamingModal situationID={this.context.applicationState.newSituationID} />
         }
         if( this.context.applicationState.showTimeBasedTransitionModal){
             return <TimeBasedTransitionModal />

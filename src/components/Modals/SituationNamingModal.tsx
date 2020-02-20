@@ -1,13 +1,16 @@
 import React from 'react'
-import { MDBInput, MDBBtn } from 'mdbreact';
+import { MDBInput, MDBBtn } from 'mdbreact'
 import { ContextUtils } from '../../Utils/ContextUtils'
 import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext'
 import Modal from './Modal'
 
+type PropsType={
+    situationID: number
+}
 /**
  * Modal to define a name for the current situation
  */
-export default class SituationNamingModal extends React.Component {
+export default class SituationNamingModal extends React.Component<PropsType> {
 
     static contextType = AppContext
     context = APP_CONTEXT_DEFAULT
@@ -17,9 +20,8 @@ export default class SituationNamingModal extends React.Component {
      * Calls the method to change the name globally
      */
     handleChange(event: any) {
-        const currentSituationId = this.context.applicationState.currentSituationID
         const value = event.target.value
-        this.context.renameSituation(currentSituationId, value)
+        this.context.renameSituation(this.props.situationID, value)
     }
 
     /**
@@ -34,13 +36,14 @@ export default class SituationNamingModal extends React.Component {
     /**
      * Closes the popup if the current situation has an appropriate name. 
      * Sets the currently selected element to none.
-     * Opens the new new situation information box.
+     * Opens the new situation and the new new situation information box.
      */
     saveAndClose() {
         if (this.isProperSituationName()) {
-            this.context.setSituationNamingModalVisibility(false)   // Hide this popup
-            this.context.setSelectedElement("", undefined)          // Set selected element to no element
-            this.context.showFirstSituationInformationWindow()      // Open new situation information
+            this.context.setRenamingModalSituation(undefined)
+            this.context.setCurrentSituation(this.props.situationID)
+            this.context.setSelectedElement("", undefined) 
+            this.context.showFirstSituationInformationWindow()
         }
     }
 
@@ -48,8 +51,7 @@ export default class SituationNamingModal extends React.Component {
      * Returns if the current situation name is appropriate and can be used
      */
     isProperSituationName() {
-        const currentSituationID = this.context.applicationState.currentSituationID
-        const currentSituation = this.context.states.find(situation => situation.id === currentSituationID)
+        const currentSituation = this.context.states.find(situation => situation.id === this.props.situationID)
         return !!currentSituation && ContextUtils.isProperSituationName(currentSituation.Name, this.context)
     }
 
@@ -57,13 +59,12 @@ export default class SituationNamingModal extends React.Component {
      * Gets called if the naming was cancelled. Closes the modal and deletes the situation
      */
     cancel() {
-        this.context.setSituationNamingModalVisibility(false)   // Hide this popup
-        this.context.removeSituation(this.context.applicationState.currentSituationID) // Remove situation
+        this.context.setRenamingModalSituation(undefined)   // Hide this popup
+        this.context.removeSituation(this.props.situationID)    // Remove situation
     }
 
     render() {
-        const currentSituationID = this.context.applicationState.currentSituationID
-        const currentSituation = this.context.states.find(situation => situation.id === currentSituationID)
+        const currentSituation = this.context.states.find(situation => situation.id === this.props.situationID)
         const isProperSituationName = this.isProperSituationName()
         if (!currentSituation) {
             return null

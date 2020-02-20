@@ -38,7 +38,7 @@ export interface AppContextType {
     setScreenResolution: (element: string, resolution: Vector2) => void,
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => void,
     setSelectedElement: (selectedElement: string, clickedPlane: Vector3 | undefined) => void,
-    setSituationNamingModalVisibility: (isVisible: boolean) => void,
+    setRenamingModalSituation: (situationID: number | undefined) => void,
     setTimeBasedTransition: (sourceSituationID: number, destinationSituationID: number, timeout: number) => void,
     setTimeBasedTransitionModalVisibility: (isVisible: boolean) => void,
     setButtonTransition: (sourceSituationID: number, destinationSituationID: number | undefined, button: string) => void,

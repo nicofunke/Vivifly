@@ -71,7 +71,7 @@ export default class TimeBasedTransitionModal extends React.Component<{}, Transi
         if (destinationStateID === "new") {
             destinationStateID = this.context.createNewSituation("")
             this.context.setCurrentSituation(destinationStateID)
-            this.context.setSituationNamingModalVisibility(true)
+            this.context.setRenamingModalSituation(destinationStateID)
         }
         // Save transition and close the modal
         if ((!this.state.SourceStateID && this.state.SourceStateID !== 0) || !this.state.Timeout) {

@@ -30,7 +30,6 @@ export default class ButtonExistingTransition extends React.Component<PropsType>
 
     render() {
         const DestinationState = this.props.states.find(state => state.id === this.props.transition.DestinationStateID)
-        console.log("Updating existing")
         return <>
             <div>Clicking this button in the current situation leads to </div>
             <SituationSelect
