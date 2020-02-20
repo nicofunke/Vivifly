@@ -32,6 +32,7 @@ export interface AppContextType {
     showFirstSituationInformationWindow: () => void,
     setCurrentSituation: (currentSituationID: number) => void,
     setLightColor: (element: string, color: Color) => void,
+    setNewElementTypeModalVisibility: ( isVisible: boolean) => void,
     setScreenImage: (element: string, situationID: number, imageFile: File) => void,
     setScreenPlane: (planeSelectionElement: string, plane: Vector3) => void,
     setScreenResolution: (element: string, resolution: Vector2) => void,

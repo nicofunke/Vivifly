@@ -1,15 +1,19 @@
 import React, { Component } from 'react'
 import { MDBCard, MDBCardBody } from 'mdbreact'
-import ElementTypePicker from './ElementTypePicker'
+import ElementCardStartScreen from './ElementCardStartScreen'
 import ButtonSettings from './ButtonSettings/ButtonSettings'
 import DisplaySettings from './DisplaySettings/DisplaySettings'
 import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext'
 import LightSettings from './LightSettings/LightSettings'
 import { ContextUtils } from '../../Utils/ContextUtils'
-import ElementInformationHeader from './ElementInformationHeader'
+import ElementCardHeader from './ElementCardHeader'
 import KeyListener from '../core/KeyListener'
 
-export default class ElementInformationWindowHandler extends Component {
+/**
+ * Handler component for the element card. 
+ * Displays the appropriate element cards for the currently selected element
+ */
+export default class ElementCardHandler extends Component {
 
     // Import context
     static contextType = AppContext
@@ -28,17 +32,17 @@ export default class ElementInformationWindowHandler extends Component {
     elementTypeSettings() {
         const elementTypes = ContextUtils.getElementTypes(this.context.applicationState.selectedElement, this.context)
         if (!elementTypes || elementTypes.length === 0) {
-            return <ElementTypePicker />
+            return <ElementCardStartScreen />
         }
         let output: JSX.Element[] = []
         if (elementTypes.find(type => type === "Button")) {
-            output.push(<div className="my-2" key="ButtonSettings"><ButtonSettings /></div>)
+            output.push(<div className="my-3" key="ButtonSettings"><ButtonSettings /></div>)
         }
         if (elementTypes.find(type => type === "Screen")) {
-            output.push(<div className="my-2" key="DisplaySettings"><DisplaySettings /></div>)
+            output.push(<div className="my-3" key="DisplaySettings"><DisplaySettings /></div>)
         }
         if (elementTypes.find(type => type === "Light")) {
-            output.push(<div className="my-2" key="LightSettings"><LightSettings /></div>)
+            output.push(<div className="my-3" key="LightSettings"><LightSettings /></div>)
         }
         return <>
             {output}
@@ -66,10 +70,11 @@ export default class ElementInformationWindowHandler extends Component {
                 <MDBCard>
                     <div className="primary-color-dark text-white">
                         <MDBCardBody className="pb-1">
-                            <ElementInformationHeader
+                            <ElementCardHeader
                                 title={this.context.applicationState.selectedElement}
                                 onClose={() => this.context.setSelectedElement("", undefined)}
-                                removeAllEffects={this.removeAllElementTypes.bind(this)} />
+                                removeAllEffects={this.removeAllElementTypes.bind(this)}
+                                addEffect={() => this.context.setNewElementTypeModalVisibility(true)} />
                         </MDBCardBody>
                     </div>
                     <MDBCardBody>

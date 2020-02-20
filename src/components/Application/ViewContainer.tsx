@@ -2,7 +2,7 @@ import React from 'react'
 import { MDBContainer, MDBRow, MDBCol } from 'mdbreact'
 import UnityScreen from '../Frame/UnityScreen'
 import SituationsList from '../SituationsList/SituationsList'
-import ElementInformationWindowHandler from '../ElementInformation/ElementInformationWindowHandler'
+import ElementCardHandler from '../ElementInformation/ElementCardHandler'
 import StartingOverlay from '../Frame/StartingOverlay'
 import InformationWindowHandler from '../InformationWindows/InformationWindowHandler'
 import ModalHandler from '../Modals/ModalHandler'
@@ -27,7 +27,7 @@ export default class ViewContainer extends React.Component {
                         <MDBCol size="2" className="p-0 h-100">
                             <SituationsList />
                         </MDBCol>
-                        <ElementInformationWindowHandler />
+                        <ElementCardHandler />
                     </MDBRow>
                 </MDBContainer>
             </div>

@@ -101,7 +101,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
                     ...state.applicationState,
                     currentSituationID: (!!state.states.find(situation => situation.id === currentSituationID)) ?
                         currentSituationID : state.states[0].id,    // If situation does not exist just go to the first situation in the list
-                    showFirstSituationWindow: false,
+                    showFirstSituationInformation: false,
                     lastSituationID: state.applicationState.currentSituationID
                 }
             }
@@ -157,7 +157,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
                     ...state.applicationState,
                     selectedElement: selectedElement,
                     hasAlreadySelectedAnElement: true,
-                    showFirstSituationWindow: false,
+                    showFirstSituationInformation: false,
                     clickedPlane: selectedElement === "" ? undefined : clickedPlane
                 }
             }
@@ -174,7 +174,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
                 ...state,
                 applicationState: {
                     ...state.applicationState,
-                    showFirstSituationWindow: true
+                    showFirstSituationInformation: true
                 }
             }
         })
@@ -261,7 +261,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
                 ...state,
                 applicationState: {
                     ...state.applicationState,
-                    showSituationNamingWindow: isVisible
+                    showSituationNamingModal: isVisible
                 }
             }
         })
@@ -355,7 +355,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
                 ...state,
                 applicationState: {
                     ...state.applicationState,
-                    showTimeBasedTransitionWindow: isVisible
+                    showTimeBasedTransitionModal: isVisible
                 }
             }
         })
@@ -445,6 +445,18 @@ export default class AppProvider extends React.Component<{}, ContextState> {
             default:
                 return
         }
+    }
+
+    setNewElementTypeModalVisibility( isVisible: boolean) {
+        this.setState((state: ContextState) => {
+            return {
+                ...state,
+                applicationState: {
+                    ...state.applicationState,
+                    showNewElementTypeModal: isVisible
+                }
+            }
+        })
     }
 
     //================= LIGHT METHODS =============================
@@ -661,6 +673,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
             setCurrentSituation: this.setCurrentSituation.bind(this),
             setLightColor: this.setLightColor.bind(this),
             setLightEmission: this.setLightEmission.bind(this),
+            setNewElementTypeModalVisibility: this.setNewElementTypeModalVisibility.bind(this),
             setScreenImage: this.setScreenImage.bind(this),
             setScreenPlane: this.setScreenPlane.bind(this),
             setScreenResolution: this.setScreenResolution.bind(this),

@@ -1,7 +1,14 @@
 import React from 'react'
 import { MDBIcon, MDBBtn } from 'mdbreact'
 
-export default function ButtonChooseTransition(props) {
+// Type for props
+type PropsType = {
+    newSituationButtonClicked: () => void,
+    existingSituationButtonClicked: () => void
+    existingSituationButtonDisabled: boolean
+}
+
+export default function ButtonChooseTransition(props: PropsType) {
     return <>
         <div>Pushing a button leads to a new situation, e.g. lights turned on or off.<br />
             Where should this button lead to?</div>

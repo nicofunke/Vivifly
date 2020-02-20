@@ -10,9 +10,10 @@ export interface ApplicationState {
     hasAlreadySelectedAnElement: boolean,       // if the user has already clicked on an element in this situation
     nextSituationID: number,                    // in order to give new situations a unique ID
     isCurrentlyUploading: boolean,              // If the application currently uploads a model
-    showFirstSituationWindow: boolean,          // If the information for the first created situation should be visible
-    showSituationNamingWindow: boolean,         // If the window to choose a name for the situation should be visible
-    showTimeBasedTransitionWindow: boolean,     // If the window to create a time based transition should be visible
+    showFirstSituationInformation: boolean,     // If the information for the first created situation should be visible
+    showNewElementTypeModal: boolean,               // If the modal to add a new type to an element should be visible
+    showSituationNamingModal: boolean,          // If the modal to choose a name for the situation should be visible
+    showTimeBasedTransitionModal: boolean,      // If the modal to create a time based transition should be visible
     modelWasUploaded: boolean,                  // If a model was already uploaded
     planeSelectionElementName: string | null,   // Current element for plane selection for screens ( or null if plane selection is not active )
     clickedPlane: Vector3 | undefined,          // Stores the normal vector of the plane of the selected element the user clicked on on
@@ -29,9 +30,10 @@ export const APPLICATION_STATE_DEFAULT: ApplicationState = {
     hasAlreadySelectedAnElement: false,
     nextSituationID: 1,
     isCurrentlyUploading: false,
-    showFirstSituationWindow: false,
-    showSituationNamingWindow: false,
-    showTimeBasedTransitionWindow: false,
+    showFirstSituationInformation: false,
+    showNewElementTypeModal: false,
+    showSituationNamingModal: false,
+    showTimeBasedTransitionModal: false,
     modelWasUploaded: true,
     planeSelectionElementName: null,
     clickedPlane: undefined,
