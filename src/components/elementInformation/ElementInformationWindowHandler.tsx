@@ -45,6 +45,17 @@ export default class ElementInformationWindowHandler extends Component {
         </>
     }
 
+    /**
+     * Removes all type of effects from the current element
+     */
+    removeAllElementTypes(){
+        const element = this.context.applicationState.selectedElement
+        const types = ContextUtils.getElementTypes(element, this.context)
+        types.forEach(type => {
+            this.context.removeElementType(element, type)
+        })
+    }
+
     render() {
         if (!this.context.applicationState.selectedElement || this.context.applicationState.selectedElement === "") {
             return null
@@ -57,7 +68,8 @@ export default class ElementInformationWindowHandler extends Component {
                         <MDBCardBody className="pb-1">
                             <ElementInformationHeader
                                 title={this.context.applicationState.selectedElement}
-                                onClose={() => this.context.setSelectedElement("", undefined)} />
+                                onClose={() => this.context.setSelectedElement("", undefined)}
+                                removeAllEffects={this.removeAllElementTypes.bind(this)} />
                         </MDBCardBody>
                     </div>
                     <MDBCardBody>
