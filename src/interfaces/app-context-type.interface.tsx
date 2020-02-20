@@ -32,7 +32,7 @@ export interface AppContextType {
     showFirstSituationInformationWindow: () => void,
     setCurrentSituation: (currentSituationID: number) => void,
     setLightColor: (element: string, color: Color) => void,
-    setNewElementTypeModalVisibility: ( isVisible: boolean) => void,
+    setNewElementTypeModalVisibility: (isVisible: boolean) => void,
     setScreenImage: (element: string, situationID: number, imageFile: File) => void,
     setScreenPlane: (planeSelectionElement: string, plane: Vector3) => void,
     setScreenResolution: (element: string, resolution: Vector2) => void,
@@ -43,5 +43,5 @@ export interface AppContextType {
     setTimeBasedTransitionModalVisibility: (isVisible: boolean) => void,
     setButtonTransition: (sourceSituationID: number, destinationSituationID: number | undefined, button: string) => void,
     setUnityLoadingProgress: (progress: number) => void,
-    startPlaneSelection: (element: string) => void
+    setPlaneSelectionMode: (element: string, active: boolean) => void
 }

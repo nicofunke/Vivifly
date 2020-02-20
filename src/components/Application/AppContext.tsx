@@ -32,7 +32,7 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     setCurrentSituation: (currentSituationID: number) => { },
     setLightColor: (element: string, color: Color) => { },
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => { },
-    setNewElementTypeModalVisibility: ( isVisible: boolean) => {},
+    setNewElementTypeModalVisibility: (isVisible: boolean) => { },
     setScreenImage: (element: string, situationID: number, imageFile: File) => { },
     setScreenPlane: (planeSelectionElement: string, plane: Vector3) => { },
     setScreenResolution: (element: string, resolution: Vector2) => { },
@@ -42,7 +42,7 @@ export const APP_CONTEXT_DEFAULT: AppContextType = {
     setTimeBasedTransitionModalVisibility: (isVisible: boolean) => { },
     setButtonTransition: (sourceSituationID: number, destinationSituationID: number | undefined, button: string) => { },
     setUnityLoadingProgress: (progress: number) => { },
-    startPlaneSelection: (element: string) => { }
+    setPlaneSelectionMode: (element: string | undefined, active: boolean) => { }
 }
 
 /**

@@ -20,9 +20,13 @@ export default class ElementCardHandler extends Component {
     context = APP_CONTEXT_DEFAULT
 
     /**
-     * Gets called when escape is pressed. Sets the currently selected element to none
+     * Closes the element card. Sets the currently selected element to none. 
+     * Stops plane selection mode if it is currently active
      */
-    onEscape() {
+    closeElementCard() {
+        if(!!this.context.applicationState.planeSelectionElementName){
+            this.context.setPlaneSelectionMode(this.context.applicationState.selectedElement, false)
+        }
         this.context.setSelectedElement("", undefined)
     }
 
@@ -65,14 +69,14 @@ export default class ElementCardHandler extends Component {
             return null
         }
         return <>
-            <KeyListener onEsc={this.onEscape.bind(this)} />
+            <KeyListener onEsc={this.closeElementCard.bind(this)} />
             <div className="window-upper-right">
                 <MDBCard>
                     <div className="primary-color-dark text-white">
                         <MDBCardBody className="pb-1">
                             <ElementCardHeader
                                 title={this.context.applicationState.selectedElement}
-                                onClose={() => this.context.setSelectedElement("", undefined)}
+                                onClose={this.closeElementCard.bind(this)}
                                 removeAllEffects={this.removeAllElementTypes.bind(this)}
                                 addEffect={() => this.context.setNewElementTypeModalVisibility(true)} />
                         </MDBCardBody>

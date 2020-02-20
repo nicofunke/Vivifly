@@ -2,6 +2,7 @@ import React from 'react'
 import { MDBIcon } from 'mdbreact'
 import ReactTooltip from 'react-tooltip'
 
+// Type for props
 type propsType = {
     title: string,
     onClose: () => void,
@@ -9,8 +10,10 @@ type propsType = {
     addEffect: () => void
 }
 
-// TODO: 1 Add new effect
-
+/**
+ * Component for the element card header. Displays the name and some option buttons 
+ * @param props 
+ */
 export default function ElementCardHeader(props: propsType) {
     return <>
         <div className="row">

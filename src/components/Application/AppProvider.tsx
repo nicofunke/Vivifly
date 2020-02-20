@@ -26,7 +26,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
     state: ContextState = {
         interactionElements: [],
         states: [{ Name: "Start", id: 0 }],
-        transitions: [{DestinationStateID: 0, SourceStateID:0, Timeout: 12}],
+        transitions: [{ DestinationStateID: 0, SourceStateID: 0, Timeout: 12 }],
         visualizationElements: [],
         applicationState: APPLICATION_STATE_DEFAULT,
         unityWrapper: new UnityWrapper(             // Current UnityWrapper object
@@ -49,13 +49,15 @@ export default class AppProvider extends React.Component<{}, ContextState> {
     unityObjectClicked(clickedElement: string, clickedPlane: Vector3): void {
         const planeSelectionElement = this.state.applicationState.planeSelectionElementName
         if (!!planeSelectionElement) {
-            // Plane selection active -> deactivate
-            this.endPlaneSelection()
+            // Plane selection active 
             if (clickedElement === planeSelectionElement) {
-                // Plane was chosen -> store normal vector and return (in order to not change the selected element)
+                // Plane was chosen 
+                this.setPlaneSelectionMode(planeSelectionElement, false, false)
                 this.setScreenPlane(planeSelectionElement, clickedPlane)
                 return
             }
+            // No plane chosen 
+            this.setPlaneSelectionMode(planeSelectionElement, false)
         }
         // Change selected element
         if (clickedElement === this.state.applicationState.selectedElement) {
@@ -66,7 +68,6 @@ export default class AppProvider extends React.Component<{}, ContextState> {
 
     /**
      * Updates the value of the unity loading progression. 
-     * 
      * @param progress      value from 0-1
      */
     setUnityLoadingProgress(progress: number) {
@@ -90,10 +91,14 @@ export default class AppProvider extends React.Component<{}, ContextState> {
     //============== Session specific methods =========================
     /**
     * Changes the currently selected situation
-    *
+    * // TODO: Update only if new situation
     * @param currentSituationID     id of the situation that should be selected
     */
     setCurrentSituation(currentSituationID: number) {
+        // Stop if this situation is already currently displayed
+        if(currentSituationID === this.state.applicationState.currentSituationID){
+            return
+        }
         // Change state
         this.setState((state: ContextState) => {
             return {
@@ -132,6 +137,11 @@ export default class AppProvider extends React.Component<{}, ContextState> {
         }
         // Restore outline of selected element
         this.state.unityWrapper?.outlineElement(this.state.applicationState.selectedElement, OUTLINE_COLOR_RED)
+        // Stop plane selection mode if currently active
+        const planeSelectionElement = this.state.applicationState.planeSelectionElementName
+        if(!!planeSelectionElement){
+            this.setPlaneSelectionMode(planeSelectionElement, false)
+        }
     }
 
     /**
@@ -336,11 +346,11 @@ export default class AppProvider extends React.Component<{}, ContextState> {
      * Removes a time-based transition
      * @param sourceSituationID source situation of the time-based transition
      */
-    removeTimeBasedTransition(sourceSituationID: number){
-        this.setState( state => {
-            return{
-            ...state,
-            transitions: state.transitions.filter( transition => transition.SourceStateID !== sourceSituationID || !transition.Timeout )
+    removeTimeBasedTransition(sourceSituationID: number) {
+        this.setState(state => {
+            return {
+                ...state,
+                transitions: state.transitions.filter(transition => transition.SourceStateID !== sourceSituationID || !transition.Timeout)
             }
         })
     }
@@ -447,7 +457,11 @@ export default class AppProvider extends React.Component<{}, ContextState> {
         }
     }
 
-    setNewElementTypeModalVisibility( isVisible: boolean) {
+    /**
+     * Changes if the modal to choose a new element type is visible
+     * @param isVisible If the modal should be currently visible
+     */
+    setNewElementTypeModalVisibility(isVisible: boolean) {
         this.setState((state: ContextState) => {
             return {
                 ...state,
@@ -539,26 +553,33 @@ export default class AppProvider extends React.Component<{}, ContextState> {
 
     // ================= SCREEN METHODS =====================
     /**
-     * Activates the plane selection mode to choose a display plane for a screen element
-     * @param {string} element Name of the screen element to choose the display plane for
+     * Activates or deactivates the plane selection mode to choose a display plane for a screen element
+     * @param element Name of the screen element to choose the display plane for
+     * @param active If the mode should be activated or not
+     * @param updateWebGL If the WebGL should be updated during the method ( default: true)
      */
-    startPlaneSelection(element: string) {
-        // Store the selection element in the current state
+    setPlaneSelectionMode(element: string , active: boolean, updateWebGL = true) {
+        // Change state
         this.setState((state: ContextState) => {
-            return { ...state, applicationState: { ...state.applicationState, planeSelectionElementName: element } }
+            return { ...state, applicationState: { ...state.applicationState, planeSelectionElementName: active ? element : undefined } }
         })
-        // Activate hover effect
-        this.state.unityWrapper?.activatePlaneHoverEffect(element)
-    }
+        if (active && !!element) {
+            // Activate hover effect
+            this.state.unityWrapper?.activatePlaneHoverEffect(element)
+        } else {
+            // Deactivate hover effect and update WebGL
+            this.state.unityWrapper?.deActivatePlaneHoverEffect()
+            const visualizationElement = this.state.visualizationElements.find(visualizationElement =>
+                (visualizationElement.Name === element && visualizationElement.Type === ELEMENT_TYPE_SCREEN))
+            const image = ContextUtils.getScreenImage(element, this.state.applicationState.currentSituationID, this.state)
+            console.log(updateWebGL)
+            if( updateWebGL && !!visualizationElement && !!image){
+                console.log("update")
+                this.state.unityWrapper?.addScreenEffect(visualizationElement, image)
+            }
 
-    /**
-     * Deactivates the plane selection mode
-     */
-    endPlaneSelection() {
-        this.setState((state: ContextState) => {
-            return { ...state, applicationState: { ...state.applicationState, planeSelectionElementName: null } }
-        })
-        this.state.unityWrapper?.deActivatePlaneHoverEffect()
+        }
+
     }
 
     /**
@@ -567,11 +588,18 @@ export default class AppProvider extends React.Component<{}, ContextState> {
      * @param  plane               new plane normal vector value
      */
     setScreenPlane(planeSelectionElement: string, plane: Vector3) {
+        // Change state
         this.setState((state: ContextState) => {
             return {
                 ...state, visualizationElements: state.visualizationElements.map(visualizationElement => {
                     if (visualizationElement.Name === planeSelectionElement && visualizationElement.Type === "Screen") {
-                        return { ...visualizationElement, Plane: plane }
+                        const newVisualizationElement = { ...visualizationElement, Plane: plane }
+                        // Update WebGL
+                        const image = ContextUtils.getScreenImage(planeSelectionElement, this.state.applicationState.currentSituationID, this.state)
+                        if (!!image) {
+                            this.state.unityWrapper?.addScreenEffect(newVisualizationElement, image)
+                        }
+                        return newVisualizationElement
                     }
                     return visualizationElement
                 })
@@ -682,7 +710,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
             setTimeBasedTransition: this.setTimeBasedTransition.bind(this),
             setTimeBasedTransitionModalVisibility: this.setTimeBasedTransitionModalVisibility.bind(this),
             setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this),
-            startPlaneSelection: this.startPlaneSelection.bind(this)
+            setPlaneSelectionMode: this.setPlaneSelectionMode.bind(this)
 
         }}>
             {this.props.children}
