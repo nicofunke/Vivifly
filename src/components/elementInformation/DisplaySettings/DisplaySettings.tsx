@@ -34,7 +34,7 @@ export default class DisplaySettings extends Component {
      * Handles newly selected files. Stores the file and sets the screen resolution if no resolution was set yet
      * @param image New image file
      */
-    handleNewImage(image: File) {
+    handleNewImage(image: File | undefined) {
         // Store file
         this.context.setScreenImage(
             this.context.applicationState.selectedElement,
@@ -45,7 +45,7 @@ export default class DisplaySettings extends Component {
         const visualizationElement = this.context.visualizationElements.find(
             (visualizationElement: VisualizationElement) => visualizationElement.Name === this.context.applicationState.selectedElement
         )
-        if (!visualizationElement || !visualizationElement.Resolution) {
+        if (!!image && (!visualizationElement || !visualizationElement.Resolution)) {
             this.saveResolution(image)
         }
     }
@@ -84,7 +84,7 @@ export default class DisplaySettings extends Component {
                                 stopPlaneSelectionMode={() => this.context.setPlaneSelectionMode(element, false)} />
                             :
                             <DisplayStandardSettings
-                                handleNewImage={this.handleNewImage.bind(this)}
+                                setImage={this.handleNewImage.bind(this)}
                                 removeElementType={() => this.context.removeElementType(element, ELEMENT_TYPE_SCREEN)}
                                 currentImage={currentImage}
                                 startPlaneSelection={() => this.context.setPlaneSelectionMode(element, true)}

@@ -628,7 +628,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
      * @param situationID       Id of the situation
      * @param imageFile         Image file that should be displayed
      */
-    setScreenImage(element: string, situationID: number, imageFile: File) {
+    setScreenImage(element: string, situationID: number, imageFile: File | undefined) {
         // Check if element is a screen element
         if (!ContextUtils.elementHasType(element, ELEMENT_TYPE_SCREEN, this.state)) {
             return
@@ -670,7 +670,11 @@ export default class AppProvider extends React.Component<{}, ContextState> {
                 (visualizationElement: VisualizationElement) => visualizationElement.Name === element && visualizationElement.Type === ELEMENT_TYPE_SCREEN
             )
             if (!!visualizationElement) {
-                this.state.unityWrapper?.addScreenEffect(visualizationElement, imageFile)
+                if(!!imageFile){
+                    this.state.unityWrapper?.addScreenEffect(visualizationElement, imageFile)
+                } else {
+                    this.state.unityWrapper?.removeScreenEffect(visualizationElement.Name)
+                }
             }
         }
     }

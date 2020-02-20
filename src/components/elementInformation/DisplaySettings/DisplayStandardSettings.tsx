@@ -7,11 +7,9 @@ import DisplayImageUploader from './DisplayImageUploader'
 type PropsType = {
     startPlaneSelection: () => void,
     removeElementType: () => void,
-    handleNewImage: (image: File) => void,
+    setImage: (image: File | undefined) => void,
     currentImage: File | undefined
 }
-
-// TODO: 1 Remove current image button
 
 /**
  * Standard settings that get displayed for screen elements.
@@ -43,8 +41,15 @@ export default class DisplayStandardSettings extends React.Component<PropsType> 
                 <div>A display can show different images on its surface, dependent on the situation</div>
                 <div className="mt-2">
                     <DisplayImageUploader
-                        handleNewImage={this.props.handleNewImage}
+                        handleNewImage={this.props.setImage}
                         currentImage={this.props.currentImage} />
+                    {!!this.props.currentImage &&
+                        <button type="button"
+                            className="btn btn-link btn-sm p-0 text-default"
+                            onClick={() => this.props.setImage(undefined)}>
+                            <MDBIcon far icon="eye-slash" />
+                            Remove current image
+                        </button>}
                 </div>
             </div>
         </>
