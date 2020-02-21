@@ -3,6 +3,7 @@
 - Unity WebGL only for feedback, without any logic 
   - React handles the logical part, with its 
 - see architecture sketches
+- In order to click elements every child gets meshcollider
 - Using light function from Vivian
 - Integrating WebGL in React with library
 - Uploading model by converting file to string

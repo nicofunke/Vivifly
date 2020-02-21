@@ -8,7 +8,7 @@ import { ELEMENT_TYPE_SCREEN } from '../../../types/element-type.type'
 import DisplayStandardSettings from './DisplayStandardSettings'
 import DisplaySettingsPlaneSelection from './DisplaySettingsPlaneSelection'
 
-// TODO: 2 Rename display to screen everywhere
+// TODO: (UX) Rename display to screen everywhere
 /**
  * Settings for the display effect of an element
  */

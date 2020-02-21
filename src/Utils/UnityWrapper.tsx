@@ -178,7 +178,7 @@ export class UnityWrapper {
                 const params = {
                     element: visualizationElement.Name,
                     imageBase64: event.target?.result?.split(',')[1],       // cut off data type
-                    // TODO: 2 use correct resolution values
+                    // TODO: (prio) use correct resolution values
                     planeX: visualizationElement.Plane?.x,
                     planeY: visualizationElement.Plane?.y,
                     planeZ: visualizationElement.Plane?.z

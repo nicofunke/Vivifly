@@ -9,6 +9,7 @@ import { ContextUtils } from '../../Utils/ContextUtils'
 import ElementCardHeader from './ElementCardHeader'
 import KeyListener from '../core/KeyListener'
 
+// TODO: (optional) Drag and drop
 /**
  * Handler component for the element card. 
  * Displays the appropriate element cards for the currently selected element

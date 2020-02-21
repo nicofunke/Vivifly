@@ -18,6 +18,7 @@ public class ModelUploader : MonoBehaviour {
     void Start() {
         // DEBUG: Upload CoffeeMachine on start
         // this.UploadURLObject("https://user.informatik.uni-goettingen.de/~nico.funke/CoffeeMakerCord_OBJ.obj");
+        // this.UploadLocalObject("C:\\Users\\Nico\\Documents\\Masterarbeit\\Vivifly\\Vivifly_unity\\Assets\\example_models\\Coffee_obj\\Coffee.obj");
     }
 
     // Adds a MeshCollider to all child GameObject
@@ -82,7 +83,7 @@ public class ModelUploader : MonoBehaviour {
     public void UploadFromString(string fileContent) {
         byte[] byteArray = Encoding.ASCII.GetBytes(fileContent);
         MemoryStream stream = new MemoryStream(byteArray);
-        var loadedObject = new OBJLoader().Load(stream);
+        GameObject loadedObject = new OBJLoader().Load(stream);
         loadedObject.transform.SetParent(this.transform);
         this.AddColliderToChildren();
     }
