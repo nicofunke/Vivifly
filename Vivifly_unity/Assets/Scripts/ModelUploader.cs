@@ -34,10 +34,13 @@ public class ModelUploader : MonoBehaviour {
     /// </summary>
     public void StartTriLibUpload() {
         using (var assetLoader = new AssetLoader()) {
+            var assetLoaderOptions = AssetLoaderOptions.CreateInstance();
+            // Scale down model, since trilib loads it way too big
+            assetLoaderOptions.Scale = 0.01f;
+            assetLoaderOptions.UseOriginalPositionRotationAndScale = true;
             var data = this.GetBrowserFileData(0);
             var name = this.GetBrowserFileName(0);
-            Debug.Log(name);
-            var myGameObject = assetLoader.LoadFromMemory(data, name, null, this.gameObject);
+            var myGameObject = assetLoader.LoadFromMemory(data, name, assetLoaderOptions, this.gameObject);
             this.AddColliderToChildren();
         }
     }

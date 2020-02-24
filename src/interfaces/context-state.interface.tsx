@@ -1,4 +1,4 @@
-import { InterActionElement } from './interaction-element.interface'
+import { InteractionElement } from './interaction-element.interface'
 import { State } from './state.interface';
 import { Transition } from './transition.interface';
 import { UnityWrapper } from '../Utils/UnityWrapper';
@@ -9,7 +9,7 @@ import { VisualizationElement } from './visualization-element.interface';
  * Interface to store all context variables such as the Vivian state machine and all current application variables
  */
 export interface ContextState {
-        interactionElements: InterActionElement[],
+        interactionElements: InteractionElement[],
         states: State[],
         transitions: Transition[],
         visualizationElements: VisualizationElement[],

@@ -6,9 +6,7 @@ import { State } from '../interfaces/state.interface';
 import { VisualizationValue } from '../interfaces/visualization-value.interface'
 import { VISUALIZATION_TYPE_SCREEN } from '../types/visualization-type.type'
 import { VisualizationElement } from '../interfaces/visualization-element.interface';
-import { InterActionElement } from '../interfaces/interaction-element.interface';
-
-// TODO: (code) Rename interAction to interaction 
+import { InteractionElement } from '../interfaces/interaction-element.interface';
 
 /**
  * Utils class with static helper functions to work with the application state(context)
@@ -18,14 +16,14 @@ export class ContextUtils {
     /**
      * Returns an array with the types (Button, Light, ...) of the given element
      * @param element                   Name of the element
-     * @param interActionElements       Current interActionElements
+     * @param interactionElements       Current interactionElements
      * @param visualizationElements     Current visualizationElements
      */
     static getElementTypes(element: string,
-        interActionElements: InterActionElement[], visualizationElements: VisualizationElement[]): ElementType[] {
+        interactionElements: InteractionElement[], visualizationElements: VisualizationElement[]): ElementType[] {
 
         let elementTypes: ElementType[] = []
-        for (const interactionElement of interActionElements) {
+        for (const interactionElement of interactionElements) {
             if (interactionElement.Name === element) {
                 elementTypes.push(interactionElement.Type)
             }
@@ -138,8 +136,8 @@ export class ContextUtils {
         // Interaction elements
         if (type === ELEMENT_TYPE_BUTTON) {
             return !!context.interactionElements.find(
-                (interActionElement: InterActionElement) => (
-                    interActionElement.Name === element && interActionElement.Type === type
+                (interactionElement: InteractionElement) => (
+                    interactionElement.Name === element && interactionElement.Type === type
                 )
             )
         }

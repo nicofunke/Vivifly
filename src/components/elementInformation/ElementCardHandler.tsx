@@ -9,7 +9,7 @@ import ElementCardHeader from './ElementCardHeader'
 import KeyListener from '../core/KeyListener'
 import { Actions } from '../../interfaces/actions.interface'
 import { VisualizationElement } from '../../interfaces/visualization-element.interface'
-import { InterActionElement } from '../../interfaces/interaction-element.interface'
+import { InteractionElement } from '../../interfaces/interaction-element.interface'
 import { Transition } from '../../interfaces/transition.interface'
 import { State } from '../../interfaces/state.interface'
 import { Vector3 } from '../../interfaces/vector3.interface'
@@ -19,7 +19,7 @@ type PropsType = {
     element: string,
     planeSelectionElementName?: string,
     visualizationElements: VisualizationElement[],
-    interactionElements: InterActionElement[],
+    interactionElements: InteractionElement[],
     transitions: Transition[],
     states: State[],
     currentSituationID: number,

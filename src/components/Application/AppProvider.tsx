@@ -12,10 +12,10 @@ import { VisualizationElement } from '../../interfaces/visualization-element.int
 import { OUTLINE_COLOR_RED } from '../../types/outline-color.type'
 import { Vector2 } from '../../interfaces/vector2.interface'
 import { Color } from '../../interfaces/color.interface'
-import { InterActionElement } from '../../interfaces/interaction-element.interface'
+import { InteractionElement } from '../../interfaces/interaction-element.interface'
 import { AppContext } from '../../interfaces/app-context.interface'
-import { Actions } from '../../interfaces/actions.interface';
-import ViewContainer from './ViewContainer';
+import { Actions } from '../../interfaces/actions.interface'
+import ViewContainer from './ViewContainer'
 
 // TODO: ERROR404 remove
 
@@ -413,7 +413,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
     addElementType(element: string, type: ElementType) {
         switch (type) {
             case ELEMENT_TYPE_BUTTON:
-                const newInteractionElement: InterActionElement = { Name: element, Type: type }
+                const newInteractionElement: InteractionElement = { Name: element, Type: type }
                 this.setState((state: ContextState) => { return { ...state, interactionElements: [...state.interactionElements, newInteractionElement] } })
                 break
             case ELEMENT_TYPE_SCREEN:

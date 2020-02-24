@@ -1,5 +1,5 @@
 import { ApplicationState, APPLICATION_STATE_DEFAULT } from './application-state.interface'
-import { InterActionElement } from './interaction-element.interface'
+import { InteractionElement } from './interaction-element.interface'
 import { State } from './state.interface'
 import { Transition } from './transition.interface'
 import { UnityWrapper } from '../Utils/UnityWrapper'
@@ -10,7 +10,7 @@ import { VisualizationElement } from './visualization-element.interface'
 */
 export interface AppContext {
     applicationState: ApplicationState,
-    interactionElements: InterActionElement[],
+    interactionElements: InteractionElement[],
     states: State[],
     transitions: Transition[],
     unityWrapper?: UnityWrapper,

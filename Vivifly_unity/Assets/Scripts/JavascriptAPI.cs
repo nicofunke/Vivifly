@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System.IO;
+using TriLib;
 
 /**
  * Class to handle JSON coloring requests from Javascript
@@ -60,28 +61,6 @@ public class JavascriptAPI : MonoBehaviour {
         screensController = viviflyCore.GetComponent<ScreensController>();
         cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
         mouseController = viviflyCore.GetComponent<MouseController>();
-
-        // DEBUG ====================
-        //string objString = File.ReadAllText("C:\\Users\\Nico\\Desktop\\object.txt");
-        //this.UploadStringObject(objString);
-        // this.UploadURLObject("https://user.informatik.uni-goettingen.de/~nico.funke/CoffeeMakerCord_OBJ.obj");
-
-        //this.activatePlaneHoverEffect("Cubey");
-        //this.deactivatePlaneHoverEffect();
-        /*string filepathBase64 = "C:\\Users\\Nico\\Desktop\\imageBase64.txt";
-        string stringBase64 = File.ReadAllText(filepathBase64);
-        string screenJSON1 = "{\"element\": \"Cube1\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 0.0, \"planeY\": 0.0, \"planeZ\": 1.0 }";
-        string screenJSON2 = "{\"element\": \"Cube2\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 0.0, \"planeY\": 1.0, \"planeZ\": 0.0 }";
-        string screenJSON3 = "{\"element\": \"Cube3\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 1.0, \"planeY\": 0.0, \"planeZ\": 0.0 }";
-        string screenJSON4 = "{\"element\": \"Cube4\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 0.0, \"planeY\": 0.0, \"planeZ\": -1.0 }";
-        string screenJSON5 = "{\"element\": \"Cube5\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": 0.0, \"planeY\": -1.0, \"planeZ\": 0.0 }";
-        string screenJSON6 = "{\"element\": \"Cube6\", \"imageBase64\": \"" + stringBase64 + "\", \"planeX\": -1.0, \"planeY\": 0.0, \"planeZ\": 0.0 }";
-        this.DisplayImage(screenJSON1);
-        this.DisplayImage(screenJSON2);
-        this.DisplayImage(screenJSON3);
-        this.DisplayImage(screenJSON4);
-        this.DisplayImage(screenJSON5);
-        this.DisplayImage(screenJSON6);*/
     }
 
     // Tries to find an object by its name and throws error to javascript otherwise
