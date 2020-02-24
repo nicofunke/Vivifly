@@ -1,28 +1,12 @@
-import { ApplicationState } from './application-state.interface'
-import { InterActionElement } from './interaction-element.interface'
-import { State } from './state.interface'
-import { Transition } from './transition.interface'
-import { UnityWrapper } from '../Utils/UnityWrapper'
-import { VisualizationElement } from './visualization-element.interface'
 import { Vector3 } from './vector3.interface'
 import { Vector2 } from './vector2.interface'
 import { Color } from './color.interface'
 import { ElementType } from '../types/element-type.type'
 
 /**
-* Interface to type the AppContext
-*/
-export interface AppContextType {
-
-    // Context variables
-    applicationState: ApplicationState,
-    interactionElements: InterActionElement[],
-    states: State[],
-    transitions: Transition[],
-    unityWrapper?: UnityWrapper,
-    visualizationElements: VisualizationElement[],
-
-    // Methods
+ * Interface that holds all actions for the current appcontext
+ */
+export interface Actions {
     addElementType: (element: string, type: ElementType) => void,
     createNewSituation: (newSituationName: string) => number,
     removeElementType: (element: string, type: string) => void,
@@ -44,4 +28,31 @@ export interface AppContextType {
     setButtonTransition: (sourceSituationID: number, destinationSituationID: number | undefined, button: string) => void,
     setUnityLoadingProgress: (progress: number) => void,
     setPlaneSelectionMode: (element: string, active: boolean) => void
+}
+
+/**
+ * Default (empty) action values
+ */
+export const ACTIONS_EMPTY: Actions = {
+    addElementType: (element: string, type: ElementType) => { },
+    createNewSituation: (newSituationName: string) => -1,
+    removeElementType: (element: string, type: string) => { },
+    removeSituation: (situationID: number) => { },
+    removeTimeBasedTransition: (sourceSituationID: number) => { },
+    renameSituation: (situationID: number, newSituationName: string) => { },
+    showFirstSituationInformationWindow: () => { },
+    setCurrentSituation: (currentSituationID: number) => { },
+    setLightColor: (element: string, color: Color) => { },
+    setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => { },
+    setNewElementTypeModalVisibility: (isVisible: boolean) => { },
+    setScreenImage: (element: string, situationID: number, imageFile: File | undefined) => { },
+    setScreenPlane: (planeSelectionElement: string, plane: Vector3) => { },
+    setScreenResolution: (element: string, resolution: Vector2) => { },
+    setSelectedElement: (selectedElement: string, clickedPlane: Vector3 | undefined) => { },
+    setRenamingModalSituation: (situationID: number | undefined) => { },
+    setTimeBasedTransition: (sourceSituationID: number, destinationSituationID: number, timeout: number) => { },
+    setTimeBasedTransitionModalVisibility: (isVisible: boolean) => { },
+    setButtonTransition: (sourceSituationID: number, destinationSituationID: number | undefined, button: string) => { },
+    setUnityLoadingProgress: (progress: number) => { },
+    setPlaneSelectionMode: (element: string | undefined, active: boolean) => { }
 }

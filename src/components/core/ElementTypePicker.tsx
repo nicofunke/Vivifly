@@ -1,7 +1,6 @@
 import React from 'react'
 import { MDBIcon } from 'mdbreact'
-import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext'
-import { ElementType, ELEMENT_TYPE_BUTTON, ELEMENT_TYPE_LIGHT, ELEMENT_TYPE_SCREEN } from '../../types/element-type.type';
+import { ElementType, ELEMENT_TYPE_BUTTON, ELEMENT_TYPE_LIGHT, ELEMENT_TYPE_SCREEN } from '../../types/element-type.type'
 
 type PropsType = {
     typeChosen: (type: ElementType) => void
@@ -11,11 +10,6 @@ type PropsType = {
  * Component that displays buttons for each element type
  */
 export default class ElementTypePicker extends React.Component<PropsType> {
-
-    // Import context
-    static contextType = AppContext
-    context = APP_CONTEXT_DEFAULT
-
     render() {
         return <>
             <div className="row">

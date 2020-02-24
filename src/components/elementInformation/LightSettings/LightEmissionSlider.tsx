@@ -8,6 +8,9 @@ type PropsType = {
     alphaChanged: (alpha: number) => void
 }
 
+/**
+ * Slider component to change the alpha value of a light
+ */
 export default class LightEmissionSlider extends React.Component<PropsType> {
 
     /**

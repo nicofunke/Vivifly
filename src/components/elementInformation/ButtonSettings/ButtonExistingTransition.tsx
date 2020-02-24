@@ -13,6 +13,9 @@ type PropsType = {
     transition: Transition
 }
 
+/**
+ * Settings to change the exsiting transition of a button 
+ */
 export default class ButtonExistingTransition extends React.Component<PropsType> {
 
     // TODO: (optional) Add goto situation button

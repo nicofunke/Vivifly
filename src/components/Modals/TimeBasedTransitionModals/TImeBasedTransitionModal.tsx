@@ -1,31 +1,34 @@
 import React from 'react'
 import Modal from '../Modal'
-import { AppContext, APP_CONTEXT_DEFAULT } from '../../Application/AppContext'
 import TBTInformation from './TBTInformation'
 import { Transition } from '../../../interfaces/transition.interface'
 import TBTTimeout from './TBTTimeout'
 import TBTDestination from './TBTDestination'
 import { ContextUtils } from '../../../Utils/ContextUtils'
 import TBTOverview from './TBTOverview'
+import { Actions } from '../../../interfaces/actions.interface'
+import { State } from '../../../interfaces/state.interface'
 
+type PropsType = {
+    transitions: Transition[],
+    currentSituationID: number,
+    actions: Actions,
+    states: State[]
+}
 /**
  * Modal to define a time-based transition
- * Displays the necessary modals to set all variables and halds the transition as state
+ * Displays the necessary modals to set all variables and stores the transition in state
  */
-export default class TimeBasedTransitionModal extends React.Component<{}, Transition> {
+export default class TimeBasedTransitionModal extends React.Component<PropsType, Transition> {
 
     state: Transition = {}
-
-    // Import AppContext
-    static contextType = AppContext
-    context = APP_CONTEXT_DEFAULT
 
     /**
      * Gets called when the component is mounted
      * Stores the existing transition to the components state
      */
     componentDidMount() {
-        const existingTransition = ContextUtils.getTimeBasedTransition(this.context.applicationState.currentSituationID, this.context)
+        const existingTransition = ContextUtils.getTimeBasedTransition(this.props.currentSituationID, this.props.transitions)
         if (!!existingTransition) {
             this.setState(existingTransition)
         }
@@ -59,7 +62,7 @@ export default class TimeBasedTransitionModal extends React.Component<{}, Transi
      * Cancels the time-based transition creation and closes the modal
      */
     cancel() {
-        this.context.setTimeBasedTransitionModalVisibility(false)
+        this.props.actions.setTimeBasedTransitionModalVisibility(false)
     }
 
     /**
@@ -69,24 +72,24 @@ export default class TimeBasedTransitionModal extends React.Component<{}, Transi
     saveDestinationAndClose(destinationStateID: number | "new") {
         // If destination == "new" create a new situation first
         if (destinationStateID === "new") {
-            destinationStateID = this.context.createNewSituation("")
-            this.context.setCurrentSituation(destinationStateID)
-            this.context.setRenamingModalSituation(destinationStateID)
+            destinationStateID = this.props.actions.createNewSituation("")
+            this.props.actions.setCurrentSituation(destinationStateID)
+            this.props.actions.setRenamingModalSituation(destinationStateID)
         }
         // Save transition and close the modal
         if ((!this.state.SourceStateID && this.state.SourceStateID !== 0) || !this.state.Timeout) {
             return
         }
-        this.context.setTimeBasedTransition(this.state.SourceStateID, destinationStateID, this.state.Timeout)
-        this.context.setTimeBasedTransitionModalVisibility(false)
+        this.props.actions.setTimeBasedTransition(this.state.SourceStateID, destinationStateID, this.state.Timeout)
+        this.props.actions.setTimeBasedTransitionModalVisibility(false)
     }
 
     /**
      * Removes the time-based transition globally and closes the modal
      */
     removeTransition(){
-        this.context.removeTimeBasedTransition(this.context.applicationState.currentSituationID)
-        this.context.setTimeBasedTransitionModalVisibility(false)
+        this.props.actions.removeTimeBasedTransition(this.props.currentSituationID)
+        this.props.actions.setTimeBasedTransitionModalVisibility(false)
     }
 
     /**
@@ -98,7 +101,7 @@ export default class TimeBasedTransitionModal extends React.Component<{}, Transi
         if (!this.state.SourceStateID && this.state.SourceStateID !== 0) {
             return <TBTInformation
                 cancel={this.cancel.bind(this)}
-                proceed={() => this.setSource(this.context.applicationState.currentSituationID)} />
+                proceed={() => this.setSource(this.props.currentSituationID)} />
         }
         // Timeout is not set => Show Timeout modal
         if (!this.state.Timeout && this.state.Timeout !== 0) {
@@ -111,14 +114,14 @@ export default class TimeBasedTransitionModal extends React.Component<{}, Transi
             return <TBTDestination
                 back={() => this.setTimeout(undefined)}
                 finish={this.saveDestinationAndClose.bind(this)}
-                states={this.context.states} />
+                states={this.props.states} />
         }
 
         // Everything is set => Show overview
         return <TBTOverview
             cancel={this.cancel.bind(this)}
-            finish={ this.saveDestinationAndClose.bind(this)}
-            states={this.context.states}
+            finish={this.saveDestinationAndClose.bind(this)}
+            states={this.props.states}
             transition={this.state}
             setTimeout={this.setTimeout.bind(this)} 
             removeTransition={this.removeTransition.bind(this)}/>

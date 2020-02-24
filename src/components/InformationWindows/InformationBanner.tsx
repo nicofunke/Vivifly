@@ -2,9 +2,9 @@ import React from 'react'
 import { MDBCard, MDBCardBody } from 'mdbreact';
 
 /**
- * Container class for information windows at the top center of the screen
+ * Container class for information banner at the top center of the screen
  */
-export default class InformationWindow extends React.Component {
+export default class InformationBanner extends React.Component {
     render() {
         return <>
             <div className="window-top-center popup-overlay">

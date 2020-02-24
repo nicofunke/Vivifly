@@ -1,6 +1,5 @@
 import React from 'react'
 import AppProvider from './components/Application/AppProvider'
-import ViewContainer from './components/Application/ViewContainer'
 
 // TODO: (optional) Warning: Not Supported on mobile devices
 // TODO: (performance) Change from Context API to props
@@ -11,9 +10,7 @@ import ViewContainer from './components/Application/ViewContainer'
 // TODO: (prio) Remove start situation warning
 
 function App() {
-  return <AppProvider>
-    <ViewContainer />
-  </AppProvider>
+  return <AppProvider/>
 }
 
 export default App

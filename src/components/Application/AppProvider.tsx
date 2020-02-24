@@ -1,5 +1,4 @@
 import React from 'react'
-import { AppContext } from './AppContext'
 import { UnityWrapper } from '../../Utils/UnityWrapper'
 import { ContextUtils } from '../../Utils/ContextUtils';
 import { ContextState } from '../../interfaces/context-state.interface';
@@ -13,17 +12,23 @@ import { VisualizationElement } from '../../interfaces/visualization-element.int
 import { OUTLINE_COLOR_RED } from '../../types/outline-color.type'
 import { Vector2 } from '../../interfaces/vector2.interface'
 import { Color } from '../../interfaces/color.interface'
-import { InterActionElement } from '../../interfaces/interaction-element.interface';
+import { InterActionElement } from '../../interfaces/interaction-element.interface'
+import { AppContext } from '../../interfaces/app-context.interface'
+import { Actions } from '../../interfaces/actions.interface';
+import ViewContainer from './ViewContainer';
+
+// TODO: ERROR404 remove
 
 /**
- * Provides the context AppContext for the whole application
+ * Provides AppContext and Actions
  */
-export default class AppProvider extends React.Component<{}, ContextState> {
+export default class AppProvider extends React.Component<{}, AppContext> {
 
     /**
      * Default state
      */
-    state: ContextState = {
+    state: AppContext = {
+
         interactionElements: [],
         states: [{ Name: "Start", id: 0 }],
         transitions: [{ DestinationStateID: 0, SourceStateID: 0, Timeout: 12 }],
@@ -35,6 +40,34 @@ export default class AppProvider extends React.Component<{}, ContextState> {
             this.uploadingStarted.bind(this),
             this.uploadingFinished.bind(this))
     }
+
+    /**
+     * Bind all methods to an Actions object
+     */
+    actions: Actions = {
+        setButtonTransition: this.setButtonTransition.bind(this),
+        addElementType: this.addElementType.bind(this),
+        createNewSituation: this.createNewSituation.bind(this),
+        removeElementType: this.removeElementType.bind(this),
+        removeSituation: this.removeSituation.bind(this),
+        removeTimeBasedTransition: this.removeTimeBasedTransition.bind(this),
+        renameSituation: this.renameSituation.bind(this),
+        showFirstSituationInformationWindow: this.showFirstSituationInformationWindow.bind(this),
+        setCurrentSituation: this.setCurrentSituation.bind(this),
+        setLightColor: this.setLightColor.bind(this),
+        setLightEmission: this.setLightEmission.bind(this),
+        setNewElementTypeModalVisibility: this.setNewElementTypeModalVisibility.bind(this),
+        setScreenImage: this.setScreenImage.bind(this),
+        setScreenPlane: this.setScreenPlane.bind(this),
+        setScreenResolution: this.setScreenResolution.bind(this),
+        setSelectedElement: this.setSelectedElement.bind(this),
+        setRenamingModalSituation: this.setRenamingModalSituation.bind(this),
+        setTimeBasedTransition: this.setTimeBasedTransition.bind(this),
+        setTimeBasedTransitionModalVisibility: this.setTimeBasedTransitionModalVisibility.bind(this),
+        setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this),
+        setPlaneSelectionMode: this.setPlaneSelectionMode.bind(this)
+    }
+
 
     // ============== WebGL/Unity methods ===========================
     /**
@@ -95,7 +128,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
     */
     setCurrentSituation(currentSituationID: number) {
         // Stop if this situation is already currently displayed
-        if(currentSituationID === this.state.applicationState.currentSituationID){
+        if (currentSituationID === this.state.applicationState.currentSituationID) {
             return
         }
         // Change state
@@ -117,7 +150,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
             for (const value of newSituation.Values) {
                 if (value.Type === VISUALIZATION_TYPE_FLOAT) {
                     // Add light effects
-                    const color = ContextUtils.getLightEmissionColor(value.VisualizationElement, this.state)
+                    const color = ContextUtils.getLightEmissionColor(value.VisualizationElement, this.state.visualizationElements)
                     if (!!color) {
                         this.state.unityWrapper?.setLightEffect(value.VisualizationElement, color.r, color.g, color.b, value.Value || 0.0)
                     }
@@ -138,7 +171,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
         this.state.unityWrapper?.outlineElement(this.state.applicationState.selectedElement, OUTLINE_COLOR_RED)
         // Stop plane selection mode if currently active
         const planeSelectionElement = this.state.applicationState.planeSelectionElementName
-        if(!!planeSelectionElement){
+        if (!!planeSelectionElement) {
             this.setPlaneSelectionMode(planeSelectionElement, false)
         }
     }
@@ -285,7 +318,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
      * @param button                    Name of the Button that triggers the transition
      */
     setButtonTransition(sourceSituationID: number, destinationSituationID: number | undefined, button: string) {
-        if (!ContextUtils.getButtonTransition(button, sourceSituationID, this.state)) {
+        if (!ContextUtils.getButtonTransition(button, sourceSituationID, this.state.transitions)) {
             // Add new transition
             const newTransition = {
                 SourceStateID: sourceSituationID,
@@ -317,7 +350,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
      * @param timeout                   Timeout in ms
      */
     setTimeBasedTransition(sourceSituationID: number, destinationSituationID: number, timeout: number) {
-        if (!ContextUtils.getTimeBasedTransition(sourceSituationID, this.state)) {
+        if (!ContextUtils.getTimeBasedTransition(sourceSituationID, this.state.transitions)) {
             // Add new transition
             const newTransition = {
                 SourceStateID: sourceSituationID,
@@ -497,7 +530,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
         })
 
         // Change color inside the current WebGL visualization if necessary
-        const emissionStrength = ContextUtils.getLightEmissionStrength(element, this.state.applicationState.currentSituationID, this.state)
+        const emissionStrength = ContextUtils.getLightEmissionStrength(element, this.state.applicationState.currentSituationID, this.state.states)
         if (!emissionStrength) {
             return
         }
@@ -543,7 +576,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
 
         // Change emission inside the current WebGL visualization if necessary
         if (emissionSituationID === this.state.applicationState.currentSituationID) {
-            const color = ContextUtils.getLightEmissionColor(element, this.state)
+            const color = ContextUtils.getLightEmissionColor(element, this.state.visualizationElements)
             if (!!color) {
                 this.state.unityWrapper?.setLightEffect(element, color.r, color.g, color.b, emissionStrength)
             }
@@ -557,7 +590,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
      * @param active If the mode should be activated or not
      * @param updateWebGL If the WebGL should be updated during the method ( default: true)
      */
-    setPlaneSelectionMode(element: string , active: boolean, updateWebGL = true) {
+    setPlaneSelectionMode(element: string, active: boolean, updateWebGL = true) {
         // Change state
         this.setState((state: ContextState) => {
             return { ...state, applicationState: { ...state.applicationState, planeSelectionElementName: active ? element : undefined } }
@@ -570,8 +603,8 @@ export default class AppProvider extends React.Component<{}, ContextState> {
             this.state.unityWrapper?.deActivatePlaneHoverEffect()
             const visualizationElement = this.state.visualizationElements.find(visualizationElement =>
                 (visualizationElement.Name === element && visualizationElement.Type === ELEMENT_TYPE_SCREEN))
-            const image = ContextUtils.getScreenImage(element, this.state.applicationState.currentSituationID, this.state)
-            if( updateWebGL && !!visualizationElement && !!image){
+            const image = ContextUtils.getScreenImage(element, this.state.applicationState.currentSituationID, this.state.states)
+            if (updateWebGL && !!visualizationElement && !!image) {
                 this.state.unityWrapper?.addScreenEffect(visualizationElement, image)
             }
 
@@ -592,7 +625,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
                     if (visualizationElement.Name === planeSelectionElement && visualizationElement.Type === "Screen") {
                         const newVisualizationElement = { ...visualizationElement, Plane: plane }
                         // Update WebGL
-                        const image = ContextUtils.getScreenImage(planeSelectionElement, this.state.applicationState.currentSituationID, this.state)
+                        const image = ContextUtils.getScreenImage(planeSelectionElement, this.state.applicationState.currentSituationID, this.state.states)
                         if (!!image) {
                             this.state.unityWrapper?.addScreenEffect(newVisualizationElement, image)
                         }
@@ -670,7 +703,7 @@ export default class AppProvider extends React.Component<{}, ContextState> {
                 (visualizationElement: VisualizationElement) => visualizationElement.Name === element && visualizationElement.Type === ELEMENT_TYPE_SCREEN
             )
             if (!!visualizationElement) {
-                if(!!imageFile){
+                if (!!imageFile) {
                     this.state.unityWrapper?.addScreenEffect(visualizationElement, imageFile)
                 } else {
                     this.state.unityWrapper?.removeScreenEffect(visualizationElement.Name)
@@ -683,39 +716,6 @@ export default class AppProvider extends React.Component<{}, ContextState> {
     //================= RENDER =============================
     // TODO: (performance) Bundle methods to 'Actions'
     render() {
-        return <AppContext.Provider value={{
-            applicationState: this.state.applicationState,
-            interactionElements: this.state.interactionElements,
-            states: this.state.states,
-            transitions: this.state.transitions,
-            unityWrapper: this.state.unityWrapper,
-            visualizationElements: this.state.visualizationElements,
-
-            setButtonTransition: this.setButtonTransition.bind(this),
-            addElementType: this.addElementType.bind(this),
-            createNewSituation: this.createNewSituation.bind(this),
-            removeElementType: this.removeElementType.bind(this),
-            removeSituation: this.removeSituation.bind(this),
-            removeTimeBasedTransition: this.removeTimeBasedTransition.bind(this),
-            renameSituation: this.renameSituation.bind(this),
-            showFirstSituationInformationWindow: this.showFirstSituationInformationWindow.bind(this),
-            setCurrentSituation: this.setCurrentSituation.bind(this),
-            setLightColor: this.setLightColor.bind(this),
-            setLightEmission: this.setLightEmission.bind(this),
-            setNewElementTypeModalVisibility: this.setNewElementTypeModalVisibility.bind(this),
-            setScreenImage: this.setScreenImage.bind(this),
-            setScreenPlane: this.setScreenPlane.bind(this),
-            setScreenResolution: this.setScreenResolution.bind(this),
-            setSelectedElement: this.setSelectedElement.bind(this),
-            setRenamingModalSituation: this.setRenamingModalSituation.bind(this),
-            setTimeBasedTransition: this.setTimeBasedTransition.bind(this),
-            setTimeBasedTransitionModalVisibility: this.setTimeBasedTransitionModalVisibility.bind(this),
-            setUnityLoadingProgress: this.setUnityLoadingProgress.bind(this),
-            setPlaneSelectionMode: this.setPlaneSelectionMode.bind(this)
-
-        }}>
-            {this.props.children}
-        </AppContext.Provider>
-
+        return <ViewContainer actions={this.actions} appContext={this.state} />
     }
 }

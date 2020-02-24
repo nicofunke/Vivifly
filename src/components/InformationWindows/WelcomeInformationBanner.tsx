@@ -1,11 +1,14 @@
 import React from 'react'
 import { MDBCardTitle, MDBCardText } from 'mdbreact'
-import InformationWindow from './InformationWindow'
+import InformationBanner from './InformationBanner'
 
-export default class WelcomeWindow extends React.Component {
+/**
+ * Information banner that is displayed after starting the app
+ */
+export default class WelcomeInformationBanner extends React.Component {
     render() {
         return <>
-            <InformationWindow>
+            <InformationBanner>
                 <div className="row align-items-center">
                     <div className="col-3">
                         <h1 className="display-4">
@@ -17,7 +20,7 @@ export default class WelcomeWindow extends React.Component {
                         <MDBCardText>Start by clicking on an element you want to add an effect to</MDBCardText>
                     </div>
                 </div>
-            </InformationWindow>
+            </InformationBanner>
         </>
     }
 }

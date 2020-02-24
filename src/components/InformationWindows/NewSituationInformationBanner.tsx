@@ -1,11 +1,14 @@
 import React from 'react'
 import { MDBCardTitle, MDBCardText } from 'mdbreact'
-import InformationWindow from './InformationWindow'
+import InformationBanner from './InformationBanner'
 
-export default class NewSituationInformation extends React.Component {
+/**
+ * Information banner that gets displayed after creating a new situation
+ */
+export default class NewSituationInformationBanner extends React.Component {
     render() {
         return <>
-            <InformationWindow>
+            <InformationBanner>
                 <div className="row align-items-center">
                     <div className="col-3">
                         <h1 className="display-4">
@@ -20,7 +23,7 @@ export default class NewSituationInformation extends React.Component {
                         </MDBCardText>
                     </div>
                 </div>
-            </InformationWindow>
+            </InformationBanner>
         </>
     }
 }

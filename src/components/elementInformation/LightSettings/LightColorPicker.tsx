@@ -10,6 +10,9 @@ type PropsType = {
     color: Color | undefined
 }
 
+/**
+ * Slider component to choose a color for a light
+ */
 export default class LightColorPicker extends React.Component<PropsType> {
 
     /**

@@ -1,13 +1,48 @@
 import React from 'react'
 import SituationsListElement from './SituationsListElement'
-import { AppContext, APP_CONTEXT_DEFAULT } from '../Application/AppContext';
-import { ContextUtils } from '../../Utils/ContextUtils';
+import { ContextUtils } from '../../Utils/ContextUtils'
+import { State } from '../../interfaces/state.interface'
+import { Actions } from '../../interfaces/actions.interface'
+import { Transition } from '../../interfaces/transition.interface'
 
-export default class SituationsList extends React.Component {
+type PropsType = {
+    states: State[],
+    actions: Actions,
+    currentSituationID: number,
+    transitions: Transition[]
+}
 
-    // Import AppContext
-    static contextType = AppContext
-    context = APP_CONTEXT_DEFAULT
+/**
+ * Component that displays all situation in form of a list
+ */
+export default class SituationsList extends React.Component<PropsType> {
+
+    /**
+     * Returns the situations list
+     */
+    renderSituationList(): JSX.Element {
+        const listElements = []
+        for (const state of this.props.states) {
+            listElements.push(
+                <SituationsListElement
+                    name={state.Name}
+                    onElementClick={() => this.props.actions.setCurrentSituation(state.id)}
+                    isSelected={this.props.currentSituationID === state.id}
+                    renameSituation={(newName: string) => this.props.actions.renameSituation(state.id, newName)}
+                    isProperSituationName={(newName: string) => ContextUtils.isProperSituationName(newName, this.props.states)}
+                    isStart={state.id === 0}
+                    hasTimeBasedTransition={!!ContextUtils.getTimeBasedTransition(state.id, this.props.transitions)}
+                    openTimeBasedOptions={() => this.props.actions.setTimeBasedTransitionModalVisibility(true)}
+                    removeSituation={() => this.props.actions.removeSituation(state.id)}
+                    id={state.id}
+                    key={state.id} />)
+        }
+        return (
+            <div>
+                {listElements}
+            </div>
+        )
+    }
 
     render() {
         return (
@@ -17,29 +52,6 @@ export default class SituationsList extends React.Component {
                 </div>
                 <hr className="my-0" />
                 {this.renderSituationList()}
-            </div>
-        )
-    }
-
-    renderSituationList() {
-        const listElements = []
-        for (const state of this.context.states) {
-            listElements.push(
-                <SituationsListElement
-                    name={state.Name}
-                    onElementClick={() => this.context.setCurrentSituation(state.id)}
-                    isSelected={this.context.applicationState.currentSituationID === state.id}
-                    renameSituation={(newName: string) => this.context.renameSituation(state.id, newName)}
-                    isProperSituationName={(newName: string) => ContextUtils.isProperSituationName(newName, this.context)}
-                    isStart={state.id === 0}
-                    hasTimeBasedTransition={!!ContextUtils.getTimeBasedTransition(state.id, this.context)}
-                    openTimeBasedOptions={() => this.context.setTimeBasedTransitionModalVisibility(true)}
-                    id={state.id}
-                    key={state.id} />)
-        }
-        return (
-            <div>
-                {listElements}
             </div>
         )
     }

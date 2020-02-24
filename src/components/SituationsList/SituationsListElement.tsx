@@ -7,17 +7,18 @@ import SituationInformationIcons from './SituationInformationIcons'
 // Typed props
 type PropsType = {
     name: string,
-    onElementClick: () => void,
-    renameSituation: (newName: string) => void,
     isSelected: boolean,
-    isProperSituationName: (newName: string) => boolean,
     isStart: boolean,
     hasTimeBasedTransition: boolean,
     id: number,
-    openTimeBasedOptions: () => void
+    openTimeBasedOptions: () => void,
+    isProperSituationName: (newName: string) => boolean,
+    onElementClick: () => void,
+    renameSituation: (newName: string) => void,
+    removeSituation: () => void
 }
 
-// TODO: (optional) Unreachable warning
+// TODO: (optional) Unreachable situation warning
 
 export default class SituationsListElement extends React.Component<PropsType> {
 
@@ -121,6 +122,9 @@ export default class SituationsListElement extends React.Component<PropsType> {
                         className='situation-options-tooltip'>
                         <SituationOptions
                             onRenameClick={() => this.setState({ editMode: true, previousSituationName: this.props.name })}
+                            onDeleteClick={this.props.removeSituation}
+                            onTimeBasedClick={this.props.openTimeBasedOptions}
+                            hasTimeBasedTransition={this.props.hasTimeBasedTransition}
                             onStartClick={() => console.log("Set start situation")}
                             situationID={this.props.id} />
                     </ReactTooltip>

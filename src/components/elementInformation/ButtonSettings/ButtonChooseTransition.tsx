@@ -8,6 +8,10 @@ type PropsType = {
     existingSituationButtonDisabled: boolean
 }
 
+/**
+ * Component to choose whether the current button should lead to a new situation or an already existing one
+ * @param props 
+ */
 export default function ButtonChooseTransition(props: PropsType) {
     return <>
         <div>Pushing a button leads to a new situation, e.g. lights turned on or off.<br />
