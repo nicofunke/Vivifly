@@ -1,8 +1,14 @@
 import { UnityContent } from "react-unity-webgl"
 import { Direction } from "../types/direction.type"
-import { OutlineColor } from '../types/outline-color.type';
-import { VisualizationElement } from '../interfaces/visualization-element.interface';
-import { Vector3 } from '../interfaces/vector3.interface';
+import { OutlineColor } from '../types/outline-color.type'
+import { VisualizationElement } from '../interfaces/visualization-element.interface'
+import { Vector3 } from '../interfaces/vector3.interface'
+import { Window } from '../interfaces/window.interface';
+
+/**
+ * declaring global window variables to store uploaded models
+ */
+declare var window: Window
 
 // Types for the constructor params
 type onClickFunction = (clickedElement: string, clickedPlane: Vector3) => void
@@ -38,20 +44,30 @@ export class UnityWrapper {
     }
 
     /**
-     * Inserting an 3D-model from file. This method is currently used, because it does not require to store the 3D model on the server
+     * Uploads a 3D model into the scene
+     * @param file 3D Model file
      */
-    insertFileModel(file: File) {
+    uploadModel(file: File) {
         this.uploadingStarted()
-        var reader: FileReader = new FileReader()
+        var reader = new FileReader();
         reader.onload = (event) => {
-            this.unityContent.send(
-                "JavascriptApi",
-                "UploadStringObject",
-                !!event.target ? event.target.result : ""
-            )
+            if (!event.target) {
+                return
+            }
+            var arrayBuffer = event.target.result
+            if (!arrayBuffer || typeof (arrayBuffer) === "string") {
+                return
+            }
+            var array = new Uint8Array(arrayBuffer)
+            window.triLibFiles = [{
+                name: file.name,
+                data: array
+            }]
+            this.unityContent.send("JavascriptApi", "StartTriLibUpload", "")
             this.uploadingFinished()
         }
-        reader.readAsText(file)
+        reader.readAsArrayBuffer(file)
+        window.triLibFiles = []
     }
 
     /**

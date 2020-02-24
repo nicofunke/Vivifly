@@ -1,29 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Dummiesman;
-using System.IO;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Runtime.InteropServices;
-using UnityEngine.Networking;
-
+using TriLib;
+using System;
 
 public class ModelUploader : MonoBehaviour {
 
-    // Import js function
+    // Import TriLib js functions
     [DllImport("__Internal")]
-    private static extern void JS_ErrorOccurred(int code, string message);
+    private static extern IntPtr TriLibGetBrowserFileName(int index);
+    [DllImport("__Internal")]
+    private static extern IntPtr TriLibGetBrowserFileData(int index);
+    [DllImport("__Internal")]
+    private static extern void TriLibFreeMemory(IntPtr pointer);
+    [DllImport("__Internal")]
+    private static extern int TriLibGetBrowserFileLength(int index);
 
-    // Start is called before the first frame update
-    void Start() {
-        // DEBUG: Upload CoffeeMachine on start
-        // this.UploadURLObject("https://user.informatik.uni-goettingen.de/~nico.funke/CoffeeMakerCord_OBJ.obj");
-        // this.UploadLocalObject("C:\\Users\\Nico\\Documents\\Masterarbeit\\Vivifly\\Vivifly_unity\\Assets\\example_models\\Coffee_obj\\Coffee.obj");
-    }
 
-    // Adds a MeshCollider to all child GameObject
-    // in order to make all parts of the uploaded object clickable
-    // (Should be called everytime after adding an a model
+    /// <summary>
+    /// Adds a MeshCollider to all child GameObject
+    /// in order to make all parts of the uploaded object clickable
+    /// (Should be called everytime after adding an a model)
+    /// </summary>
     void AddColliderToChildren() {
         Transform[] children;
         children = this.GetComponentsInChildren<Transform>();
@@ -32,64 +29,46 @@ public class ModelUploader : MonoBehaviour {
         }
     }
 
-    // Uploads an object from the local file system and appends it as a child to the current object
-    // Calls AddColliderToChildren afterwards
-    // (Does not work as WebGL)
-    public void UploadLocalObject(string path) {
-
-        string objPath = path;
-        string error = string.Empty;
-        GameObject loadedObject;
-        if (!File.Exists(objPath)) {
-            JS_ErrorOccurred(404, "File does not exist: " + path);
-        }
-        else {
-            loadedObject = new OBJLoader().Load(objPath);
-            loadedObject.transform.SetParent(this.transform);
+    /// <summary>
+    /// Gets the file data from js window and loads the model into the scene
+    /// </summary>
+    public void StartTriLibUpload() {
+        using (var assetLoader = new AssetLoader()) {
+            var data = this.GetBrowserFileData(0);
+            var name = this.GetBrowserFileName(0);
+            Debug.Log(name);
+            var myGameObject = assetLoader.LoadFromMemory(data, name, null, this.gameObject);
             this.AddColliderToChildren();
         }
     }
 
-    // Uploads an object from URL and appends it as a child to the current object
-    // Calls AddColliderToChildren afterwards
-    // (Is currently not used by frontend because it would require storing models on the server)
-    public void UploadURLObject(string url) {
-        StartCoroutine(GetText(url));
+    // ============== TriLib methods =============
+    /// <summary>
+    /// Gets the registered browser file name by index.
+    /// </summary>
+    /// <param name="index">Browser file index.</param>
+    /// <returns>Browser file name.</returns>
+    public string GetBrowserFileName(int index) {
+        var pointer = TriLibGetBrowserFileName(index);
+        var fileName = Marshal.PtrToStringAuto(pointer);
+        TriLibFreeMemory(pointer);
+        return fileName;
     }
 
-    // Coroutine for loading a model by URL
-    // (Gets called by UploadURLObject)
-    // FROM https://answers.unity.com/questions/1432968/unitywebrequest-response-to-stream.html
-    IEnumerator GetText(string url) {
-        using (UnityWebRequest www = UnityWebRequest.Get(url)) {
-            yield return www.SendWebRequest();
-            if (www.isNetworkError || www.isHttpError) {
-                Debug.Log(www.error);
-            }
-            else {
-                byte[] results = www.downloadHandler.data;
-                using (var textStream = new MemoryStream(results)) {
-                    var loadedObject = new OBJLoader().Load(textStream);
-                    loadedObject.transform.SetParent(this.transform);
-                    this.AddColliderToChildren();
-                }
-            }
+    /// <summary>
+    /// Gets the registered browser file byte data by index.
+    /// </summary>
+    /// <param name="index">Browser file index.</param>
+    /// <returns>Browser file byte data.</returns>
+    public byte[] GetBrowserFileData(int index) {
+        var pointer = TriLibGetBrowserFileData(index);
+        if (pointer == IntPtr.Zero) {
+            return null;
         }
-    }
-
-    // Uploads an object that is given as a string and appends it as a child to the current object
-    // Calls AddColliderToChildren afterwards
-    // (Currently used method by frontend because it does not require stroing additional files on the server)
-    public void UploadFromString(string fileContent) {
-        byte[] byteArray = Encoding.ASCII.GetBytes(fileContent);
-        MemoryStream stream = new MemoryStream(byteArray);
-        GameObject loadedObject = new OBJLoader().Load(stream);
-        loadedObject.transform.SetParent(this.transform);
-        this.AddColliderToChildren();
-    }
-
-    // Update is called once per frame
-    void Update() {
-
+        var length = TriLibGetBrowserFileLength(index);
+        var data = new byte[length];
+        Marshal.Copy(pointer, data, 0, length);
+        TriLibFreeMemory(pointer);
+        return data;
     }
 }

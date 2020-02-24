@@ -128,14 +128,11 @@ public class JavascriptAPI : MonoBehaviour {
 
     // =========== UPLOAD METHODS ============================================
 
-    // Uploads an .*obj model given by URL
-    public void UploadURLObject(string url) {
-        modelUploader.UploadURLObject(url);
-    }
-
-    // Uploads an *.obj model given as a string)
-    public void UploadStringObject(string fileContent) {
-        modelUploader.UploadFromString(fileContent);
+    /// <summary>
+    /// Calls the method to load the model that is stored inside js window into unity scene
+    /// </summary>
+    public void StartTriLibUpload() {
+        modelUploader.StartTriLibUpload();
     }
 
     // =========== LIGHT METHODS ============================================

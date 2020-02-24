@@ -8,7 +8,7 @@ import { VISUALIZATION_TYPE_SCREEN } from '../types/visualization-type.type'
 import { VisualizationElement } from '../interfaces/visualization-element.interface';
 import { InterActionElement } from '../interfaces/interaction-element.interface';
 
-// TODO: Rename interAction to interaction 
+// TODO: (code) Rename interAction to interaction 
 
 /**
  * Utils class with static helper functions to work with the application state(context)

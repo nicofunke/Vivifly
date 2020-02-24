@@ -11,6 +11,7 @@
   - Using file from local file system does not work
   - using a file from link would require to upload the file beforehand
   - sendMessage to unity does not support other types than primitive datatypes (no sending file directly) 
+  - Replaced by TriLib with window vairables
 - Problem with lights/highlights:
   - Communication from React to WebGL only allows primitive datatypes 
   - It is necessary to send element name and color at least
@@ -24,6 +25,8 @@
 
 - colors for each element type
 - states -> Situations
+- timeout -> time-based change
+- screen -> display
 
 # Changes on Vivian Framework
 - ScreenElement Rotate and movement exchanged and rotation inverted
@@ -34,11 +37,7 @@
 - LightSpec constructor public
 
 # Fragen
-- ist das ganze public machen in Ordnung?
-- ScreenElement Fixes richtig?
-- Ändert Resolution nichts?
-- Plane gibt allgemeinen Winkel der Plane an, passt sich nicht an Plane des Objects an?
-  - Sollte man nur Einheitsvektoren verwenden?
+- Wie Startsituation setzen?
 
 
 Mögliche Dateiformate: 

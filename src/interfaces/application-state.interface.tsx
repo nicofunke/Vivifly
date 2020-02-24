@@ -33,6 +33,6 @@ export const APPLICATION_STATE_DEFAULT: ApplicationState = {
     showFirstSituationInformation: false,
     showNewElementTypeModal: false,
     showTimeBasedTransitionModal: false,
-    modelWasUploaded: true,
+    modelWasUploaded: false,
     lastSituationID: 0,
 }
