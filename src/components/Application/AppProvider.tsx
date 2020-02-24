@@ -6,7 +6,7 @@ import { VisualizationValue } from '../../interfaces/visualization-value.interfa
 import { Vector3 } from '../../interfaces/vector3.interface'
 import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface'
 import { ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT, ElementType, ELEMENT_TYPE_BUTTON } from '../../types/element-type.type';
-import { VISUALIZATION_TYPE_FLOAT, VISUALIZATION_TYPE_SCREEN } from '../../types/visualization-type.type'
+import { VISUALIZATION_TYPE_SCREEN } from '../../types/visualization-type.type'
 import { State } from '../../interfaces/state.interface'
 import { VisualizationElement } from '../../interfaces/visualization-element.interface'
 import { OUTLINE_COLOR_RED } from '../../types/outline-color.type'
@@ -131,44 +131,23 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         if (currentSituationID === this.state.applicationState.currentSituationID) {
             return
         }
-        // Change state
+        
         this.setState((state: ContextState) => {
+            // If situation does not exist just go to the first situation in the list
+            currentSituationID = (!!state.states.find(situation => situation.id === currentSituationID)) ?
+                currentSituationID : state.states[0].id
+            // Change Visualization
+            state.unityWrapper?.updateVisualization(state, currentSituationID)
+            // Change state
             return {
                 ...state, applicationState: {
                     ...state.applicationState,
-                    currentSituationID: (!!state.states.find(situation => situation.id === currentSituationID)) ?
-                        currentSituationID : state.states[0].id,    // If situation does not exist just go to the first situation in the list
+                    currentSituationID: currentSituationID,
                     showFirstSituationInformation: false,
                     lastSituationID: state.applicationState.currentSituationID
                 }
             }
         })
-        // Change visualization
-        this.state.unityWrapper?.removeAllVisualEffects()
-        const newSituation = this.state.states.find(situation => situation.id === currentSituationID)
-        if (!!newSituation && !!newSituation.Values) {
-            for (const value of newSituation.Values) {
-                if (value.Type === VISUALIZATION_TYPE_FLOAT) {
-                    // Add light effects
-                    const color = ContextUtils.getLightEmissionColor(value.VisualizationElement, this.state.visualizationElements)
-                    if (!!color) {
-                        this.state.unityWrapper?.setLightEffect(value.VisualizationElement, color.r, color.g, color.b, value.Value || 0.0)
-                    }
-                } else if (value.Type === VISUALIZATION_TYPE_SCREEN) {
-                    // Add screen effects
-                    const visualizationElement = this.state.visualizationElements.find(
-                        (visualizationElement: VisualizationElement) => (
-                            visualizationElement.Name === value.VisualizationElement && visualizationElement.Type === ELEMENT_TYPE_SCREEN
-                        )
-                    )
-                    if (!!visualizationElement && !!value.File) {
-                        this.state.unityWrapper?.addScreenEffect(visualizationElement, value.File)
-                    }
-                }
-            }
-        }
-        // Restore outline of selected element
-        this.state.unityWrapper?.outlineElement(this.state.applicationState.selectedElement, OUTLINE_COLOR_RED)
         // Stop plane selection mode if currently active
         const planeSelectionElement = this.state.applicationState.planeSelectionElementName
         if (!!planeSelectionElement) {
@@ -277,10 +256,6 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         if (this.state.states.length <= 1) {
             return
         }
-        // If the situation is the current one change the situation to the last one
-        if (this.state.applicationState.currentSituationID === situationID) {
-            this.setCurrentSituation(this.state.applicationState.lastSituationID)
-        }
         // Remove situation from list of states and all transition that contain this situation
         this.setState((state: ContextState) => {
             return {
@@ -290,6 +265,10 @@ export default class AppProvider extends React.Component<{}, AppContext> {
                     (transition.DestinationStateID !== situationID && transition.SourceStateID !== situationID))
             }
         })
+        // If the situation is the current one change the situation to the last one
+        if (this.state.applicationState.currentSituationID === situationID) {
+            this.setCurrentSituation(this.state.applicationState.lastSituationID)
+        }
     }
 
 

@@ -1,9 +1,13 @@
 import { UnityContent } from "react-unity-webgl"
 import { Direction } from "../types/direction.type"
-import { OutlineColor } from '../types/outline-color.type'
+import { OutlineColor, OUTLINE_COLOR_RED } from '../types/outline-color.type';
 import { VisualizationElement } from '../interfaces/visualization-element.interface'
 import { Vector3 } from '../interfaces/vector3.interface'
 import { Window } from '../interfaces/window.interface';
+import { AppContext } from '../interfaces/app-context.interface';
+import { VISUALIZATION_TYPE_FLOAT, VISUALIZATION_TYPE_SCREEN } from '../types/visualization-type.type';
+import { ContextUtils } from './ContextUtils';
+import { ELEMENT_TYPE_SCREEN } from '../types/element-type.type';
 
 /**
  * declaring global window variables to store uploaded models
@@ -41,6 +45,40 @@ export class UnityWrapper {
         })
         this.uploadingStarted = uploadingStarted
         this.uploadingFinished = uploadingFinished
+    }
+
+    /**
+     * Removes all visualization from the current WebGL and displays a certain context
+     * @param context       Context that should be displayed
+     * @param situationID   Situation that should be visualized (default: current situation)
+     */
+    updateVisualization(context: AppContext, situationID: number | undefined = undefined) {
+        this.removeAllVisualEffects()
+        situationID = situationID !== undefined ? situationID : context.applicationState.currentSituationID
+        const situation = context.states.find(situation => situation.id === situationID)
+        if (!!situation && !!situation.Values) {
+            for (const value of situation.Values) {
+                if (value.Type === VISUALIZATION_TYPE_FLOAT) {
+                    // Add light effects
+                    const color = ContextUtils.getLightEmissionColor(value.VisualizationElement, context.visualizationElements)
+                    if (!!color) {
+                        this.setLightEffect(value.VisualizationElement, color.r, color.g, color.b, value.Value || 0.0)
+                    }
+                } else if (value.Type === VISUALIZATION_TYPE_SCREEN) {
+                    // Add screen effects
+                    const visualizationElement = context.visualizationElements.find(
+                        (visualizationElement: VisualizationElement) => (
+                            visualizationElement.Name === value.VisualizationElement && visualizationElement.Type === ELEMENT_TYPE_SCREEN
+                        )
+                    )
+                    if (!!visualizationElement && !!value.File) {
+                        this.addScreenEffect(visualizationElement, value.File)
+                    }
+                }
+            }
+        }
+        // Restore outline of selected element
+        this.outlineElement(context.applicationState.selectedElement, OUTLINE_COLOR_RED)
     }
 
     /**
