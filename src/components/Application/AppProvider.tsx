@@ -714,7 +714,6 @@ export default class AppProvider extends React.Component<{}, AppContext> {
 
 
     //================= RENDER =============================
-    // TODO: (performance) Bundle methods to 'Actions'
     render() {
         return <ViewContainer actions={this.actions} appContext={this.state} />
     }
