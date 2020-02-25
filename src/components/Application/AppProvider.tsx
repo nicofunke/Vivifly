@@ -31,7 +31,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
 
         interactionElements: [],
         states: [{ Name: "Start", id: 0 }],
-        transitions: [{ DestinationStateID: 0, SourceStateID: 0, Timeout: 12 }],
+        transitions: [],
         visualizationElements: [],
         applicationState: APPLICATION_STATE_DEFAULT,
         unityWrapper: new UnityWrapper(             // Current UnityWrapper object
