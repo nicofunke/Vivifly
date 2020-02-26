@@ -14,9 +14,9 @@ type StateType = {
 }
 
 /**
- * Component for the third time-based transition window, to choose the destination situation
+ * Component for the third time-based change window, to choose the destination situation
  */
-export default class TBTDestination extends React.Component<PropsType, StateType> {
+export default class TimeChangeDestination extends React.Component<PropsType, StateType> {
 
     state: StateType = { destinationStateID: undefined }
 
@@ -35,7 +35,7 @@ export default class TBTDestination extends React.Component<PropsType, StateType
     render() {
         return <>
             <p>
-                Where should this time-based transition lead to?
+                Where should this time-based change lead to?
             </p>
             <SituationSelect
                 selectSituation={this.setDestination.bind(this)}

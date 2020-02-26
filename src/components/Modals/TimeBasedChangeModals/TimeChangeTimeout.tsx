@@ -12,9 +12,9 @@ type StateType = {
 }
 
 /**
- * Component for the second time-based transition window, to choose the timeout for the transition
+ * Component for the second time-based change window, to choose the timeout for the change
  */
-export default class TBTTimeout extends React.Component<PropsType, StateType> {
+export default class TimeChangeTimeout extends React.Component<PropsType, StateType> {
 
     state = { timeout: 1000 }
 

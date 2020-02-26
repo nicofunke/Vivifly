@@ -31,7 +31,7 @@ export default class SituationsList extends React.Component<PropsType> {
                     renameSituation={(newName: string) => this.props.actions.renameSituation(state.id, newName)}
                     isProperSituationName={(newName: string) => ContextUtils.isProperSituationName(newName, this.props.states)}
                     isStart={state.id === 0}
-                    hasTimeBasedTransition={!!ContextUtils.getTimeBasedTransition(state.id, this.props.transitions)}
+                    hasTimeBasedChange={!!ContextUtils.getTimeBasedTransition(state.id, this.props.transitions)}
                     openTimeBasedOptions={() => this.props.actions.setTimeBasedTransitionModalVisibility(true)}
                     removeSituation={() => this.props.actions.removeSituation(state.id)}
                     id={state.id}

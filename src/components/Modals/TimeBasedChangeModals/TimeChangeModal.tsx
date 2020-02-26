@@ -1,11 +1,11 @@
 import React from 'react'
 import Modal from '../Modal'
-import TBTInformation from './TBTInformation'
+import TimeChangeInformation from './TimeChangeInformation'
 import { Transition } from '../../../interfaces/transition.interface'
-import TBTTimeout from './TBTTimeout'
-import TBTDestination from './TBTDestination'
+import TimeChangeTimeout from './TimeChangeTimeout'
+import TimeChangeDestination from './TimeChangeDestination'
 import { ContextUtils } from '../../../Utils/ContextUtils'
-import TBTOverview from './TBTOverview'
+import TimeChangeOverview from './TimeChangeOverview'
 import { Actions } from '../../../interfaces/actions.interface'
 import { State } from '../../../interfaces/state.interface'
 
@@ -16,10 +16,10 @@ type PropsType = {
     states: State[]
 }
 /**
- * Modal to define a time-based transition
+ * Modal to define a time-based change
  * Displays the necessary modals to set all variables and stores the transition in state
  */
-export default class TimeBasedTransitionModal extends React.Component<PropsType, Transition> {
+export default class TimeChangeModal extends React.Component<PropsType, Transition> {
 
     state: Transition = {}
 
@@ -59,7 +59,7 @@ export default class TimeBasedTransitionModal extends React.Component<PropsType,
     }
 
     /**
-     * Cancels the time-based transition creation and closes the modal
+     * Cancels the time-based change creation and closes the modal
      */
     cancel() {
         this.props.actions.setTimeBasedTransitionModalVisibility(false)
@@ -85,7 +85,7 @@ export default class TimeBasedTransitionModal extends React.Component<PropsType,
     }
 
     /**
-     * Removes the time-based transition globally and closes the modal
+     * Removes the time-based change transition globally and closes the modal
      */
     removeTransition(){
         this.props.actions.removeTimeBasedTransition(this.props.currentSituationID)
@@ -99,26 +99,26 @@ export default class TimeBasedTransitionModal extends React.Component<PropsType,
     getCurrentContent(transition: Transition): JSX.Element {
         // Source is not set => Show information modal
         if (!this.state.SourceStateID && this.state.SourceStateID !== 0) {
-            return <TBTInformation
+            return <TimeChangeInformation
                 cancel={this.cancel.bind(this)}
                 proceed={() => this.setSource(this.props.currentSituationID)} />
         }
         // Timeout is not set => Show Timeout modal
         if (!this.state.Timeout && this.state.Timeout !== 0) {
-            return <TBTTimeout
+            return <TimeChangeTimeout
                 back={() => this.setSource(undefined)}
                 proceed={this.setTimeout.bind(this)} />
         }
         // Destination is not set => Show destination modal
         if (!this.state.DestinationStateID && this.state.DestinationStateID !== 0) {
-            return <TBTDestination
+            return <TimeChangeDestination
                 back={() => this.setTimeout(undefined)}
                 finish={this.saveDestinationAndClose.bind(this)}
                 states={this.props.states} />
         }
 
         // Everything is set => Show overview
-        return <TBTOverview
+        return <TimeChangeOverview
             cancel={this.cancel.bind(this)}
             finish={this.saveDestinationAndClose.bind(this)}
             states={this.props.states}

@@ -17,11 +17,10 @@ type StateType = {
     destinationStateID: number | "new" | undefined
 }
 
-// TODO: (UX) Rename to time-based change
 /**
- * Component for the time-based transition overview window, which allows to change destination and timeout
+ * Component for the time-based change overview window, which allows to change destination and timeout
  */
-export default class TBTOverview extends React.Component<PropsType, StateType> {
+export default class TimeChangeOverview extends React.Component<PropsType, StateType> {
 
     // This component stores a copy of destinationID in order to also use "new" as value 
     // default type for state

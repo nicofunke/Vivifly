@@ -1,6 +1,6 @@
 import React from 'react'
 import SituationNamingModal from './SituationNamingModal'
-import TimeBasedTransitionModal from './TimeBasedTransitionModals/TimeBasedTransitionModal'
+import TimeChangeModal from './TimeBasedChangeModals/TimeChangeModal'
 import NewElementTypeModal from './NewElementTypeModal'
 import { ApplicationState } from '../../interfaces/application-state.interface';
 import { State } from '../../interfaces/state.interface';
@@ -27,7 +27,7 @@ export default class ModalHandler extends React.Component<PropsType> {
                 states={this.props.states} />
         }
         if (this.props.applicationState.showTimeBasedTransitionModal) {
-            return <TimeBasedTransitionModal
+            return <TimeChangeModal
                 states={this.props.states}
                 currentSituationID={this.props.applicationState.currentSituationID}
                 actions={this.props.actions}

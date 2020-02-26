@@ -9,7 +9,7 @@ type PropsType = {
     name: string,
     isSelected: boolean,
     isStart: boolean,
-    hasTimeBasedTransition: boolean,
+    hasTimeBasedChange: boolean,
     id: number,
     openTimeBasedOptions: () => void,
     isProperSituationName: (newName: string) => boolean,
@@ -79,7 +79,7 @@ export default class SituationsListElement extends React.Component<PropsType> {
                     <div className="col-2">
                         <SituationInformationIcons
                             isStart={this.props.isStart}
-                            hasTimeBasedTransition={this.props.hasTimeBasedTransition}
+                            hasTimeBasedChange={this.props.hasTimeBasedChange}
                             openTimeBasedOptions={this.props.openTimeBasedOptions}
                             id={this.props.id} />
                     </div>
@@ -124,7 +124,7 @@ export default class SituationsListElement extends React.Component<PropsType> {
                             onRenameClick={() => this.setState({ editMode: true, previousSituationName: this.props.name })}
                             onDeleteClick={this.props.removeSituation}
                             onTimeBasedClick={this.props.openTimeBasedOptions}
-                            hasTimeBasedTransition={this.props.hasTimeBasedTransition}
+                            hasTimeBasedChange={this.props.hasTimeBasedChange}
                             onStartClick={() => console.log("Set start situation")}
                             situationID={this.props.id} />
                     </ReactTooltip>

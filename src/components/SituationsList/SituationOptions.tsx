@@ -7,7 +7,7 @@ type PropsType = {
     onRenameClick: () => void,
     onStartClick: () => void,
     onDeleteClick: () => void,
-    hasTimeBasedTransition: boolean
+    hasTimeBasedChange: boolean
     situationID: number
 }
 
@@ -21,7 +21,7 @@ export default class SituationOptions extends React.Component<PropsType> {
             <div className="row situation-list-element hover-icon py-2 px-1" onClick={this.props.onTimeBasedClick}>
                 <div className="col-2"><MDBIcon icon="clock" /></div>
                 <div className="col-10">
-                    {this.props.hasTimeBasedTransition ? "Change time-based transition" : "Add time-based transition"}
+                    {this.props.hasTimeBasedChange ? "Edit time-based change" : "Add time-based change"}
                 </div>
             </div>
             <div className="row situation-list-element hover-icon py-2 px-1" onClick={this.props.onRenameClick}>

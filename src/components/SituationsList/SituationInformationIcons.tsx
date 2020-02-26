@@ -5,7 +5,7 @@ import ReactTooltip from 'react-tooltip'
 // Typed props
 type PropsType = {
     isStart: boolean,
-    hasTimeBasedTransition: boolean,
+    hasTimeBasedChange: boolean,
     openTimeBasedOptions: () => void,
     id: number
 }
@@ -25,7 +25,7 @@ export default class SituationInformationIcons extends React.Component<PropsType
                         </>}
                 </div>
                 <div className="col-6">
-                    {this.props.hasTimeBasedTransition &&
+                    {this.props.hasTimeBasedChange &&
                         <>
                             <MDBIcon
                                 icon="clock"
