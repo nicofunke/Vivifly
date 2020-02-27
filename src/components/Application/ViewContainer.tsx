@@ -8,6 +8,7 @@ import ModalHandler from '../Modals/ModalHandler'
 import { Actions } from '../../interfaces/actions.interface'
 import { AppContext } from '../../interfaces/app-context.interface'
 import InformationBannerHandler from '../InformationBanners/InformationBannerHandler'
+import Navbar from '../Frame/Navbar'
 
 type PropsType = {
     actions: Actions,
@@ -24,25 +25,26 @@ export default class ViewContainer extends React.Component<PropsType> {
             <StartingOverlay
                 unityLoadingProgress={this.props.appContext.applicationState.unityLoadingProgress} />
 
-            <InformationBannerHandler
-                informationBannerType={this.props.appContext.applicationState.currentInformationBanner}
-                actions={this.props.actions} />
-
             <ModalHandler
                 actions={this.props.actions}
                 states={this.props.appContext.states}
                 transitions={this.props.appContext.transitions}
                 applicationState={this.props.appContext.applicationState} />
 
-            <div className="h-100">
+            <div className="h-100-under-navbar">
                 <UnityScreen
                     unityWrapper={this.props.appContext.unityWrapper}
                     modelWasUploaded={this.props.appContext.applicationState.modelWasUploaded}
                     isCurrentlyUploading={this.props.appContext.applicationState.isCurrentlyUploading} />
+                <Navbar />
                 <MDBContainer fluid className="h-100">
                     <MDBRow className="h-100">
 
-                        <MDBCol size="2" className="p-0 h-100">
+                        <InformationBannerHandler
+                            informationBannerType={this.props.appContext.applicationState.currentInformationBanner}
+                            actions={this.props.actions} />
+
+                        <MDBCol size="2" className="p-0 h-100-under-navbar">
                             <SituationsList
                                 states={this.props.appContext.states}
                                 transitions={this.props.appContext.transitions}

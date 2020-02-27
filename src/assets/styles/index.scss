@@ -1,3 +1,4 @@
+
 // Main styles
 .cursor-pointer:hover {
   cursor: pointer;
@@ -37,10 +38,15 @@
   }
 }
 
+.h-100-under-navbar {
+  min-height: calc(100vh - 64px); // 64px is the navbar height
+  max-height: calc(100vh - 64px);
+}
+
 // Object specific styling
 .window-upper-right {
   position: absolute;
-  top: 1rem;
+  margin-top: 1rem;
   right: 1rem;
   width: 25vw;
   min-width: 400px;
@@ -56,7 +62,7 @@
 
 .window-top-center {
   position: absolute;
-  top: 1rem;
+  margin-top: 1rem;
   left: 50%;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
@@ -83,6 +89,9 @@
 
 
 // z-index for overlays
+.navbar {
+  z-index: 1000;
+}
 .popup-overlay {
   z-index: 1001;
 }
