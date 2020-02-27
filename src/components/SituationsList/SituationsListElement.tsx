@@ -15,6 +15,7 @@ type PropsType = {
     isProperSituationName: (newName: string) => boolean,
     onElementClick: () => void,
     renameSituation: (newName: string) => void,
+    setStart: () => void,
     removeSituation: () => void
 }
 
@@ -68,7 +69,6 @@ export default class SituationsListElement extends React.Component<PropsType> {
         this.setState({ editMode: false, previousSituationName: "" })
     }
 
-    // TODO: (prio) Set Start situation
     render() {
         return (
             <div
@@ -125,7 +125,7 @@ export default class SituationsListElement extends React.Component<PropsType> {
                             onDeleteClick={this.props.removeSituation}
                             onTimeBasedClick={this.props.openTimeBasedOptions}
                             hasTimeBasedChange={this.props.hasTimeBasedChange}
-                            onStartClick={() => console.log("Set start situation")}
+                            onStartClick={this.props.setStart}
                             situationID={this.props.id} />
                     </ReactTooltip>
 

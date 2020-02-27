@@ -21,6 +21,7 @@ export interface Actions {
     setScreenImage: (element: string, situationID: number, imageFile: File | undefined) => void,
     setScreenPlane: (planeSelectionElement: string, plane: Vector3) => void,
     setScreenResolution: (element: string, resolution: Vector2) => void,
+    setStartSituation: (situationID: number) => void,
     setLightEmission: (element: string, emissionSituationID: number, emissionStrength: number) => void,
     setSelectedElement: (selectedElement: string, clickedPlane: Vector3 | undefined) => void,
     setRenamingModalSituation: (situationID: number | undefined) => void,

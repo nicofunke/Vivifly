@@ -20,7 +20,7 @@ export default class SituationInformationIcons extends React.Component<PropsType
                 <div className="col-6">
                     {this.props.isStart &&
                         <>
-                            <MDBIcon icon="home" data-tip="Home Situation" data-for="situation-start-tooltip" className="mr-1" />
+                            <MDBIcon icon="home" data-tip="Starting Situation" data-for="situation-start-tooltip" className="mr-1" />
                             <ReactTooltip place="right" effect="solid" id="situation-start-tooltip" />
                         </>}
                 </div>

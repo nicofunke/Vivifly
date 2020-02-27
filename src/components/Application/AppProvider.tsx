@@ -29,9 +29,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * Default state
      */
     state: AppContext = {
-
         interactionElements: [],
-        states: [{ Name: "Start", id: 0 }],
+        states: [{ Name: "Start", id: 0, isStart: true }],
         transitions: [],
         visualizationElements: [],
         applicationState: APPLICATION_STATE_DEFAULT,
@@ -63,6 +62,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         setScreenPlane: this.setScreenPlane.bind(this),
         setScreenResolution: this.setScreenResolution.bind(this),
         setSelectedElement: this.setSelectedElement.bind(this),
+        setStartSituation: this.setStartSituation.bind(this),
         setRenamingModalSituation: this.setRenamingModalSituation.bind(this),
         setTimeBasedTransition: this.setTimeBasedTransition.bind(this),
         setTimeBasedTransitionModalVisibility: this.setTimeBasedTransitionModalVisibility.bind(this),
@@ -289,6 +289,24 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         }
     }
 
+    /**
+     * Sets the start situation
+     * @param situationID New start situation ID
+     */
+    setStartSituation(situationID: number) {
+        this.setState( state => {
+            return {
+                ...state,
+                states: state.states.map( situation => {
+                    if(situation.id === situationID){
+                        return { ...situation, isStart: true}
+                    } else {
+                        return { ...situation, isStart: undefined}
+                    }
+                })
+            }
+        })
+    }
 
     /**
      * Sets/Unsets the situation which can be renamed with the new situation modal

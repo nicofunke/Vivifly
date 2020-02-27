@@ -37,5 +37,10 @@
 - LightSpec constructor public
 - Light colors situation specific are not yet supported
 
+
+# Export steps
+- situationID -> Name
+- start situation
+- 
 -------
 - in Tests sollten alle Funktionalitäten geprüft werden

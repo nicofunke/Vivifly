@@ -6,5 +6,6 @@ import { VisualizationValue } from './visualization-value.interface';
 export interface State {
     Name: string,
     id: number,             // This parameter is only used during runtime and will be removed on export
+    isStart?: true,         // This parameter is only used during runtime and will be removed on export
     Values?: VisualizationValue[]
 }
