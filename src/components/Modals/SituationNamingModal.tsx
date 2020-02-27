@@ -44,7 +44,7 @@ export default class SituationNamingModal extends React.Component<PropsType> {
             this.props.actions.setSelectedElement("", undefined) 
             this.props.actions.setRenamingModalSituation(undefined)
             this.props.actions.setCurrentSituation(this.props.situationID)
-            this.props.actions.showNextInformationWindow()
+            this.props.actions.showNextInformationBanner()
         }
     }
 

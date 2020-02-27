@@ -16,6 +16,7 @@ import { InteractionElement } from '../../interfaces/interaction-element.interfa
 import { AppContext } from '../../interfaces/app-context.interface'
 import { Actions } from '../../interfaces/actions.interface'
 import ViewContainer from './ViewContainer'
+import { InformationBannerUtils } from '../../Utils/InformationBannerUtils';
 
 // TODO: ERROR404 remove
 
@@ -48,11 +49,12 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         setButtonTransition: this.setButtonTransition.bind(this),
         addElementType: this.addElementType.bind(this),
         createNewSituation: this.createNewSituation.bind(this),
+        hideInformationBanner: this.hideInformationBanner.bind(this),
         removeElementType: this.removeElementType.bind(this),
         removeSituation: this.removeSituation.bind(this),
         removeTimeBasedTransition: this.removeTimeBasedTransition.bind(this),
         renameSituation: this.renameSituation.bind(this),
-        showNextInformationWindow: this.showNextInformationWindow.bind(this),
+        showNextInformationBanner: this.showNextInformationBanner.bind(this),
         setCurrentSituation: this.setCurrentSituation.bind(this),
         setLightColor: this.setLightColor.bind(this),
         setLightEmission: this.setLightEmission.bind(this),
@@ -131,7 +133,9 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         if (currentSituationID === this.state.applicationState.currentSituationID) {
             return
         }
-        
+        // Hide information banner
+        this.hideInformationBanner()
+
         this.setState((state: ContextState) => {
             // If situation does not exist just go to the first situation in the list
             currentSituationID = (!!state.states.find(situation => situation.id === currentSituationID)) ?
@@ -143,7 +147,6 @@ export default class AppProvider extends React.Component<{}, AppContext> {
                 ...state, applicationState: {
                     ...state.applicationState,
                     currentSituationID: currentSituationID,
-                    showFirstSituationInformation: false,
                     lastSituationID: state.applicationState.currentSituationID
                 }
             }
@@ -170,6 +173,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         if (selectedElement !== "") {
             this.state.unityWrapper?.outlineElement(selectedElement, OUTLINE_COLOR_RED)
         }
+        // Hide information banner
+        this.hideInformationBanner()
         // Change state
         this.setState((state: ContextState) => {
             return {
@@ -177,8 +182,6 @@ export default class AppProvider extends React.Component<{}, AppContext> {
                 applicationState: {
                     ...state.applicationState,
                     selectedElement: selectedElement,
-                    hasAlreadySelectedAnElement: true,
-                    showFirstSituationInformation: false,
                     clickedPlane: selectedElement === "" ? undefined : clickedPlane
                 }
             }
@@ -187,15 +190,30 @@ export default class AppProvider extends React.Component<{}, AppContext> {
 
 
     /**
-     * Opens the information window for a new situation
+     * Opens the next information banner
      */
-    showNextInformationWindow() {
+    showNextInformationBanner() {
         this.setState((state: ContextState) => {
             return {
                 ...state,
                 applicationState: {
                     ...state.applicationState,
-                    showFirstSituationInformation: true
+                    currentInformationBanner: InformationBannerUtils.nextInformationBanner(state.applicationState.currentInformationBanner)
+                }
+            }
+        })
+    }
+
+    /**
+     * Hides the current information banner
+     */
+    hideInformationBanner() {
+        this.setState((state: ContextState) => {
+            return {
+                ...state,
+                applicationState: {
+                    ...state.applicationState,
+                    currentInformationBanner: InformationBannerUtils.hideInformationBanner(state.applicationState.currentInformationBanner)
                 }
             }
         })

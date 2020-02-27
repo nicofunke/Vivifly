@@ -7,7 +7,7 @@ import StartingOverlay from '../Frame/StartingOverlay'
 import ModalHandler from '../Modals/ModalHandler'
 import { Actions } from '../../interfaces/actions.interface'
 import { AppContext } from '../../interfaces/app-context.interface'
-import InformationBannerHandler from '../InformationWindows/InformationBannerHandler'
+import InformationBannerHandler from '../InformationBanners/InformationBannerHandler'
 
 type PropsType = {
     actions: Actions,
@@ -25,8 +25,8 @@ export default class ViewContainer extends React.Component<PropsType> {
                 unityLoadingProgress={this.props.appContext.applicationState.unityLoadingProgress} />
 
             <InformationBannerHandler
-                hasAlreadySelectedAnElement={this.props.appContext.applicationState.hasAlreadySelectedAnElement}
-                showFirstSituationInformation={this.props.appContext.applicationState.showFirstSituationInformation} />
+                informationBannerType={this.props.appContext.applicationState.currentInformationBanner}
+                actions={this.props.actions} />
 
             <ModalHandler
                 actions={this.props.actions}
@@ -41,7 +41,7 @@ export default class ViewContainer extends React.Component<PropsType> {
                     isCurrentlyUploading={this.props.appContext.applicationState.isCurrentlyUploading} />
                 <MDBContainer fluid className="h-100">
                     <MDBRow className="h-100">
-                        
+
                         <MDBCol size="2" className="p-0 h-100">
                             <SituationsList
                                 states={this.props.appContext.states}
@@ -49,7 +49,7 @@ export default class ViewContainer extends React.Component<PropsType> {
                                 actions={this.props.actions}
                                 currentSituationID={this.props.appContext.applicationState.currentSituationID} />
                         </MDBCol>
-                        
+
                         <ElementCardHandler
                             actions={this.props.actions}
                             element={this.props.appContext.applicationState.selectedElement}
@@ -59,8 +59,8 @@ export default class ViewContainer extends React.Component<PropsType> {
                             transitions={this.props.appContext.transitions}
                             states={this.props.appContext.states}
                             currentSituationID={this.props.appContext.applicationState.currentSituationID}
-                            clickedPlane={this.props.appContext.applicationState.clickedPlane}/>
-                    
+                            clickedPlane={this.props.appContext.applicationState.clickedPlane} />
+
                     </MDBRow>
                 </MDBContainer>
             </div>

@@ -3,9 +3,9 @@ import { MDBCardTitle, MDBCardText } from 'mdbreact'
 import InformationBanner from './InformationBanner'
 
 /**
- * Information banner that gets displayed after creating a new situation
+ * Information banner that gets displayed after creating the first new situation
  */
-export default class NewSituationInformationBanner extends React.Component {
+export default class FirstSituationInformationBanner extends React.Component {
     render() {
         return <>
             <InformationBanner>

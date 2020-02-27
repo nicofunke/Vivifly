@@ -1,10 +1,12 @@
 import { Vector3 } from './vector3.interface';
+import { InformationBannerType, INFORMATION_BANNER_START } from '../types/information-banner.type';
 
 /**
  * Interface for the application state during a session
  */
 export interface ApplicationState {
     currentSituationID: number,
+    currentInformationBanner: InformationBannerType, //  Stores which information banner is currently active
     selectedElement: string,
     unityLoadingProgress: number,                   // from 0.0 to 1.0
     nextSituationID: number,                        // in order to give new situations a unique ID
@@ -23,12 +25,13 @@ export interface ApplicationState {
  */
 export const APPLICATION_STATE_DEFAULT: ApplicationState = {
     currentSituationID: 0,
+    currentInformationBanner: INFORMATION_BANNER_START,
     selectedElement: "",
     unityLoadingProgress: 0.0,
     nextSituationID: 1,
     isCurrentlyUploading: false,
     showNewElementTypeModal: false,
     showTimeBasedTransitionModal: false,
-    modelWasUploaded: false,
+    modelWasUploaded: true,
     lastSituationID: 0,
 }

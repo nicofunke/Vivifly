@@ -9,11 +9,12 @@ import { ElementType } from '../types/element-type.type'
 export interface Actions {
     addElementType: (element: string, type: ElementType) => void,
     createNewSituation: (newSituationName: string) => number,
+    hideInformationBanner: () => void,
     removeElementType: (element: string, type: string) => void,
     removeSituation: (situationID: number) => void,
     removeTimeBasedTransition: (sourceSituationID: number) => void,
     renameSituation: (situationID: number, newSituationName: string) => void,
-    showNextInformationWindow: () => void,
+    showNextInformationBanner: () => void,
     setCurrentSituation: (currentSituationID: number) => void,
     setLightColor: (element: string, color: Color) => void,
     setNewElementTypeModalVisibility: (isVisible: boolean) => void,
