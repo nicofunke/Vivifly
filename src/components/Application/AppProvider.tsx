@@ -52,7 +52,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         removeSituation: this.removeSituation.bind(this),
         removeTimeBasedTransition: this.removeTimeBasedTransition.bind(this),
         renameSituation: this.renameSituation.bind(this),
-        showFirstSituationInformationWindow: this.showFirstSituationInformationWindow.bind(this),
+        showNextInformationWindow: this.showNextInformationWindow.bind(this),
         setCurrentSituation: this.setCurrentSituation.bind(this),
         setLightColor: this.setLightColor.bind(this),
         setLightEmission: this.setLightEmission.bind(this),
@@ -189,7 +189,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
     /**
      * Opens the information window for a new situation
      */
-    showFirstSituationInformationWindow() {
+    showNextInformationWindow() {
         this.setState((state: ContextState) => {
             return {
                 ...state,

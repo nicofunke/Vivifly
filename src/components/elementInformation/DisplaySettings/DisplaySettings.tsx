@@ -20,8 +20,6 @@ type PropsType = {
     planeSelectionElementName?: string
 }
 
-// TODO: (UX) Rename display to screen everywhere
-
 /**
  * Settings for the display effect of an element
  */

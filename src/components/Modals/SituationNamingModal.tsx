@@ -41,10 +41,10 @@ export default class SituationNamingModal extends React.Component<PropsType> {
      */
     saveAndClose() {
         if (this.isProperSituationName()) {
+            this.props.actions.setSelectedElement("", undefined) 
             this.props.actions.setRenamingModalSituation(undefined)
             this.props.actions.setCurrentSituation(this.props.situationID)
-            this.props.actions.setSelectedElement("", undefined) 
-            this.props.actions.showFirstSituationInformationWindow()
+            this.props.actions.showNextInformationWindow()
         }
     }
 
