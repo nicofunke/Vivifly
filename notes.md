@@ -35,12 +35,7 @@
 - ScreenElement Visualize extended with Texture2D params
 - Screenspec constructor public
 - LightSpec constructor public
+- Light colors situation specific are not yet supported
 
-# Fragen
-- Wie Startsituation setzen?
-
-
-Mögliche Dateiformate: 
-stl, fbx (auch in Vivian enthalten), stp (von CAD Software)
-
-Resolution anhand bild
+-------
+- in Tests sollten alle Funktionalitäten geprüft werden

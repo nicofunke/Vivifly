@@ -2,6 +2,9 @@ import React from 'react'
 import { MDBIcon } from 'mdbreact'
 import Logo from '../../assets/logo_font.png'
 
+// TODO: (prio) Export function(JSZip)
+// TODO: (prio) Demo mode
+
 export default class Navbar extends React.Component {
 
     render() {
