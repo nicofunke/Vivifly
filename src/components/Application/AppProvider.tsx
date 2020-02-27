@@ -18,7 +18,7 @@ import { Actions } from '../../interfaces/actions.interface'
 import ViewContainer from './ViewContainer'
 import { InformationBannerUtils } from '../../Utils/InformationBannerUtils';
 
-// TODO: ERROR404 remove
+// TODO: (prio) Remove JS_ERROR_OCCURRED
 
 /**
  * Provides AppContext and Actions

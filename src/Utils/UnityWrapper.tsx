@@ -37,9 +37,6 @@ export class UnityWrapper {
             const clickedPlane: Vector3 = { x: clickObject.planeX, y: clickObject.planeY, z: clickObject.planeZ }
             onClick(clickObject.element, clickedPlane)
         })
-        this.unityContent.on("catchUnityError", (code: number, messageString: string) => {
-            console.log("ERROR" + code + ": " + messageString)
-        })
         this.unityContent.on("progress", (progress: number) => {
             onProgress(progress)
         })
