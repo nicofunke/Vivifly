@@ -14,7 +14,7 @@ type PropsType = {
  */
 export default function ButtonChooseTransition(props: PropsType) {
     return <>
-        <div>Pushing a button leads to a new situation, e.g. lights turned on or off.<br />
+        <div>Pushing a button leads to another situation, e.g. lights turned on or off.<br />
             Where should this button lead to?</div>
         <div className="row">
             <div className="col-5 px-2">

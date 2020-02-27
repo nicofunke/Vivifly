@@ -6,7 +6,6 @@ import AppProvider from './components/Application/AppProvider'
 // TODO: (code) Unity doc comments 
 // TODO: (prio) bigger model
 // TODO: (UX) Activate screen explicitly
-// TODO: (UX) Rename to "Another situation" isntead of new
 // TODO: (prio) mousewheel support
 
 function App() {
