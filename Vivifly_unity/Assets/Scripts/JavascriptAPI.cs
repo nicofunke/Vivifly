@@ -37,10 +37,6 @@ public class ScreenJSON {
 
 public class JavascriptAPI : MonoBehaviour {
 
-    // Import js function
-    [DllImport("__Internal")]
-    private static extern void JS_ErrorOccurred(int code, string message);
-
     // Necessary scripts to call functions
     OutlineController outlineController;
     LightsController lightsController;
@@ -51,7 +47,9 @@ public class JavascriptAPI : MonoBehaviour {
 
     public Texture2D image;
 
-    // Instantiates necessary objects
+    /// <summary>
+    /// Instantiates necessary controller objects
+    /// </summary>
     void Start() {
         // initialize controller object
         GameObject viviflyCore = GameObject.Find("ViviflyCore");
@@ -63,25 +61,18 @@ public class JavascriptAPI : MonoBehaviour {
         mouseController = viviflyCore.GetComponent<MouseController>();
     }
 
-    // Tries to find an object by its name and throws error to javascript otherwise
-    private GameObject FindObjectByName(string objectName) {
-        GameObject gameObject = GameObject.Find(objectName);
-        if (!gameObject) {
-            JS_ErrorOccurred(404, "Could not find gameObject " + objectName);
-        }
-        return gameObject;
-
-    }
-
     // =========== OUTLINE METHODS ============================================
 
-    // outlines a gameobject
-    // Example JSON parameter: {"element": "Cube", "color": "red"}
-    // possible color strings: red, deep-orange, light-green, cyan
+    /// <summary>
+    /// Outlines a gameobject
+    /// Example JSON parameter: {"element": "Cube", "color": "red"}
+    /// possible color strings: red, deep-orange, light-green, cyan
+    /// </summary>
+    /// <param name="outlineJSON"></param>
     public void SetOutline(string outlineJSON) {
         OutlineJSON request = new OutlineJSON();
         JsonUtility.FromJsonOverwrite(outlineJSON, request);
-        GameObject objectToOutline = this.FindObjectByName(request.element);
+        GameObject objectToOutline = GameObject.Find(request.element);
         if (!objectToOutline) {
             // Element does not exist: do nothing
             return;
@@ -89,9 +80,12 @@ public class JavascriptAPI : MonoBehaviour {
         this.outlineController.setOutline(objectToOutline, request.color);
     }
 
-    // Removes the outline effect of an object
+    /// <summary>
+    ///  Removes the outline effect of an object
+    /// </summary>
+    /// <param name="objectName">Name of the gameObject</param>
     public void RemoveOutline(string objectName) {
-        GameObject outlinedObject = this.FindObjectByName(objectName);
+        GameObject outlinedObject = GameObject.Find(objectName);
         if (!outlinedObject) {
             // Element does not exist: do nothing
             return;
@@ -99,7 +93,9 @@ public class JavascriptAPI : MonoBehaviour {
         this.outlineController.RemoveOutline(outlinedObject);
     }
 
-    // Removes all outline effects of all elements
+    /// <summary>
+    /// Removes all outline effects of all elements
+    /// </summary>
     public void RemoveAllOutlines() {
         this.outlineController.RemoveAllOutlines();
     }
@@ -116,26 +112,37 @@ public class JavascriptAPI : MonoBehaviour {
 
     // =========== LIGHT METHODS ============================================
 
-    // Changes the color as defined in the json that is given as string parameter
-    // example JSON: {element: "Cube3", red: 0.2, green: 1.0, blue: 0.15, alpha: 0.7 }
+
+    /// <summary>
+    /// Changes the color as defined in the json that is given as string parameter
+    /// example JSON: {element: "Cube3", red: 0.2, green: 1.0, blue: 0.15, alpha: 0.7 }
+    /// </summary>
     public void SetLightColor(string coloringJSON) {
         ColoringJSON request = new ColoringJSON();
         JsonUtility.FromJsonOverwrite(coloringJSON, request);
         this.lightsController.ChangeColor(request.element, request.red, request.green, request.blue, request.alpha);
     }
 
-    // Removes the light effect of an object
+    /// <summary>
+    /// Removes the light effect of an object
+    /// </summary>
+    /// <param name="objectName">Name of the gameObject</param>
     public void RemoveLight(string objectName) {
         this.lightsController.RemoveLightEffect(objectName);
     }
 
-    // Removes all light effects of all elements
+    /// <summary>
+    /// Removes all light effects of all elements
+    /// </summary>
     public void RemoveAllLights() {
         this.lightsController.RemoveAllLightEffects();
     }
 
     // =========== SCREEN METHODS =====================================================
-    // Displays an image on a plane of a gameobject
+    /// <summary>
+    /// Displays an image on a plane of a gameobject
+    /// </summary>
+    /// <param name="screenJSON">JSON string containing screen information(see ScreenJSON Class)</param>
     public void DisplayImage(string screenJSON) {
         ScreenJSON request = new ScreenJSON();
         JsonUtility.FromJsonOverwrite(screenJSON, request);
@@ -143,43 +150,59 @@ public class JavascriptAPI : MonoBehaviour {
         this.screensController.displayImage(request.element, request.imageBase64, planeVector);
     }
 
-    // Removes the screen effect of a certain gameobject
+    /// <summary>
+    /// Removes the screen effect of a certain gameobject
+    /// </summary>
+    /// <param name="gameObjectName">Name of the gameObject</param>
     public void RemoveScreenEffect(string gameObjectName) {
         this.screensController.RemoveScreenEffect(gameObjectName);
     }
 
-    // Removes all screen effects
+    /// <summary>
+    /// Removes all screen effects
+    /// </summary>
     public void RemoveAllScreenEffects() {
         this.screensController.RemoveAllScreenEffects();
     }
 
-    // Activates the hover effect for the planes of a gameObject
+    /// <summary>
+    /// Activates the hover effect for the planes of a gameObject
+    /// </summary>
+    /// <param name="gameObjectName">Name of the gameObject</param>
     public void activatePlaneHoverEffect(string gameObjectName) {
         this.mouseController.StartPlaneHoverEffect(gameObjectName);
     }
 
-    // Deactivates the hover effect for planes
+    /// <summary>
+    /// Deactivates the hover effect for planes
+    /// </summary>
     public void deactivatePlaneHoverEffect() {
         this.mouseController.StopPlaneHoverEffect();
     }
 
     // =========== CAMERA MOVEMENT METHODS ============================================
 
-    // Starts movement of camera in the direction that is given as string
-    // possible strings: forwards, backwards, left, right
+    /// <summary>
+    /// Starts movement of camera in the direction that is given as string
+    /// </summary>
+    /// <param name="direction">forwards, backwards, left or right</param>
     public void StartCameraMovement(string direction) {
         cameraController.startMoving(direction);
     }
 
-    // Stops movement of camera in the direction that is given as string
-    // possible strings: forwards, backwards, left, right
+    /// <summary>
+    /// Stops movement of camera in the direction that is given as string
+    /// </summary>
+    /// <param name="direction">forwards, backwards, left or right</param>
     public void StopCameraMovement(string direction) {
         cameraController.stopMoving(direction);
     }
 
     // =========== OVERALL METHODS ============================================
 
-    // Removes all visual effects such as lights, screens and outlines
+    /// <summary>
+    /// Removes all visual effects such as lights, screens and outlines
+    /// </summary>
     public void RemoveAllVisualEffects() {
         this.RemoveAllScreenEffects();
         this.RemoveAllOutlines();

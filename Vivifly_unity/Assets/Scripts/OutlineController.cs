@@ -6,22 +6,19 @@ using System.Linq;
 
 public class OutlineController : MonoBehaviour {
 
-    // Import js function
-    [DllImport("__Internal")]
-    private static extern void JS_ErrorOccurred(int code, string message);
-
-    // Maps GameObjects with their correspondend outline component
+    /// <summary>
+    /// Maps GameObjects with their correspondend outline component
+    /// </summary>
     private Dictionary<GameObject, cakeslice.Outline> outlineComponents = new Dictionary<GameObject, cakeslice.Outline>();
 
-    // Outlines a gameobject
-    // possible color strings: red, deep-orange, light-green, cyan
+    /// <summary>
+    /// Outlines a gameobject
+    /// </summary>
+    /// <param name="objectToOutline">GameObject that should be outlined</param>
+    /// <param name="colorName">red, deep-orange, light-green or cyan</param>
     public void setOutline(GameObject objectToOutline, string colorName) {
         int colorCode = this.ColorNameToCode(colorName);
-        if (colorCode < 0) {
-            // Wrong color string
-            JS_ErrorOccurred(404, "Could not find color " + colorName);
-            return;
-        }
+
         if (outlineComponents.ContainsKey(objectToOutline)) {
             // Object is already outlined -> Just change color
             outlineComponents[objectToOutline].color = colorCode;
@@ -34,7 +31,10 @@ public class OutlineController : MonoBehaviour {
         }
     }
 
-    // Removes the outline of an gameObject
+    /// <summary>
+    /// Removes the outline of an gameObject
+    /// </summary>
+    /// <param name="outlinedObject">Outlined GameObject</param>
     public void RemoveOutline(GameObject outlinedObject) {
         if (!outlineComponents.ContainsKey(outlinedObject)) {
             // Error: Object is not outlined
@@ -44,7 +44,9 @@ public class OutlineController : MonoBehaviour {
         outlineComponents.Remove(outlinedObject);
     }
 
-    // Removes outlines of all gameObjects
+    /// <summary>
+    /// Removes outlines of all gameObjects
+    /// </summary>
     public void RemoveAllOutlines() {
         GameObject[] keyObjects = outlineComponents.Keys.ToArray();
         foreach (GameObject keyObject in keyObjects) {
@@ -52,9 +54,11 @@ public class OutlineController : MonoBehaviour {
         }
     }
 
-    // returns the matching color number of the outline colors for a given color name
-    // returns -1 if the color name was not found
-    // possible color strings: red, deep-orange, light-green, cyan
+    /// <summary>
+    /// returns the matching color number of the outline colors for a given color name or -1 if the color does not exist
+    /// </summary>
+    /// <param name="colorName">red, deep-orange, light-green or cyan</param>
+    /// <returns></returns>
     private int ColorNameToCode(string colorName) {
         switch (colorName) {
             case "red":

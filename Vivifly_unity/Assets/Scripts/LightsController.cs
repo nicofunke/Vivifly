@@ -7,14 +7,19 @@ using System.Linq;
 using de.ugoe.cs.vivian.core;
 public class LightsController : MonoBehaviour {
 
-    // Import js function
-    [DllImport("__Internal")]
-    private static extern void JS_ErrorOccurred(int code, string message);
-
-    // Maps the name of gameObjects with their correspondend light GameObject if exist
+    /// <summary>
+    /// Maps the name of gameObjects with their correspondend light GameObject if exist
+    /// </summary>
     private Dictionary<string, GameObject> lightObjects = new Dictionary<string, GameObject>();
 
-    // Adds a light effect to an gameObject 
+    /// <summary>
+    /// Adds a light effect to an gameObject 
+    /// </summary>
+    /// <param name="gameObjectName">Name of the gameObject</param>
+    /// <param name="red"> Red value from 0-1</param>
+    /// <param name="green">Green value from 0-1</param>
+    /// <param name="blue">Blue value from 0-1</param>
+    /// <param name="alpha">Alpha value</param>
     public void ChangeColor(string gameObjectName, float red, float green, float blue, float alpha) {
         GameObject lightGameObject;
         Color emissionColor = new Color(red, green, blue);
@@ -33,7 +38,10 @@ public class LightsController : MonoBehaviour {
         this.lightObjects.Add(gameObjectName, lightGameObject);
     }
 
-    // Removes the light effect of a gameobject
+    /// <summary>
+    /// Removes the light effect of a gameobject
+    /// </summary>
+    /// <param name="gameObjectName">Name of the gameObject</param>
     public void RemoveLightEffect(string gameObjectName) {
         // There is no overlay element -> stop
         if (!lightObjects.ContainsKey(gameObjectName)) {
@@ -44,7 +52,9 @@ public class LightsController : MonoBehaviour {
         Destroy(lightGameObject);
     }
 
-    // Removes all light gameobjects
+    /// <summary>
+    /// Removes all light gameobjects
+    /// </summary>
     public void RemoveAllLightEffects() {
         string[] keyObjects = lightObjects.Keys.ToArray();
         foreach (string gameObjectName in keyObjects) {

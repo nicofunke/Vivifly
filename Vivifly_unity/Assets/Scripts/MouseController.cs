@@ -23,10 +23,14 @@ public class MouseController : MonoBehaviour {
     [DllImport("__Internal")]
     private static extern void JS_ObjectClicked( string mouseClickJSON);
 
-    // Current gameObject with plane hover effect
+    /// <summary>
+    /// Current gameObject with plane hover effect
+    /// </summary>
     private string planeHoverEffectObjectName = null;
 
-    // Texture2D for hover effect
+    /// <summary>
+    /// Texture2D for hover effect
+    /// </summary>
     public Texture2D hoverTexture;
 
 
@@ -35,7 +39,9 @@ public class MouseController : MonoBehaviour {
         WebGLInput.captureAllKeyboardInput = false;
     }
 
-    // Check for clicks and hover effect
+    /// <summary>
+    /// Checks for clicks and hover effect
+    /// </summary>
     void Update() {
         CheckForClicks();
         CheckPlaneHoverEffect();
@@ -128,79 +134,4 @@ public class MouseController : MonoBehaviour {
         Vector3 vector = hit.transform.InverseTransformDirection(hit.normal);
         return new Vector3((float)Math.Round(vector.x, 2), (float)Math.Round(vector.y, 2), (float)Math.Round(vector.z, 2));
     }
-
-
-
-
-    //========================================================================================================
-    // ----- METHODS BELOW THIS POINT ARE CURRENTLY NOT USED, SINCE THEY CAN BE REPLACED BY USING 'hit.normal'
-
-    /// <summary>
-    /// Returns the plane normal vector of a plane that is hit by a RaycastHit 
-    /// </summary>
-    /// <param name="hit">RaycastHit that hits the plane of a gameObject</param>
-    /// <returns></returns>
-    /*private Vector3 GetPlaneVector(RaycastHit hit) {
-
-        Vector3[] collisionPoints = getThreeCollisionPoints(hit);
-
-        // Convert collision points to local points inside gameobject
-        collisionPoints[0] = hit.transform.InverseTransformPoint(collisionPoints[0]);
-        collisionPoints[1] = hit.transform.InverseTransformPoint(collisionPoints[1]);
-        collisionPoints[2] = hit.transform.InverseTransformPoint(collisionPoints[2]);
-
-        // calculate plane with normal vector
-        Vector3 planeVector1 = (collisionPoints[2] - collisionPoints[0]).normalized;
-        Vector3 planeVector2 = (collisionPoints[1] - collisionPoints[0]).normalized;
-        Vector3 planeNormalVector = Vector3.Cross(planeVector1, planeVector2).normalized;
-
-        // Round vector in order to remove precision bugs 
-        planeNormalVector = new Vector3((float)System.Math.Round(planeNormalVector.x, 2), (float)System.Math.Round(planeNormalVector.y, 2), (float)System.Math.Round(planeNormalVector.z, 2));
-
-        // Check if normal vector needs to be inversed
-        Plane surface = new Plane(planeNormalVector, collisionPoints[0]);
-        if (surface.GetSide(new Vector3(0, 0, 0))) {
-            planeNormalVector = -planeNormalVector;
-        }
-        return planeNormalVector;
-    }
-
-    /// <summary>
-    ///      Splits the given Raycast closely to the collision in order to get more collisions 
-    /// </summary>
-    private Vector3[] getThreeCollisionPoints(RaycastHit hit) {
-        GameObject clickedObject = hit.transform.gameObject;
-        Vector3[] collisionPoints = new Vector3[3];
-        collisionPoints[0] = hit.point;
-        Vector3 cameraPosition = Camera.main.transform.position;
-        Vector3 vectorFromCameraToCollision = collisionPoints[0] - cameraPosition;
-
-        // Split the ray before it collides with the gameobject in order to get more points to calculate the plane
-        float distortionStrength = 0.01f;
-        float splitPointDistance = 0.01f;
-        Vector3 splitPoint = collisionPoints[0] - splitPointDistance * vectorFromCameraToCollision.normalized;
-
-        // Generate new rays from split point and try to find two more collisions 
-        int collisions = 1;
-        int maxIterations = 1000;   // To prevent infinte loops if no other collissions could be detected
-        while (collisions < 3 && maxIterations > 0) {
-            RaycastHit splitHit;
-            Vector3 distortionVector = new Vector3(Random.Range(-distortionStrength, distortionStrength),
-            Random.Range(-distortionStrength, distortionStrength), Random.Range(-distortionStrength, distortionStrength)).normalized;
-            Ray splitRay = new Ray(splitPoint, vectorFromCameraToCollision.normalized + distortionVector);
-            if (Physics.Raycast(splitRay, out splitHit)) {
-                if (splitHit.transform && splitHit.transform.gameObject == clickedObject) {
-                    collisionPoints[collisions] = splitHit.point;
-                    collisions++;
-                }
-            }
-            maxIterations--;
-        }
-        if (collisions < 3) {
-            JS_ErrorOccurred(400, "Could not detect a surface");
-            return null;
-        }
-        return collisionPoints;
-    }
-    */
 }

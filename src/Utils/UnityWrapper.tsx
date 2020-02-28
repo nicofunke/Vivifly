@@ -40,7 +40,6 @@ export class UnityWrapper {
         this.unityContent.on("progress", (progress: number) => {
             onProgress(progress)
         })
-        this.unityContent.on("catchUnityError", (progress: number) => { })
         this.uploadingStarted = uploadingStarted
         this.uploadingFinished = uploadingFinished
     }

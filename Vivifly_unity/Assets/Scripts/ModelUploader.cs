@@ -36,7 +36,7 @@ public class ModelUploader : MonoBehaviour {
         using (var assetLoader = new AssetLoader()) {
             var assetLoaderOptions = AssetLoaderOptions.CreateInstance();
             // Scale down model, since trilib loads it way too big
-            assetLoaderOptions.Scale = 0.01f;
+            assetLoaderOptions.Scale = 0.09f;
             assetLoaderOptions.UseOriginalPositionRotationAndScale = true;
             var data = this.GetBrowserFileData(0);
             var name = this.GetBrowserFileName(0);

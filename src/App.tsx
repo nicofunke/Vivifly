@@ -1,11 +1,9 @@
 import React from 'react'
 import AppProvider from './components/Application/AppProvider'
 
-// TODO: (optional) Warning: Not Supported on mobile devices
-// TODO: (code) Unity doc comments 
-// TODO: (prio) bigger model
+// TODO: (optional) Warning: Not Supported on mobile devices 
 // TODO: (UX) Activate screen explicitly
-// TODO: (prio) mousewheel support
+// TODO: (optional) mousewheel support
 
 function App() {
   return <AppProvider/>
