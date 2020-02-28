@@ -333,9 +333,14 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         }
         // Remove situation from list of states and all transition that contain this situation
         this.setState((state: ContextState) => {
+            const isStarting = state.states.find(situation => situation.id === situationID && situation.isStart)
+            const newStates = state.states.filter(situation => situation.id !== situationID)
+            if (isStarting) { // set new starting situation if starting situation is removed
+                newStates[0].isStart = true
+            }
             return {
                 ...state,
-                states: state.states.filter(situation => situation.id !== situationID),    // Remove from states list
+                states: newStates,
                 transitions: state.transitions.filter(transition =>                         // Remove from transitions
                     (transition.DestinationStateID !== situationID && transition.SourceStateID !== situationID))
             }
