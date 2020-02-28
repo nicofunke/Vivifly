@@ -36,7 +36,11 @@ export default class ViewContainer extends React.Component<PropsType> {
                     unityWrapper={this.props.appContext.unityWrapper}
                     modelWasUploaded={this.props.appContext.applicationState.modelWasUploaded}
                     isCurrentlyUploading={this.props.appContext.applicationState.isCurrentlyUploading} />
-                <Navbar />
+                <Navbar
+                    actions={this.props.actions}
+                    isDemoMode={this.props.appContext.applicationState.isDemoMode}
+                    states={this.props.appContext.states} />
+
                 <MDBContainer fluid className="h-100">
                     <MDBRow className="h-100">
 
@@ -49,7 +53,8 @@ export default class ViewContainer extends React.Component<PropsType> {
                                 states={this.props.appContext.states}
                                 transitions={this.props.appContext.transitions}
                                 actions={this.props.actions}
-                                currentSituationID={this.props.appContext.applicationState.currentSituationID} />
+                                currentSituationID={this.props.appContext.applicationState.currentSituationID}
+                                isDemoMode={this.props.appContext.applicationState.isDemoMode} />
                         </MDBCol>
 
                         <ElementCardHandler

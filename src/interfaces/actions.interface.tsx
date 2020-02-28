@@ -16,6 +16,7 @@ export interface Actions {
     renameSituation: (situationID: number, newSituationName: string) => void,
     showNextInformationBanner: () => void,
     setCurrentSituation: (currentSituationID: number) => void,
+    setDemoMode: (active: boolean) => void,
     setLightColor: (element: string, color: Color) => void,
     setNewElementTypeModalVisibility: (isVisible: boolean) => void,
     setScreenImage: (element: string, situationID: number, imageFile: File | undefined) => void,

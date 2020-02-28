@@ -76,7 +76,9 @@ export class UnityWrapper {
             }
         }
         // Restore outline of selected element
-        this.outlineElement(context.applicationState.selectedElement, OUTLINE_COLOR_RED)
+        if (!context.applicationState.isDemoMode) {
+            this.outlineElement(context.applicationState.selectedElement, OUTLINE_COLOR_RED)
+        }
     }
 
     /**

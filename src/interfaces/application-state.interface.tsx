@@ -18,6 +18,8 @@ export interface ApplicationState {
     planeSelectionElementName?: string,             // Current element for plane selection for screens ( or null if plane selection is not active )
     clickedPlane?: Vector3,                         // Stores the normal vector of the plane of the selected element the user clicked on on
     lastSituationID: number,                        // Stores the last visited situation in order to go back to this situation if the current one gets removed 
+    isDemoMode: boolean,                            // If the application is currently in "demo-mode" to test the current model 
+    demoTimeout?: number                               // Stores the current timeout while in demo mode
 }
 
 /**
@@ -34,4 +36,5 @@ export const APPLICATION_STATE_DEFAULT: ApplicationState = {
     showTimeBasedTransitionModal: false,
     modelWasUploaded: true,
     lastSituationID: 0,
+    isDemoMode: false
 }

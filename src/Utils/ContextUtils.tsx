@@ -154,4 +154,23 @@ export class ContextUtils {
         const isDuplicate = states.filter(state => state.Name === name).length > 1
         return !!name && name !== "" && !isDuplicate
     }
+
+    /**
+     * Returns the starting state of a list of states
+     * @param states List of all states
+     */
+    static getStartingStateID(states: State[]): number | undefined {
+        const startingState = states.find(state => state.isStart)
+        return !!startingState ? startingState.id : undefined
+    }
+
+    /**
+     * Returns the name of a situation
+     * @param situationID ID of the situation
+     * @param states List of all states
+     */
+    static getSituationName(situationID: number, states: State[]): string | undefined {
+        const situation = states.find(situation => situation.id === situationID)
+        return situation?.Name
+    }
 }

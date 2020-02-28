@@ -7,7 +7,7 @@ import { UnityWrapper } from '../../Utils/UnityWrapper'
 
 export default function UploadModelOverlay(props: { unityWrapper: UnityWrapper }) {
 
-    // TODO: (prio) Handling wrong file formats
+    // TODO: (optional) Handling wrong file formats
     const { getRootProps, getInputProps } = useDropzone({
         multiple: false,
         onDrop: files => props.unityWrapper.uploadModel(files[0])

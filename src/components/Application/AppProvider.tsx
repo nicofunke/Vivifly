@@ -55,6 +55,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         renameSituation: this.renameSituation.bind(this),
         showNextInformationBanner: this.showNextInformationBanner.bind(this),
         setCurrentSituation: this.setCurrentSituation.bind(this),
+        setDemoMode: this.setDemoMode.bind(this),
         setLightColor: this.setLightColor.bind(this),
         setLightEmission: this.setLightEmission.bind(this),
         setNewElementTypeModalVisibility: this.setNewElementTypeModalVisibility.bind(this),
@@ -74,8 +75,6 @@ export default class AppProvider extends React.Component<{}, AppContext> {
     // ============== WebGL/Unity methods ===========================
     /**
      * Method that gets called if an element is clicked inside unity WebGL
-     * Sets it as the currently selected element
-     *
      * @param clickedElement    name of the clicked element
      * @param planeX            x value of the normal vector of the plane that was clicked on
      * @param planeY            y value of the normal vector of the plane that was clicked on
@@ -83,8 +82,17 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      */
     unityObjectClicked(clickedElement: string, clickedPlane: Vector3): void {
         const planeSelectionElement = this.state.applicationState.planeSelectionElementName
+        // If demo mode
+        if (this.state.applicationState.isDemoMode) {
+            const transition =
+                ContextUtils.getButtonTransition(clickedElement, this.state.applicationState.currentSituationID, this.state.transitions)
+            if (!!transition && transition.DestinationStateID !== undefined) {
+                this.setCurrentSituation(transition.DestinationStateID)
+            }
+            return
+        }
+        // If Plane selection mode 
         if (!!planeSelectionElement) {
-            // Plane selection active 
             if (clickedElement === planeSelectionElement) {
                 // Plane was chosen 
                 this.setPlaneSelectionMode(planeSelectionElement, false, false)
@@ -137,9 +145,25 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         this.hideInformationBanner()
 
         this.setState((state: ContextState) => {
-            // If situation does not exist just go to the first situation in the list
+            // If situation does not exist just go to the first situation in the list (May happen when a situation is removed ) 
             currentSituationID = (!!state.states.find(situation => situation.id === currentSituationID)) ?
                 currentSituationID : state.states[0].id
+
+            // TODO: This is a really dirty hack :( Activating timeout transition if demo mode
+            // In a further version the whole demo mode should be done with Vivian Framework inside Unity
+            clearTimeout(state.applicationState.demoTimeout)
+            let demoTimeout = undefined
+            if (state.applicationState.isDemoMode) {
+                const transition = ContextUtils.getTimeBasedTransition(currentSituationID, this.state.transitions)
+                if (!!transition) {
+                    demoTimeout = setTimeout(() => {
+                        if (this.state.applicationState.isDemoMode && transition.DestinationStateID !== undefined) {
+                            this.setCurrentSituation(transition.DestinationStateID)
+                        }
+                    }, transition.Timeout)
+                }
+            }
+
             // Change Visualization
             state.unityWrapper?.updateVisualization(state, currentSituationID)
             // Change state
@@ -147,7 +171,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
                 ...state, applicationState: {
                     ...state.applicationState,
                     currentSituationID: currentSituationID,
-                    lastSituationID: state.applicationState.currentSituationID
+                    lastSituationID: state.applicationState.currentSituationID,
+                    demoTimeout: demoTimeout
                 }
             }
         })
@@ -160,7 +185,6 @@ export default class AppProvider extends React.Component<{}, AppContext> {
 
     /**
      * Changes the currently selected element and highlights it in unity
-     *
      * @param selectedElement   name of the element that should be selected
      */
     setSelectedElement(selectedElement: string, clickedPlane: Vector3 | undefined) {
@@ -216,6 +240,39 @@ export default class AppProvider extends React.Component<{}, AppContext> {
                     currentInformationBanner: InformationBannerUtils.hideInformationBanner(state.applicationState.currentInformationBanner)
                 }
             }
+        })
+    }
+
+    /**
+     * Changes if the "demo mode" to test the model is active
+     * @param active If the demo mode should be active 
+     */
+    setDemoMode(active: boolean) {
+        this.setState(state => {
+            // TODO: This is a really dirty hack :( Activating timeout transition if demo mode
+            // In a further version the whole demo mode should be done with Vivian Framework inside Unity
+            clearTimeout(state.applicationState.demoTimeout)
+            let demoTimeout = undefined
+            if (active) {
+                const transition = ContextUtils.getTimeBasedTransition(this.state.applicationState.currentSituationID, this.state.transitions)
+                if (!!transition) {
+                    demoTimeout = setTimeout(() => {
+                        if (this.state.applicationState.isDemoMode && transition.DestinationStateID !== undefined) {
+                            this.setCurrentSituation(transition.DestinationStateID)
+                        }
+                    }, transition.Timeout)
+                }
+            }
+            const newState: AppContext = {
+                ...state,
+                applicationState: {
+                    ...state.applicationState,
+                    isDemoMode: active,
+                    demoTimeout: demoTimeout
+                }
+            }
+            state.unityWrapper?.updateVisualization(newState)
+            return newState
         })
     }
 
@@ -294,14 +351,14 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * @param situationID New start situation ID
      */
     setStartSituation(situationID: number) {
-        this.setState( state => {
+        this.setState(state => {
             return {
                 ...state,
-                states: state.states.map( situation => {
-                    if(situation.id === situationID){
-                        return { ...situation, isStart: true}
+                states: state.states.map(situation => {
+                    if (situation.id === situationID) {
+                        return { ...situation, isStart: true }
                     } else {
-                        return { ...situation, isStart: undefined}
+                        return { ...situation, isStart: undefined }
                     }
                 })
             }

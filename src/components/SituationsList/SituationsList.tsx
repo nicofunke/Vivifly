@@ -1,15 +1,17 @@
 import React from 'react'
 import SituationsListElement from './SituationsListElement'
-import { ContextUtils } from '../../Utils/ContextUtils'
+import { ContextUtils } from '../../Utils/ContextUtils';
 import { State } from '../../interfaces/state.interface'
 import { Actions } from '../../interfaces/actions.interface'
 import { Transition } from '../../interfaces/transition.interface'
+import SituationsListDemoMode from './SItuationListDemoMode'
 
 type PropsType = {
     states: State[],
     actions: Actions,
     currentSituationID: number,
-    transitions: Transition[]
+    transitions: Transition[],
+    isDemoMode: boolean
 }
 
 /**
@@ -46,6 +48,9 @@ export default class SituationsList extends React.Component<PropsType> {
     }
 
     render() {
+        if (!!this.props.isDemoMode) {
+            return <SituationsListDemoMode currentSituationName={ContextUtils.getSituationName(this.props.currentSituationID, this.props.states)} />
+        }
         return (
             <div className=" h-100 w-100 bg-white">
                 <div className="text-dark w-100 p-2">

@@ -1,0 +1,25 @@
+import React from 'react'
+import SituationsListElement from './SituationsListElement'
+import { ContextUtils } from '../../Utils/ContextUtils'
+import { State } from '../../interfaces/state.interface'
+import { Actions } from '../../interfaces/actions.interface'
+import { Transition } from '../../interfaces/transition.interface'
+
+type PropsType = {
+    currentSituationName?: string
+}
+
+/**
+ * Component that displays the current situation while in demo mode
+ */
+export default class SituationsListDemoMode extends React.Component<PropsType> {
+    render() {
+        return <div className=" w-100 bg-white">
+            <h5 className="text-white bg-danger p-2">DEMO MODE</h5>
+            <div className="text-dark w-100 pb-2 px-2">
+                <small>CURRENT SITUATION:</small>
+                <h4>{this.props.currentSituationName}</h4>
+            </div>
+        </div>
+    }
+}
