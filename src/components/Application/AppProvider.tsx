@@ -16,7 +16,7 @@ import { InteractionElement } from '../../interfaces/interaction-element.interfa
 import { AppContext } from '../../interfaces/app-context.interface'
 import { Actions } from '../../interfaces/actions.interface'
 import ViewContainer from './ViewContainer'
-import { InformationBannerUtils } from '../../Utils/InformationBannerUtils';
+import { InformationBannerUtils } from '../../Utils/InformationBannerUtils'
 
 // TODO: (prio) Remove JS_ERROR_OCCURRED
 
@@ -516,54 +516,81 @@ export default class AppProvider extends React.Component<{}, AppContext> {
     removeElementType(element: string, type: string) {
         switch (type) {
             case "Button":
-                // Remove element from interactionElements and remove all transitions that include the button
-                this.setState((state: ContextState) => {
-                    return {
-                        ...state,
-                        interactionElements: state.interactionElements.filter(interactionElement => interactionElement.Name !== element),
-                        transitions: state.transitions.filter(transition => (transition.InteractionElement !== element))
-                    }
-                })
+                this.removeTypeButton(element)
                 break
             case "Screen":
-                // Remove from all situations and from visualizationElements list
-                const newSituations = this.state.states.map(situation => {
-                    if (!situation.Values) {
-                        return situation
-                    }
-                    return { ...situation, Values: situation.Values.filter(value => value.VisualizationElement !== element || value.Type !== "ScreenContentVisualization") }
-                })
-                this.setState((state: ContextState) => {
-                    return {
-                        ...state,
-                        states: newSituations,
-                        visualizationElements: state.visualizationElements.filter(visualizationElement => visualizationElement.Name !== element || visualizationElement.Type !== "Screen")
-                    }
-                })
-                // Remove screen effects from current WebGL visualization
-                this.state.unityWrapper?.removeScreenEffect(element)
+                this.removeTypeScreen(element)
                 break
             case "Light":
-                // Remove from all situations and from visualizationElements list
-                const newStates = this.state.states.map(situation => {
-                    if (!situation.Values) {
-                        return situation
-                    }
-                    return { ...situation, Values: situation.Values.filter(value => value.VisualizationElement !== element || value.Type !== "FloatValueVisualization") }
-                })
-                this.setState((state: ContextState) => {
-                    return {
-                        ...state,
-                        states: newStates,
-                        visualizationElements: state.visualizationElements.filter(visualizationElement => visualizationElement.Name !== element || visualizationElement.Type !== "Light")
-                    }
-                })
-                // Remove light effects from current WebGL visualization
-                this.state.unityWrapper?.removeLightEffect(element)
+                this.removeTypeLight(element)
                 break
             default:
                 return
         }
+    }
+
+    /**
+     * Removes the light functionalities of an element
+     * @param element Name of the element
+     */
+    removeTypeLight(element: string) {
+        // Remove from all situations and from visualizationElements list
+        const newStates = this.state.states.map(situation => {
+            if (!situation.Values) {
+                return situation
+            }
+            return { ...situation, Values: situation.Values.filter(value => value.VisualizationElement !== element || value.Type !== "FloatValueVisualization") }
+        })
+        this.setState((state: ContextState) => {
+            return {
+                ...state,
+                states: newStates,
+                visualizationElements: state.visualizationElements.filter(visualizationElement =>
+                    visualizationElement.Name !== element || visualizationElement.Type !== ELEMENT_TYPE_LIGHT)
+            }
+        })
+        // Remove light effects from current WebGL visualization
+        this.state.unityWrapper?.removeLightEffect(element)
+    }
+
+    /**
+     * Removes the screen functionalities of a element
+     * @param element Name of the element
+     */
+    removeTypeScreen(element: string) {
+        // Remove from all situations and from visualizationElements list
+        const newSituations = this.state.states.map(situation => {
+            if (!situation.Values) {
+                return situation
+            }
+            return { ...situation, Values: situation.Values.filter(value => value.VisualizationElement !== element || value.Type !== "ScreenContentVisualization") }
+        })
+        this.setState((state: ContextState) => {
+            return {
+                ...state,
+                states: newSituations,
+                visualizationElements: state.visualizationElements.filter(visualizationElement =>
+                    visualizationElement.Name !== element || visualizationElement.Type !== ELEMENT_TYPE_SCREEN)
+            }
+        })
+        // Remove screen effects from current WebGL visualization
+        this.state.unityWrapper?.removeScreenEffect(element)
+    }
+
+    /**
+     * Removes the button functionalities of a element
+     * @param element Name of the element
+     */
+    removeTypeButton(element: string) {
+        // Remove element from interactionElements and remove all transitions that include the button
+        this.setState((state: ContextState) => {
+            return {
+                ...state,
+                interactionElements: state.interactionElements.filter(interactionElement =>
+                    interactionElement.Name !== element || interactionElement.Type !== ELEMENT_TYPE_BUTTON),
+                transitions: state.transitions.filter(transition => (transition.InteractionElement !== element))
+            }
+        })
     }
 
     /**

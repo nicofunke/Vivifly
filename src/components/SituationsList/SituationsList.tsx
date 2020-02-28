@@ -4,7 +4,7 @@ import { ContextUtils } from '../../Utils/ContextUtils';
 import { State } from '../../interfaces/state.interface'
 import { Actions } from '../../interfaces/actions.interface'
 import { Transition } from '../../interfaces/transition.interface'
-import SituationsListDemoMode from './SItuationListDemoMode'
+import SituationsListDemoMode from './SituationListDemoMode'
 
 type PropsType = {
     states: State[],

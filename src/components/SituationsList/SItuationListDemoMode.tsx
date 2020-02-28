@@ -1,9 +1,4 @@
 import React from 'react'
-import SituationsListElement from './SituationsListElement'
-import { ContextUtils } from '../../Utils/ContextUtils'
-import { State } from '../../interfaces/state.interface'
-import { Actions } from '../../interfaces/actions.interface'
-import { Transition } from '../../interfaces/transition.interface'
 
 type PropsType = {
     currentSituationName?: string
