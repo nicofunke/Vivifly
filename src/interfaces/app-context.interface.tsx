@@ -16,15 +16,3 @@ export interface AppContext {
     unityWrapper?: UnityWrapper,
     visualizationElements: VisualizationElement[],
 }
-
-/**
- * Default value for the AppContext
- */
-export const APP_CONTEXT_DEFAULT: AppContext = {
-    // Context variables
-    applicationState: APPLICATION_STATE_DEFAULT,
-    interactionElements: [],
-    states: [],
-    transitions: [],
-    visualizationElements: []
-}

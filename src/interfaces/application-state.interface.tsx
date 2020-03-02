@@ -34,7 +34,7 @@ export const APPLICATION_STATE_DEFAULT: ApplicationState = {
     isCurrentlyUploading: false,
     showNewElementTypeModal: false,
     showTimeBasedTransitionModal: false,
-    modelWasUploaded: false,
+    modelWasUploaded: true,
     lastSituationID: 0,
     isDemoMode: false
 }

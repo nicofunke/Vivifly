@@ -1,15 +1,15 @@
 import { ElementType, ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT, ELEMENT_TYPE_BUTTON } from '../types/element-type.type'
-import { ContextState } from '../interfaces/context-state.interface'
 import { Color } from '../interfaces/color.interface'
-import { Transition } from '../interfaces/transition.interface';
-import { State } from '../interfaces/state.interface';
+import { Transition } from '../interfaces/transition.interface'
+import { State } from '../interfaces/state.interface'
 import { VisualizationValue } from '../interfaces/visualization-value.interface'
 import { VISUALIZATION_TYPE_SCREEN } from '../types/visualization-type.type'
-import { VisualizationElement } from '../interfaces/visualization-element.interface';
-import { InteractionElement } from '../interfaces/interaction-element.interface';
+import { VisualizationElement } from '../interfaces/visualization-element.interface'
+import { InteractionElement } from '../interfaces/interaction-element.interface'
+import { AppContext } from '../interfaces/app-context.interface'
 
 /**
- * Utils class with static helper functions to work with the application state(context)
+ * Utils class with static helper functions to work with the application state
  */
 export class ContextUtils {
 
@@ -124,7 +124,7 @@ export class ContextUtils {
      * @param type      Type to check for
      * @param context   Current Context
      */
-    static elementHasType(element: string, type: ElementType, context: ContextState): boolean {
+    static elementHasType(element: string, type: ElementType, context: AppContext): boolean {
         // Visualization elements
         if (type === ELEMENT_TYPE_SCREEN || type === ELEMENT_TYPE_LIGHT) {
             return !!context.visualizationElements.find(

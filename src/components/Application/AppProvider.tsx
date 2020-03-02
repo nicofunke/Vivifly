@@ -1,11 +1,10 @@
 import React from 'react'
 import { UnityWrapper } from '../../Utils/UnityWrapper'
-import { ContextUtils } from '../../Utils/ContextUtils';
-import { ContextState } from '../../interfaces/context-state.interface';
+import { ContextUtils } from '../../Utils/ContextUtils'
 import { VisualizationValue } from '../../interfaces/visualization-value.interface'
 import { Vector3 } from '../../interfaces/vector3.interface'
 import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface'
-import { ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT, ElementType, ELEMENT_TYPE_BUTTON } from '../../types/element-type.type';
+import { ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT, ElementType, ELEMENT_TYPE_BUTTON } from '../../types/element-type.type'
 import { VISUALIZATION_TYPE_SCREEN } from '../../types/visualization-type.type'
 import { State } from '../../interfaces/state.interface'
 import { VisualizationElement } from '../../interfaces/visualization-element.interface'
@@ -112,21 +111,21 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * @param progress      value from 0-1
      */
     setUnityLoadingProgress(progress: number) {
-        this.setState((state: ContextState) => { return { ...state, applicationState: { ...state.applicationState, unityLoadingProgress: progress } } })
+        this.setState((state: AppContext) => { return { applicationState: { ...state.applicationState, unityLoadingProgress: progress } } })
     }
 
     /**
      * Gets called when uploading a 3D model started
      */
     uploadingStarted() {
-        this.setState((state: ContextState) => { return { ...state, applicationState: { ...state.applicationState, isCurrentlyUploading: true } } })
+        this.setState((state: AppContext) => { return { applicationState: { ...state.applicationState, isCurrentlyUploading: true } } })
     }
 
     /**
      * Gets called if the 3D has been uploaded successfully
      */
     uploadingFinished() {
-        this.setState((state: ContextState) => { return { ...state, applicationState: { ...state.applicationState, isCurrentlyUploading: false, modelWasUploaded: true } } })
+        this.setState((state: AppContext) => { return { applicationState: { ...state.applicationState, isCurrentlyUploading: false, modelWasUploaded: true } } })
     }
 
     //============== Session specific methods =========================
@@ -142,12 +141,12 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         // Hide information banner
         this.hideInformationBanner()
 
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             // If situation does not exist just go to the first situation in the list (May happen when a situation is removed ) 
             currentSituationID = (!!state.states.find(situation => situation.id === currentSituationID)) ?
                 currentSituationID : state.states[0].id
 
-            // TODO: This is a really dirty hack :( Activating timeout transition if demo mode
+            // TODO: This is a really dirty hack :( Activating timeout transition if demo mode is active
             // In a further version the whole demo mode should be done with Vivian Framework inside Unity
             clearTimeout(state.applicationState.demoTimeout)
             let demoTimeout = undefined
@@ -166,7 +165,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
             state.unityWrapper?.updateVisualization(state, currentSituationID)
             // Change state
             return {
-                ...state, applicationState: {
+                applicationState: {
                     ...state.applicationState,
                     currentSituationID: currentSituationID,
                     lastSituationID: state.applicationState.currentSituationID,
@@ -197,10 +196,10 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         }
         // Hide information banner
         this.hideInformationBanner()
+
         // Change state
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 applicationState: {
                     ...state.applicationState,
                     selectedElement: selectedElement,
@@ -215,9 +214,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * Opens the next information banner
      */
     showNextInformationBanner() {
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 applicationState: {
                     ...state.applicationState,
                     currentInformationBanner: InformationBannerUtils.nextInformationBanner(state.applicationState.currentInformationBanner)
@@ -230,9 +228,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * Hides the current information banner
      */
     hideInformationBanner() {
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 applicationState: {
                     ...state.applicationState,
                     currentInformationBanner: InformationBannerUtils.hideInformationBanner(state.applicationState.currentInformationBanner)
@@ -288,9 +285,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         }
         const newID = this.state.applicationState.nextSituationID
         const nextID = newID + 1
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 states: [...state.states, { Name: newSituationName, id: newID }],
                 applicationState: {
                     ...state.applicationState,
@@ -308,9 +304,9 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * @param newSituationName      new siutation name
      */
     renameSituation(situationID: number, newSituationName: string) {
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state, states: state.states.map(situation => {
+                states: state.states.map(situation => {
                     if (situationID === situation.id) {
                         return { ...situation, Name: newSituationName }
                     }
@@ -330,14 +326,13 @@ export default class AppProvider extends React.Component<{}, AppContext> {
             return
         }
         // Remove situation from list of states and all transition that contain this situation
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             const isStarting = state.states.find(situation => situation.id === situationID && situation.isStart)
             const newStates = state.states.filter(situation => situation.id !== situationID)
             if (isStarting) { // set new starting situation if starting situation is removed
                 newStates[0].isStart = true
             }
             return {
-                ...state,
                 states: newStates,
                 transitions: state.transitions.filter(transition =>                         // Remove from transitions
                     (transition.DestinationStateID !== situationID && transition.SourceStateID !== situationID))
@@ -356,7 +351,6 @@ export default class AppProvider extends React.Component<{}, AppContext> {
     setStartSituation(situationID: number) {
         this.setState(state => {
             return {
-                ...state,
                 states: state.states.map(situation => {
                     if (situation.id === situationID) {
                         return { ...situation, isStart: true }
@@ -373,9 +367,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * @param situationID If the popup should be visible
      */
     setRenamingModalSituation(situationID: number | undefined) {
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 applicationState: {
                     ...state.applicationState,
                     newSituationID: situationID
@@ -401,14 +394,13 @@ export default class AppProvider extends React.Component<{}, AppContext> {
                 event: 0,
                 DestinationStateID: destinationSituationID
             }
-            this.setState((state: ContextState) => {
+            this.setState((state: AppContext) => {
                 return { ...state, transitions: [...state.transitions, newTransition] }
             })
         } else {
             // Change existing transition
-            this.setState((state: ContextState) => {
+            this.setState((state: AppContext) => {
                 return {
-                    ...state,
                     transitions: state.transitions.map(transition =>
                         (transition.SourceStateID === sourceSituationID && transition.InteractionElement === button) ?
                             { ...transition, DestinationStateID: destinationSituationID } : transition
@@ -432,14 +424,13 @@ export default class AppProvider extends React.Component<{}, AppContext> {
                 Timeout: timeout,
                 DestinationStateID: destinationSituationID
             }
-            this.setState((state: ContextState) => {
-                return { ...state, transitions: [...state.transitions, newTransition] }
+            this.setState((state: AppContext) => {
+                return { transitions: [...state.transitions, newTransition] }
             })
         } else {
             // Change existing transition
-            this.setState((state: ContextState) => {
+            this.setState((state: AppContext) => {
                 return {
-                    ...state,
                     transitions: state.transitions.map(transition =>
                         (transition.SourceStateID === sourceSituationID && !!transition.Timeout) ?
                             { ...transition, DestinationStateID: destinationSituationID, Timeout: timeout } : transition
@@ -456,7 +447,6 @@ export default class AppProvider extends React.Component<{}, AppContext> {
     removeTimeBasedTransition(sourceSituationID: number) {
         this.setState(state => {
             return {
-                ...state,
                 transitions: state.transitions.filter(transition => transition.SourceStateID !== sourceSituationID || !transition.Timeout)
             }
         })
@@ -467,9 +457,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * @param isVisible If the window should be displayed or not
      */
     setTimeBasedTransitionModalVisibility(isVisible: boolean) {
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 applicationState: {
                     ...state.applicationState,
                     showTimeBasedTransitionModal: isVisible
@@ -489,15 +478,15 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         switch (type) {
             case ELEMENT_TYPE_BUTTON:
                 const newInteractionElement: InteractionElement = { Name: element, Type: type }
-                this.setState((state: ContextState) => { return { ...state, interactionElements: [...state.interactionElements, newInteractionElement] } })
+                this.setState((state: AppContext) => { return {  interactionElements: [...state.interactionElements, newInteractionElement] } })
                 break
             case ELEMENT_TYPE_SCREEN:
                 const newScreenElement: VisualizationElement = { Type: type, Name: element, Plane: undefined }
-                this.setState((state: ContextState) => { return { ...state, visualizationElements: [...state.visualizationElements, newScreenElement] } })
+                this.setState((state: AppContext) => { return { visualizationElements: [...state.visualizationElements, newScreenElement] } })
                 break
             case ELEMENT_TYPE_LIGHT:
                 const newLightElement: VisualizationElement = { Type: type, Name: element, EmissionColor: { r: 1, g: 0, b: 0, a: 0.5 } }
-                this.setState((state: ContextState) => { return { ...state, visualizationElements: [...state.visualizationElements, newLightElement] } })
+                this.setState((state: AppContext) => { return {visualizationElements: [...state.visualizationElements, newLightElement] } })
                 break
             default:
                 return
@@ -539,9 +528,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
             }
             return { ...situation, Values: situation.Values.filter(value => value.VisualizationElement !== element || value.Type !== "FloatValueVisualization") }
         })
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 states: newStates,
                 visualizationElements: state.visualizationElements.filter(visualizationElement =>
                     visualizationElement.Name !== element || visualizationElement.Type !== ELEMENT_TYPE_LIGHT)
@@ -563,9 +551,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
             }
             return { ...situation, Values: situation.Values.filter(value => value.VisualizationElement !== element || value.Type !== "ScreenContentVisualization") }
         })
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 states: newSituations,
                 visualizationElements: state.visualizationElements.filter(visualizationElement =>
                     visualizationElement.Name !== element || visualizationElement.Type !== ELEMENT_TYPE_SCREEN)
@@ -581,9 +568,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      */
     removeTypeButton(element: string) {
         // Remove element from interactionElements and remove all transitions that include the button
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 interactionElements: state.interactionElements.filter(interactionElement =>
                     interactionElement.Name !== element || interactionElement.Type !== ELEMENT_TYPE_BUTTON),
                 transitions: state.transitions.filter(transition => (transition.InteractionElement !== element))
@@ -596,9 +582,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * @param isVisible If the modal should be currently visible
      */
     setNewElementTypeModalVisibility(isVisible: boolean) {
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 applicationState: {
                     ...state.applicationState,
                     showNewElementTypeModal: isVisible
@@ -620,9 +605,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         if (!ContextUtils.elementHasType(element, ELEMENT_TYPE_LIGHT, this.state)) {
             return
         }
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state,
                 visualizationElements: state.visualizationElements.map(visualizationElement => {
                     return visualizationElement.Name === element ?
                         { ...visualizationElement, EmissionColor: color }
@@ -694,8 +678,8 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      */
     setPlaneSelectionMode(element: string, active: boolean, updateWebGL = true) {
         // Change state
-        this.setState((state: ContextState) => {
-            return { ...state, applicationState: { ...state.applicationState, planeSelectionElementName: active ? element : undefined } }
+        this.setState((state: AppContext) => {
+            return { applicationState: { ...state.applicationState, planeSelectionElementName: active ? element : undefined } }
         })
         if (active && !!element) {
             // Activate hover effect
@@ -721,9 +705,9 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      */
     setScreenPlane(planeSelectionElement: string, plane: Vector3) {
         // Change state
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state, visualizationElements: state.visualizationElements.map(visualizationElement => {
+                visualizationElements: state.visualizationElements.map(visualizationElement => {
                     if (visualizationElement.Name === planeSelectionElement && visualizationElement.Type === "Screen") {
                         const newVisualizationElement = { ...visualizationElement, Plane: plane }
                         // Update WebGL
@@ -745,9 +729,9 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * @param resolution    New resolution
      */
     setScreenResolution(element: string, resolution: Vector2) {
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state, visualizationElements: state.visualizationElements.map(visualizationElement => {
+                visualizationElements: state.visualizationElements.map(visualizationElement => {
                     if (visualizationElement.Name === element && visualizationElement.Type === "Screen") {
                         return { ...visualizationElement, Resolution: resolution }
                     }
@@ -770,9 +754,9 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         }
 
         // Change state
-        this.setState((state: ContextState) => {
+        this.setState((state: AppContext) => {
             return {
-                ...state, states: state.states.map(
+                states: state.states.map(
                     (situation: State) => {
                         if (situation.id === situationID) {
                             let valueChanged = false
@@ -813,7 +797,6 @@ export default class AppProvider extends React.Component<{}, AppContext> {
             }
         }
     }
-
 
     //================= RENDER =============================
     render() {
