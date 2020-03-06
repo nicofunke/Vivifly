@@ -27,6 +27,11 @@
 - states -> Situations
 - timeout -> time-based change
 - screen -> display
+- say that changing colors is currently not implemented in Vivian
+
+
+# Study notes
+- Test all functions 
 
 # Changes on Vivian Framework
 - ScreenElement Rotate and movement exchanged and rotation inverted
@@ -41,6 +46,7 @@
 # Export steps
 - situationID -> Name
 - start situation
-- 
+- Image files as names in folder
+  
 -------
 - in Tests sollten alle Funktionalitäten geprüft werden

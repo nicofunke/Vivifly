@@ -2,22 +2,23 @@ import React from 'react'
 import { MDBIcon } from 'mdbreact'
 import Logo from '../../assets/logo_font.png'
 import { Actions } from '../../interfaces/actions.interface'
-import { State } from '../../interfaces/state.interface'
-import { ContextUtils } from '../../Utils/ContextUtils';
+import { ContextUtils } from '../../Utils/ContextUtils'
+import { AppContext } from '../../interfaces/app-context.interface'
+import { ExportUtils } from '../../Utils/ExportUtils';
 
 // TODO: (prio) Export function(JSZip)
-// TODO: (prio) information banner should disappear when clicking timeout
+// TODO: (prio) information banner should disappear when clicking somewhere
 
 type PropsType = {
     actions: Actions,
     isDemoMode: boolean,
-    states: State[]
+    context: AppContext
 }
 
 export default class Navbar extends React.Component<PropsType> {
 
     startDemoMode() {
-        const startingStateID = ContextUtils.getStartingStateID(this.props.states)
+        const startingStateID = ContextUtils.getStartingStateID(this.props.context.states)
         if (startingStateID === undefined) {
             // Model has no starting state!
             return
@@ -39,7 +40,7 @@ export default class Navbar extends React.Component<PropsType> {
                 </div>
                 <ul className="navbar-nav flex-row">
                     <li className="nav-item active">
-                        <button type="button" className="btn btn-light p-2 px-3">
+                        <button type="button" className="btn btn-light p-2 px-3" onClick={() => ExportUtils.exportModel(this.props.context)}>
                             <MDBIcon icon="file-export" className="mx-1 text-primary" />
                             Export Model
                         </button>

@@ -39,7 +39,7 @@ export default class ViewContainer extends React.Component<PropsType> {
                 <Navbar
                     actions={this.props.actions}
                     isDemoMode={this.props.appContext.applicationState.isDemoMode}
-                    states={this.props.appContext.states} />
+                    context={this.props.appContext} />
 
                 <MDBContainer fluid className="h-100">
                     <MDBRow className="h-100">
