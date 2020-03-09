@@ -16,5 +16,4 @@ export interface Transition {
 
     // time-based variables
     Timeout?: number
-
 }

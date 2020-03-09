@@ -4,9 +4,8 @@ import Logo from '../../assets/logo_font.png'
 import { Actions } from '../../interfaces/actions.interface'
 import { ContextUtils } from '../../Utils/ContextUtils'
 import { AppContext } from '../../interfaces/app-context.interface'
-import { ExportUtils } from '../../Utils/ExportUtils';
+import { ModelExport } from '../../Utils/ModelExport'
 
-// TODO: (prio) Export function(JSZip)
 // TODO: (prio) information banner should disappear when clicking somewhere
 
 type PropsType = {
@@ -17,6 +16,9 @@ type PropsType = {
 
 export default class Navbar extends React.Component<PropsType> {
 
+    /**
+     * Starts the "demo" mode to test current model
+     */
     startDemoMode() {
         const startingStateID = ContextUtils.getStartingStateID(this.props.context.states)
         if (startingStateID === undefined) {
@@ -28,8 +30,19 @@ export default class Navbar extends React.Component<PropsType> {
         this.props.actions.setDemoMode(true)
     }
 
+    /**
+     * stops the demo mode
+     */
     stopDemoMode() {
         this.props.actions.setDemoMode(false)
+    }
+
+    /**
+     * Gets called if the export button is clicked. Exports the current model as zip and starts download
+     */
+    onExportClick(){
+        const modelExport = new ModelExport(this.props.context)
+        modelExport.startModelDownload()
     }
 
     render() {
@@ -40,7 +53,7 @@ export default class Navbar extends React.Component<PropsType> {
                 </div>
                 <ul className="navbar-nav flex-row">
                     <li className="nav-item active">
-                        <button type="button" className="btn btn-light p-2 px-3" onClick={() => ExportUtils.exportModel(this.props.context)}>
+                        <button type="button" className="btn btn-light p-2 px-3" onClick={this.onExportClick.bind(this)}>
                             <MDBIcon icon="file-export" className="mx-1 text-primary" />
                             Export Model
                         </button>

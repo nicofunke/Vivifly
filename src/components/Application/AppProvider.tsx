@@ -5,7 +5,7 @@ import { VisualizationValue } from '../../interfaces/visualization-value.interfa
 import { Vector3 } from '../../interfaces/vector3.interface'
 import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface'
 import { ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT, ElementType, ELEMENT_TYPE_BUTTON } from '../../types/element-type.type'
-import { VISUALIZATION_TYPE_SCREEN } from '../../types/visualization-type.type'
+import { VISUALIZATION_TYPE_SCREEN, VISUALIZATION_TYPE_FLOAT } from '../../types/visualization-type.type';
 import { State } from '../../interfaces/state.interface'
 import { VisualizationElement } from '../../interfaces/visualization-element.interface'
 import { OUTLINE_COLOR_RED } from '../../types/outline-color.type'
@@ -478,7 +478,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         switch (type) {
             case ELEMENT_TYPE_BUTTON:
                 const newInteractionElement: InteractionElement = { Name: element, Type: type }
-                this.setState((state: AppContext) => { return {  interactionElements: [...state.interactionElements, newInteractionElement] } })
+                this.setState((state: AppContext) => { return { interactionElements: [...state.interactionElements, newInteractionElement] } })
                 break
             case ELEMENT_TYPE_SCREEN:
                 const newScreenElement: VisualizationElement = { Type: type, Name: element, Plane: undefined }
@@ -486,7 +486,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
                 break
             case ELEMENT_TYPE_LIGHT:
                 const newLightElement: VisualizationElement = { Type: type, Name: element, EmissionColor: { r: 1, g: 0, b: 0, a: 0.5 } }
-                this.setState((state: AppContext) => { return {visualizationElements: [...state.visualizationElements, newLightElement] } })
+                this.setState((state: AppContext) => { return { visualizationElements: [...state.visualizationElements, newLightElement] } })
                 break
             default:
                 return
@@ -596,7 +596,6 @@ export default class AppProvider extends React.Component<{}, AppContext> {
 
     /**
      * Changes the main color of a light element
-     *
      * @param element   name of the light element
      * @param color     new color
      */
@@ -608,7 +607,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
         this.setState((state: AppContext) => {
             return {
                 visualizationElements: state.visualizationElements.map(visualizationElement => {
-                    return visualizationElement.Name === element ?
+                    return visualizationElement.Name === element && visualizationElement.Type === ELEMENT_TYPE_LIGHT ?
                         { ...visualizationElement, EmissionColor: color }
                         : visualizationElement
                 })
@@ -631,19 +630,20 @@ export default class AppProvider extends React.Component<{}, AppContext> {
      * @param emissionStrength      new emission strength
      */
     setLightEmission(element: string, emissionSituationID: number, emissionStrength: number) {
-        if (!this.state.visualizationElements.find(visualizationElement => visualizationElement.Name === element)) {
+        if (!this.state.visualizationElements.find(visualizationElement =>
+            (visualizationElement.Name === element && visualizationElement.Type === ELEMENT_TYPE_LIGHT))) {
             // Element is no light -> Stop
             return
         }
         const newStates = this.state.states.map(situation => {
-            if (situation.id !== emissionSituationID) {
+            if (situation.id !== emissionSituationID ) {
                 return situation
             }
             let emissionChanged = false
             let newValues: VisualizationValue[] = []
             if (!!situation.Values) {
                 newValues = situation.Values.map(visualizationValue => {
-                    if (visualizationValue.VisualizationElement !== element || visualizationValue.Type !== "FloatValueVisualization") {
+                    if (visualizationValue.VisualizationElement !== element || visualizationValue.Type !== VISUALIZATION_TYPE_FLOAT) {
                         return visualizationValue
                     }
                     // Visualization exists -> Change emission
@@ -653,7 +653,7 @@ export default class AppProvider extends React.Component<{}, AppContext> {
             }
             if (!emissionChanged) {
                 // emission does not exist yet -> Create a new entry
-                const newVisualizationValue: VisualizationValue = { Type: "FloatValueVisualization", Value: emissionStrength, VisualizationElement: element }
+                const newVisualizationValue: VisualizationValue = { Type: VISUALIZATION_TYPE_FLOAT, Value: emissionStrength, VisualizationElement: element }
                 newValues = [...newValues, newVisualizationValue]
             }
             return { ...situation, Values: newValues }

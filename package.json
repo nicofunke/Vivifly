@@ -4,8 +4,12 @@
   "private": true,
   "dependencies": {
     "@trendmicro/react-sidenav": "^0.4.5",
+    "@types/file-saver": "^2.0.1",
+    "@types/jszip": "^3.1.7",
     "@types/react-color": "^3.0.1",
     "@types/react-tooltip": "^3.11.0",
+    "file-saver": "^2.0.2",
+    "jszip": "^3.2.2",
     "mdbreact": "^4.21.1",
     "node-sass": "^4.13.1",
     "react": "^16.10.2",
