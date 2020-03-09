@@ -26,6 +26,7 @@ export default function ElementCardHeader(props: propsType) {
                 </div>
             </div>
             <div className="col-11 offset-1 pt-4">
+                <small className="text-light">Current Element:</small>
                 <h4 >{props.title}</h4>
             </div>
         </div>

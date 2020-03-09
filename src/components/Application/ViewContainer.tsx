@@ -29,7 +29,9 @@ export default class ViewContainer extends React.Component<PropsType> {
                 actions={this.props.actions}
                 states={this.props.appContext.states}
                 transitions={this.props.appContext.transitions}
-                applicationState={this.props.appContext.applicationState} />
+                applicationState={this.props.appContext.applicationState}
+                interactionElements={this.props.appContext.interactionElements}
+                visualizationElements={this.props.appContext.visualizationElements} />
 
             <div className="h-100-under-navbar">
                 <UnityScreen

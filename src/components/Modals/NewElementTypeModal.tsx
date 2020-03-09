@@ -3,11 +3,12 @@ import Modal from './Modal'
 import ElementTypePicker from '../core/ElementTypePicker'
 import { MDBBtn } from 'mdbreact'
 import { ElementType } from '../../types/element-type.type'
-import { Actions } from '../../interfaces/actions.interface';
+import { Actions } from '../../interfaces/actions.interface'
 
 type PropsType = {
     actions: Actions,
-    element: string
+    element: string,
+    existingTypes: ElementType[]
 }
 
 /**
@@ -37,7 +38,9 @@ export default class NewElementTypeModal extends React.Component<PropsType> {
                 <p>Which kind of effect do you want to add to this element?</p>
                 <div className="row">
                     <div className="col-10 offset-1">
-                        <ElementTypePicker typeChosen={this.addElementTypeAndClose.bind(this)} />
+                        <ElementTypePicker
+                            typeChosen={this.addElementTypeAndClose.bind(this)}
+                            existingTypes={this.props.existingTypes} />
                     </div>
                 </div>
                 <div className="mt-2">

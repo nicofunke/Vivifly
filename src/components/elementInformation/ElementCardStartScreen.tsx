@@ -24,7 +24,8 @@ export default class ElementCardStartScreen extends React.Component<PropsType> {
                         <div className="col-9">
                             <ElementTypePicker
                                 typeChosen={(type: ElementType) =>
-                                    this.props.actions.addElementType(this.props.element, type)} />
+                                    this.props.actions.addElementType(this.props.element, type)}
+                                existingTypes={[]} />
                         </div>
                     </div>
                 </div>

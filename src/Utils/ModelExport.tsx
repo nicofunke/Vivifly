@@ -4,7 +4,7 @@ import { saveAs } from 'file-saver'
 import { VISUALIZATION_TYPE_SCREEN } from '../types/visualization-type.type'
 import { ContextUtils } from './ContextUtils';
 
-// TODO: Handle duplicate image names
+// TODO: (prio) Handle duplicate image names
 
 /**
  * Class to export models

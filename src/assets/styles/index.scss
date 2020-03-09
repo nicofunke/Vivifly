@@ -26,6 +26,9 @@
 }
 
 .element-type-button {
+  &.disabled {
+    opacity: 0.5;
+  }
   &:hover {
     cursor: pointer;
     .rounded-circle {

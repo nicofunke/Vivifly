@@ -6,12 +6,17 @@ import { ApplicationState } from '../../interfaces/application-state.interface';
 import { State } from '../../interfaces/state.interface';
 import { Actions } from '../../interfaces/actions.interface';
 import { Transition } from '../../interfaces/transition.interface';
+import { ContextUtils } from '../../Utils/ContextUtils';
+import { InteractionElement } from '../../interfaces/interaction-element.interface';
+import { VisualizationElement } from '../../interfaces/visualization-element.interface';
 
 type PropsType = {
     applicationState: ApplicationState,
     states: State[],
     actions: Actions,
-    transitions: Transition[]
+    transitions: Transition[],
+    interactionElements: InteractionElement[],
+    visualizationElements: VisualizationElement[]
 }
 
 /**
@@ -36,7 +41,9 @@ export default class ModalHandler extends React.Component<PropsType> {
         if (this.props.applicationState.showNewElementTypeModal) {
             return <NewElementTypeModal
                 actions={this.props.actions}
-                element={this.props.applicationState.selectedElement} />
+                element={this.props.applicationState.selectedElement}
+                existingTypes={ContextUtils.getElementTypes(
+                    this.props.applicationState.selectedElement, this.props.interactionElements, this.props.visualizationElements)} />
         }
         return null
     }
