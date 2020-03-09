@@ -5,6 +5,7 @@ import { InformationBannerType, INFORMATION_BANNER_START, INFORMATION_BANNER_VIS
 import { InformationBannerUtils } from '../../Utils/InformationBannerUtils'
 import { Actions } from '../../interfaces/actions.interface'
 import SecondSituationInformationBanner from './SecondSituationInformationBanner';
+import KeyListener from '../core/KeyListener';
 
 type PropsType = {
     informationBannerType: InformationBannerType,
@@ -15,19 +16,30 @@ type PropsType = {
  */
 export default class InformationBannerHandler extends React.Component<PropsType> {
 
+    /**
+     * Calls the action to close the current information banner
+     */
+    closeCurrentBanner() {
+        this.props.actions.hideInformationBanner()
+    }
+
     render() {
         if (!InformationBannerUtils.isInformationBannerVisible(this.props.informationBannerType)) {
             return null
         }
+        let banner: JSX.Element = <></>
         if (this.props.informationBannerType === INFORMATION_BANNER_START) {
-            return <WelcomeInformationBanner />
+            banner = <WelcomeInformationBanner />
         }
         if (this.props.informationBannerType === INFORMATION_BANNER_VISUAL) {
-            return <FirstSituationInformationBanner />
+            banner = <FirstSituationInformationBanner />
         }
-        if(this.props.informationBannerType === INFORMATION_BANNER_TIME) { 
-            return <SecondSituationInformationBanner />
+        if (this.props.informationBannerType === INFORMATION_BANNER_TIME) {
+            banner = <SecondSituationInformationBanner />
         }
-        return null
+        return <>
+        <KeyListener onMouseClick={this.closeCurrentBanner.bind(this)}/>
+            {banner}
+        </>
     }
 }

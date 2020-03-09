@@ -3,7 +3,8 @@ import React from 'react'
 // Type for props
 type PropsType = {
     onEnter?: () => void,
-    onEsc?: () => void
+    onEsc?: () => void,
+    onMouseClick?: () => void
 }
 
 export default class KeyListener extends React.Component<PropsType> {
@@ -13,11 +14,20 @@ export default class KeyListener extends React.Component<PropsType> {
      */
     onKeyPressed(event: any) {
         const keyCode = event.keyCode
-        if(!!this.props.onEsc && keyCode === 27){
+        if (!!this.props.onEsc && keyCode === 27) {
             this.props.onEsc()
         }
-        if(!!this.props.onEnter && keyCode === 13){
+        if (!!this.props.onEnter && keyCode === 13) {
             this.props.onEnter()
+        }
+    }
+
+    /**
+     * Listener for mouseClicks. Triggers the props method
+     */
+    onClick() {
+        if (!!this.props.onMouseClick) {
+            this.props.onMouseClick()
         }
     }
 
@@ -25,8 +35,10 @@ export default class KeyListener extends React.Component<PropsType> {
      * Start listening to keydown events after mounting
      */
     componentDidMount() {
-        this.onKeyPressed = this.onKeyPressed.bind(this)    // Method needs to be binded here, otherwise the listener can't be removed
+        this.onKeyPressed = this.onKeyPressed.bind(this)    // Methods need to be binded here, otherwise the listener can't be removed
+        this.onClick = this.onClick.bind(this)     
         document.addEventListener("keydown", this.onKeyPressed, false)
+        document.addEventListener("click", this.onClick, false)
     }
 
     /**
@@ -34,6 +46,7 @@ export default class KeyListener extends React.Component<PropsType> {
      */
     componentWillUnmount() {
         document.removeEventListener("keydown", this.onKeyPressed, false)
+        document.removeEventListener("click", this.onClick, false )
     }
 
     render() {

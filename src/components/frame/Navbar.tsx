@@ -6,8 +6,6 @@ import { ContextUtils } from '../../Utils/ContextUtils'
 import { AppContext } from '../../interfaces/app-context.interface'
 import { ModelExport } from '../../Utils/ModelExport'
 
-// TODO: (prio) information banner should disappear when clicking somewhere
-
 type PropsType = {
     actions: Actions,
     isDemoMode: boolean,
