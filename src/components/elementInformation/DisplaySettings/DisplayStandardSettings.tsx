@@ -17,6 +17,29 @@ type PropsType = {
  */
 export default class DisplayStandardSettings extends React.Component<PropsType> {
 
+    state = { screenActivated: false }
+
+    /**
+     * Sets the screen activation toggle to true if an image exists on mounting
+     */
+    componentDidMount() {
+        if (!!this.props.currentImage) {
+            this.setState({ screenActivated: true })
+        }
+    }
+
+    /**
+     * Gets called if the toggle button is changed. Activates the screen or deactivates it and deletes the current image
+     * @param event Change event of the toggle button
+     */
+    toggleChanged(event: any) {
+        const value = event.target.checked
+        if (!value) {
+            this.props.setImage(undefined)
+        }
+        this.setState({ screenActivated: value })
+    }
+
     render() {
         return <>
             <div className="mb-1" >
@@ -39,18 +62,27 @@ export default class DisplayStandardSettings extends React.Component<PropsType> 
             </div>
             <div className="card-text">
                 <div>A display can show different images on its surface, dependent on the situation</div>
-                <div className="mt-2">
-                    <DisplayImageUploader
-                        handleNewImage={this.props.setImage}
-                        currentImage={this.props.currentImage} />
-                    {!!this.props.currentImage &&
-                        <button type="button"
-                            className="btn btn-link btn-sm p-0 text-default"
-                            onClick={() => this.props.setImage(undefined)}>
-                            <MDBIcon far icon="eye-slash" />
-                            Remove current image
-                        </button>}
+
+                <div className="custom-control custom-switch my-2">
+                    <input
+                        type="checkbox"
+                        className="custom-control-input"
+                        checked={this.state.screenActivated}
+                        onChange={(this.toggleChanged.bind(this))}
+                        id="displayToggle"
+                        readOnly
+                    />
+                    <label className="custom-control-label" htmlFor="displayToggle">
+                        Activate display in the current situation
+                    </label>
                 </div>
+                {this.state.screenActivated &&
+                    <div className="mt-2">
+                        <DisplayImageUploader
+                            handleNewImage={this.props.setImage}
+                            currentImage={this.props.currentImage} />
+                    </div>
+                }
             </div>
         </>
     }
