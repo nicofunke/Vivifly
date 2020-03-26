@@ -78,6 +78,12 @@
   margin-bottom: 0;
 }
 
+.situation-list {
+  min-height: calc(100vh - 64px - 58px); // 64px is the navbar height
+  max-height: calc(100vh - 64px - 58px);
+  overflow-y: auto;
+}
+
 .situation-list-element:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.05);

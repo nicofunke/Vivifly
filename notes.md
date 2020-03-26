@@ -42,11 +42,33 @@
 - LightSpec constructor public
 - Light colors situation specific are not yet supported
 
+# Related work
+- Lively 3D
+- Three.js
+- Threenode js
+- Qt simulator
+- vvvv (?)
+
+# Use cases
+- prototyping / product tests
+- Video games
 
 # Export steps
 - situationID -> Name
 - start situation
 - Image files as names in folder
   
--------
-- in Tests sollten alle Funktionalitäten geprüft werden
+# Fragen
+- Warum sehe ich das model in Vivian nicht?
+- Warum muss ich eine Zeile von Vivian entfernen?
+- Gibt es eine Quelle für Vivian? Kann ich Vivian in den Report/ die Arbeit aufnehmen?
+
+# Masterarbeit 
+- Simplify the creation of Vivian Framework state machines
+- Allow simultaneous editing and testing of state machines
+- real-time feedback of visualization effects
+- - Motivation: Is it possible to combine complex 3D-model handling with the simplicity of state of the art web frameworks?
+- on the fly
+- no additional installations
+- cross-platform
+- upload 3D-models

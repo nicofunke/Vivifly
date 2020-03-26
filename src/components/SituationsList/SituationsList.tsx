@@ -41,7 +41,7 @@ export default class SituationsList extends React.Component<PropsType> {
                     key={state.id} />)
         }
         return (
-            <div>
+            <div className="situation-list">
                 {listElements}
             </div>
         )
