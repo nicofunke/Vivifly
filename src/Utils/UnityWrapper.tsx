@@ -53,23 +53,23 @@ export class UnityWrapper {
         this.removeAllVisualEffects()
         situationID = situationID !== undefined ? situationID : context.applicationState.currentSituationID
         const situation = context.states.find(situation => situation.id === situationID)
-        if (!!situation && !!situation.Values) {
-            for (const value of situation.Values) {
-                if (value.Type === VISUALIZATION_TYPE_FLOAT) {
+        if (!!situation && !!situation.Conditions) {
+            for (const condition of situation.Conditions) {
+                if (condition.Type === VISUALIZATION_TYPE_FLOAT) {
                     // Add light effects
-                    const color = ContextUtils.getLightEmissionColor(value.VisualizationElement, context.visualizationElements)
+                    const color = ContextUtils.getLightEmissionColor(condition.VisualizationElement, context.visualizationElements)
                     if (!!color) {
-                        this.setLightEffect(value.VisualizationElement, color.r, color.g, color.b, value.Value || 0.0)
+                        this.setLightEffect(condition.VisualizationElement, color.r, color.g, color.b, condition.Value || 0.0)
                     }
-                } else if (value.Type === VISUALIZATION_TYPE_SCREEN) {
+                } else if (condition.Type === VISUALIZATION_TYPE_SCREEN) {
                     // Add screen effects
                     const visualizationElement = context.visualizationElements.find(
                         (visualizationElement: VisualizationElement) => (
-                            visualizationElement.Name === value.VisualizationElement && visualizationElement.Type === ELEMENT_TYPE_SCREEN
+                            visualizationElement.Name === condition.VisualizationElement && visualizationElement.Type === ELEMENT_TYPE_SCREEN
                         )
                     )
-                    if (!!visualizationElement && !!value.File) {
-                        this.addScreenEffect(visualizationElement, value.File)
+                    if (!!visualizationElement && !!condition.File) {
+                        this.addScreenEffect(visualizationElement, condition.File)
                     }
                 }
             }

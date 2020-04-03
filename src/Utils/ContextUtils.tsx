@@ -1,8 +1,8 @@
 import { ElementType, ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT, ELEMENT_TYPE_BUTTON } from '../types/element-type.type'
 import { Color } from '../interfaces/color.interface'
 import { Transition } from '../interfaces/transition.interface'
-import { State } from '../interfaces/state.interface'
-import { VisualizationValue } from '../interfaces/visualization-value.interface'
+import { State } from '../interfaces/state.interface';
+import { VisualizationCondition } from '../interfaces/visualization-condition.interface'
 import { VISUALIZATION_TYPE_SCREEN } from '../types/visualization-type.type'
 import { VisualizationElement } from '../interfaces/visualization-element.interface'
 import { InteractionElement } from '../interfaces/interaction-element.interface'
@@ -64,10 +64,10 @@ export class ContextUtils {
             // situation does not exist -> Stop
             return undefined
         }
-        if (!emissionSituation.Values) {
+        if (!emissionSituation.Conditions) {
             return 0.0
         }
-        const visualizationValue = emissionSituation.Values.find(value => value.VisualizationElement === element && value.Type === "FloatValueVisualization")
+        const visualizationValue = emissionSituation.Conditions.find(value => value.VisualizationElement === element && value.Type === "FloatValueVisualization")
         // Return 0.0 if element has no visualization currently
         return !!visualizationValue ? visualizationValue.Value : 0.0
     }
@@ -105,11 +105,11 @@ export class ContextUtils {
         const state = states.find(
             (state: State) => state.id === situationId
         )
-        if (!state || !state.Values) {
+        if (!state || !state.Conditions) {
             return undefined
         }
-        const visualization = state.Values.find(
-            (visualization: VisualizationValue) => (visualization.VisualizationElement === element && visualization.Type === VISUALIZATION_TYPE_SCREEN)
+        const visualization = state.Conditions.find(
+            (visualization: VisualizationCondition) => (visualization.VisualizationElement === element && visualization.Type === VISUALIZATION_TYPE_SCREEN)
         )
         if (!visualization || !visualization.File) {
             return undefined

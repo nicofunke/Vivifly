@@ -48,6 +48,7 @@
 - Threenode js
 - Qt simulator
 - vvvv (?)
+- Yakindu state chart tools
 
 # Use cases
 - prototyping / product tests

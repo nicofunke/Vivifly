@@ -6,6 +6,7 @@ import AppProvider from './components/Application/AppProvider'
 // TODO: (UX) Right click on situation
 // TODO: (UX) Light is automatically on 0.5 emission strength
 // TODO: (optional) holding mousewheel support
+// TODO: (optional) DOCS
 
 function App() {
   return <AppProvider/>

@@ -23,7 +23,7 @@ export default class TimeChangeTimeout extends React.Component<PropsType, StateT
      * @param event timeout input change event
      */
     handleChange(event: any){
-        const value = event.target.value
+        const value = parseInt(event.target.value)
         this.setState({timeout: value})
     }
 
@@ -34,7 +34,7 @@ export default class TimeChangeTimeout extends React.Component<PropsType, StateT
             </p>
             <div className="d-flex justify-content-center my-4">
                 <div>
-                    <MDBInput label="Timeout in ms" type="number" outline value={this.state.timeout} onChange={this.handleChange.bind(this)} autofocus/>
+                    <MDBInput label="Timeout in ms" type="number" outline value={this.state.timeout} onChange={this.handleChange.bind(this)} autoFocus/>
                     <small className="text-danger">
                         {this.state?.timeout > 0 || "Please choose a positive value"}</small>
                 </div>

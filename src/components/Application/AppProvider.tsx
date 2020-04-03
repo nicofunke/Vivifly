@@ -1,12 +1,12 @@
 import React from 'react'
 import { UnityWrapper } from '../../Utils/UnityWrapper'
 import { ContextUtils } from '../../Utils/ContextUtils'
-import { VisualizationValue } from '../../interfaces/visualization-value.interface'
+import { VisualizationCondition } from '../../interfaces/visualization-condition.interface'
 import { Vector3 } from '../../interfaces/vector3.interface'
 import { APPLICATION_STATE_DEFAULT } from '../../interfaces/application-state.interface'
 import { ELEMENT_TYPE_SCREEN, ELEMENT_TYPE_LIGHT, ElementType, ELEMENT_TYPE_BUTTON } from '../../types/element-type.type'
 import { VISUALIZATION_TYPE_SCREEN, VISUALIZATION_TYPE_FLOAT } from '../../types/visualization-type.type';
-import { State } from '../../interfaces/state.interface'
+import { State } from '../../interfaces/state.interface';
 import { VisualizationElement } from '../../interfaces/visualization-element.interface'
 import { OUTLINE_COLOR_RED } from '../../types/outline-color.type'
 import { Vector2 } from '../../interfaces/vector2.interface'
@@ -16,6 +16,7 @@ import { AppContext } from '../../interfaces/app-context.interface'
 import { Actions } from '../../interfaces/actions.interface'
 import ViewContainer from './ViewContainer'
 import { InformationBannerUtils } from '../../Utils/InformationBannerUtils'
+import { Transition } from '../../interfaces/transition.interface';
 
 /**
  * Provides AppContext and Actions
@@ -388,10 +389,10 @@ export default class AppProvider extends React.Component<{}, AppContext> {
     setButtonTransition(sourceSituationID: number, destinationSituationID: number | undefined, button: string) {
         if (!ContextUtils.getButtonTransition(button, sourceSituationID, this.state.transitions)) {
             // Add new transition
-            const newTransition = {
+            const newTransition: Transition = {
                 SourceStateID: sourceSituationID,
                 InteractionElement: button,
-                event: 0,
+                Event: "BUTTON_PRESS",
                 DestinationStateID: destinationSituationID
             }
             this.setState((state: AppContext) => {
@@ -523,10 +524,10 @@ export default class AppProvider extends React.Component<{}, AppContext> {
     removeTypeLight(element: string) {
         // Remove from all situations and from visualizationElements list
         const newStates = this.state.states.map(situation => {
-            if (!situation.Values) {
+            if (!situation.Conditions) {
                 return situation
             }
-            return { ...situation, Values: situation.Values.filter(value => value.VisualizationElement !== element || value.Type !== "FloatValueVisualization") }
+            return { ...situation, Conditions: situation.Conditions.filter(condition => condition.VisualizationElement !== element || condition.Type !== "FloatValueVisualization") }
         })
         this.setState((state: AppContext) => {
             return {
@@ -546,10 +547,10 @@ export default class AppProvider extends React.Component<{}, AppContext> {
     removeTypeScreen(element: string) {
         // Remove from all situations and from visualizationElements list
         const newSituations = this.state.states.map(situation => {
-            if (!situation.Values) {
+            if (!situation.Conditions) {
                 return situation
             }
-            return { ...situation, Values: situation.Values.filter(value => value.VisualizationElement !== element || value.Type !== "ScreenContentVisualization") }
+            return { ...situation, Conditions: situation.Conditions.filter(condition => condition.VisualizationElement !== element || condition.Type !== "ScreenContentVisualization") }
         })
         this.setState((state: AppContext) => {
             return {
@@ -640,23 +641,23 @@ export default class AppProvider extends React.Component<{}, AppContext> {
                 return situation
             }
             let emissionChanged = false
-            let newValues: VisualizationValue[] = []
-            if (!!situation.Values) {
-                newValues = situation.Values.map(visualizationValue => {
-                    if (visualizationValue.VisualizationElement !== element || visualizationValue.Type !== VISUALIZATION_TYPE_FLOAT) {
-                        return visualizationValue
+            let newConditions: VisualizationCondition[] = []
+            if (!!situation.Conditions) {
+                newConditions = situation.Conditions.map(condition => {
+                    if (condition.VisualizationElement !== element || condition.Type !== VISUALIZATION_TYPE_FLOAT) {
+                        return condition
                     }
                     // Visualization exists -> Change emission
                     emissionChanged = true
-                    return { ...visualizationValue, Value: emissionStrength }
+                    return { ...condition, Value: emissionStrength }
                 })
             }
             if (!emissionChanged) {
                 // emission does not exist yet -> Create a new entry
-                const newVisualizationValue: VisualizationValue = { Type: VISUALIZATION_TYPE_FLOAT, Value: emissionStrength, VisualizationElement: element }
-                newValues = [...newValues, newVisualizationValue]
+                const newCondition: VisualizationCondition = { Type: VISUALIZATION_TYPE_FLOAT, Value: emissionStrength, VisualizationElement: element }
+                newConditions = [...newConditions, newCondition]
             }
-            return { ...situation, Values: newValues }
+            return { ...situation, Conditions: newConditions }
         })
         this.setState({ states: newStates })
 
@@ -760,22 +761,22 @@ export default class AppProvider extends React.Component<{}, AppContext> {
                     (situation: State) => {
                         if (situation.id === situationID) {
                             let valueChanged = false
-                            let newVisualizationValues = situation.Values?.map((visualizationValue: VisualizationValue) => {
+                            let newConditions = situation.Conditions?.map((condition: VisualizationCondition) => {
 
                                 // If there is already a screen visualization just change it ...
-                                if (visualizationValue.VisualizationElement === element && visualizationValue.Type === VISUALIZATION_TYPE_SCREEN) {
+                                if (condition.VisualizationElement === element && condition.Type === VISUALIZATION_TYPE_SCREEN) {
                                     valueChanged = true
-                                    return { ...visualizationValue, File: imageFile }
+                                    return { ...condition, File: imageFile }
                                 }
-                                return visualizationValue
+                                return condition
                             })
 
                             // ... otherwise add a new screen visualization
                             if (!valueChanged) {
-                                const newVisualizationValue: VisualizationValue = { Type: VISUALIZATION_TYPE_SCREEN, File: imageFile, VisualizationElement: element }
-                                newVisualizationValues = !!newVisualizationValues ? [...newVisualizationValues, newVisualizationValue] : [newVisualizationValue]
+                                const newCondition: VisualizationCondition = { Type: VISUALIZATION_TYPE_SCREEN, File: imageFile, VisualizationElement: element }
+                                newConditions = !!newConditions ? [...newConditions, newCondition] : [newCondition]
                             }
-                            return { ...situation, Values: newVisualizationValues }
+                            return { ...situation, Conditions: newConditions }
                         }
                         return situation
                     }

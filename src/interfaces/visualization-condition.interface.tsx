@@ -3,7 +3,7 @@ import { VisualizationType } from "../types/visualization-type.type";
 /**
  * Interface for visualization effects during states in the Vivian Framework
  */
-export interface VisualizationValue {
+export interface VisualizationCondition {
     Type: VisualizationType,
     VisualizationElement: string,
 

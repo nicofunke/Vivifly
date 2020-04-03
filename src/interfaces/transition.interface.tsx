@@ -12,7 +12,7 @@ export interface Transition {
     
     // Interaction variables
     InteractionElement?: string,
-    Event?: number,
+    Event?: "BUTTON_PRESS",
 
     // time-based variables
     Timeout?: number

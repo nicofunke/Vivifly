@@ -1,8 +1,9 @@
-import { AppContext } from '../interfaces/app-context.interface';
+import { AppContext } from '../interfaces/app-context.interface'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
-import { VISUALIZATION_TYPE_SCREEN } from '../types/visualization-type.type'
-import { ContextUtils } from './ContextUtils';
+import { VISUALIZATION_TYPE_SCREEN, VISUALIZATION_TYPE_FLOAT } from '../types/visualization-type.type'
+import { ContextUtils } from './ContextUtils'
+import { VisualizationCondition } from '../interfaces/visualization-condition.interface'
 
 // TODO: (prio) Handle duplicate image names
 
@@ -106,26 +107,44 @@ export class ModelExport {
     }
 
     /**
-     * Converts the states of the current context into the zip directories
+     * Converts the states of the current context as JSON into the zip directory
      */
     private convertStates() {
+
+        // Set image files 
         let imageFiles: File[] = []
-        const output = {
+        const visualizationElements: string[] = this.context.visualizationElements.map(element => element.Name)
+        let output = {
             States: this.context.states.map(state => {
-                return {
-                    ...state,
-                    // Delete state ID
-                    id: undefined,
-                    Values: state.Values?.map(value => {
-                        // Replace image files with image name
-                        if (value.Type === VISUALIZATION_TYPE_SCREEN) {
-                            imageFiles = !!value.File ? [...imageFiles, value.File] : imageFiles
-                            return { ...value, File: undefined, FileName: value.File?.name }
+                let exportState: any = { ...state }
+                // Remove temporary state id
+                exportState.id = undefined
+
+                // Replace image files with file names
+                exportState.Conditions = !!state.Conditions ?
+                    state.Conditions.map(condition => {
+                        if (condition.Type === VISUALIZATION_TYPE_SCREEN) {
+                            imageFiles = !!condition.File ? [...imageFiles, condition.File] : imageFiles
+                            return { ...condition, File: undefined, FileName: condition.File?.name }
                         } else {
-                            return value
+                            return condition
                         }
+                    }) : []
+
+                // Replace missing visualization values with zero values
+                const elementsWithCondition = exportState.Conditions.map(
+                    (condition: VisualizationCondition) => condition.VisualizationElement)
+                let missingVisualizationElements = visualizationElements.filter(
+                    visualizationElement => !elementsWithCondition.includes(visualizationElement))
+                missingVisualizationElements.forEach(elementName => {
+                    exportState.Conditions?.push({
+                        VisualizationElement: elementName,
+                        Type: VISUALIZATION_TYPE_FLOAT,
+                        Value: 0
                     })
-                }
+                })
+
+                return exportState
             })
         }
 
