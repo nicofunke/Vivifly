@@ -16,7 +16,7 @@
     "react-color": "^2.17.3",
     "react-dom": "^16.10.2",
     "react-dropzone": "^10.2.1",
-    "react-scripts": "^3.3.0",
+    "react-scripts": "^5.0.1",
     "react-tooltip": "^4.0.3",
     "react-unity-webgl": "^7.1.8",
     "storm-react-diagrams": "^5.2.1"
