@@ -9,7 +9,7 @@
     "@types/react-color": "^3.0.1",
     "@types/react-tooltip": "^3.11.0",
     "file-saver": "^2.0.2",
-    "jszip": "^3.2.2",
+    "jszip": "^3.8.0",
     "mdbreact": "^4.21.1",
     "node-sass": "^4.13.1",
     "react": "^16.10.2",
